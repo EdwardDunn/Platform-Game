@@ -1,8 +1,8 @@
-Zombie Game Copyrights
+**Zombie Game Copyrights**
 
 Added by: Edward Dunn
 Date: 05/09/2016
-Details:
+
 	Description: main character
 	Source: http://www.gameart2d.com/freebies.html
 
@@ -16,6 +16,6 @@ Details:
 	
 Added by:
 Date:
-Details:
+
 	Description:
 	Source: 
