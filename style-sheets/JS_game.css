@@ -1,0 +1,48 @@
+body {
+background-color: #d6d7d8;
+}
+
+canvas {	
+border:1px solid #d3d3d3;
+background-color: #f1f1f1;
+width: 90%;
+margin-left: 5%;
+}
+
+#restartButton{
+margin: auto;
+width: 150px;
+padding: 40px;
+}
+
+.button {
+  display: inline-block;
+  padding: 18px 28px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #575757;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button:hover {
+  background-color: #3e8e41;
+}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+#buttonWrapper{
+	text-align:center; 
+}
+
+
+

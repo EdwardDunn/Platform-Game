@@ -12,8 +12,8 @@ You can learn how from this *free* series [How to Contribute to an Open Source P
 **GitHub Syntax Cheat Sheet**
 https://education.github.com/git-cheat-sheet-education.pdf
 
-**W3 schools html/JavaScript game tutorial is very usefull**
-http://www.w3schools.com/graphics/game_canvas.asp as a learning guide.
+**W3 schools html/JavaScript game tutorial is very usefull as a learning guide - **
+http://www.w3schools.com/graphics/game_canvas.asp
 
 **Copyright**
 If you are adding any new images please only use copyright free images and update 
