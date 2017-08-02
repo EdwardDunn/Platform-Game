@@ -30,33 +30,43 @@ Contributing Steps
 	1. Fork repo (just click the fork button on main project page)
 
 	2. Create a folder on your computer and initialise as a git repository
-	   git init
+	   
+	   	git init
 
 	3. Clone your forked version to your local folder
-	   git clone [your forked repository URL]
+	   
+	   	git clone [your forked repository URL]
 
 	4. Create a new local branch
-	   git branch [local branch name]
+	   
+	   	git branch [local branch name]
 	   
 	5. Move to new local branch
-	   git checkout [local branch name]
+	   
+	   	git checkout [local branch name]
 	
 	6. Use an editor or your choice to make changes (NotePad++ is enough)
 
 	7. Stages your changes frequently 
-	   git add .
+	
+	   	git add .
 
 	8. Once you are happy with the changes you have made, commit them
-	   git commit -m "your commit message"
+	
+	   	git commit -m "your commit message"
 	   
 	9. Move to your master branch
-	   git checkout master
+	   
+	   	git checkout master
 	
 	10. Merge your local branch to master
-	   git merge [local branch name]
+	    
+	    	git merge [local branch name]
 
 	11. Push your changes to our forked repository
-	   git push -u [remote name] [branch name]
+	    
+	    	git push -u [remote name] [branch name]
 
-	   To find your remote name
-           git remote
+	    To find your remote name
+            
+	    	git remote
