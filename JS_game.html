@@ -9,7 +9,7 @@ Copyright:Copyright free game art by;
 -->
 
 <html>
-<link rel="stylesheet" type="text/css" href="style-sheets/JS_game.css">
+<link rel="stylesheet" type="text/css" href="Style-Sheets/JS_game.css">
 
 <head>
 	<meta charset="UTF-8">
@@ -41,16 +41,16 @@ var myObstacles = [];
 
 function startGame() {
 	//character
-    myGamePiece = new component(60, 70, "pictures/good_guy.png", 100, 120, "image");
+    myGamePiece = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
 	//background
-    myBackground = new component(900, 400, "pictures/background.jpg", 0, 0, "image");
+    myBackground = new component(900, 400, "Pictures/background.jpg", 0, 0, "image");
 	//score
 	myScore = new component("30px", "Consolas", "black", 100, 40, "text");
 
 	//loop for creating new obstacles setting a random x coordinate for each
 	for (var i=0; i<100; i++){
 	var x = Math.floor((Math.random() * 20000) + 900);	
-	myObstacles[i] = new component(40, 50, "pictures/zombie.png", x, 200, "image")
+	myObstacles[i] = new component(40, 50, "Pictures/zombie.png", x, 200, "image")
 	}
 
 	//call start function
@@ -242,7 +242,7 @@ function moveright() {
 
 <!--restart button-->
 <div id="restartButton">
-<img src="pictures/restart.png" width="90%" onClick="history.go(0)"/>
+<img src="Pictures/restart.png" width="90%" onClick="history.go(0)"/>
 </div>
 
 </body>
