@@ -1,4 +1,4 @@
-**Contribution Guide
+Contribution Guide
 
 This project has been created for open source beginners. 
 No contributions are too small, give it a go!
