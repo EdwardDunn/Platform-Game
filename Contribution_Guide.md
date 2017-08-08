@@ -12,8 +12,7 @@ You can learn how from this [free series](https://egghead.io/series/how-to-contr
 
 [W3 schools html/JavaScript game tutorial](http://www.w3schools.com/graphics/game_canvas.asp) is very useful for this project
 
-Copyright
-If you are adding any new images please only use copyright free images and update 
+Copyright - If you are adding any new images please only use copyright free images and update 
 copyright file. 
 
 Feel free to add any new features.
