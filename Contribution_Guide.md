@@ -1,9 +1,9 @@
-Contribution Guide
+**Contribution Guide**
 
 This project has been created for open source beginners. 
 No contributions are too small, give it a go!
 
-For help with contributing here are a few guides
+**For help with contributing here are a few guides**
 
 Working on your first Pull Request?
 You can learn how from this [free series](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
@@ -15,7 +15,7 @@ You can learn how from this [free series](https://egghead.io/series/how-to-contr
 Copyright - If you are adding any new images please only use copyright free images and update 
 copyright file. 
 
-Feel free to add any new features.
+**Feel free to add any new features**
 
 Suggestions
 - New characters
@@ -24,7 +24,7 @@ Suggestions
 - Better controls
 
 
-Contributing steps
+**Contributing steps**
 
 	1. Fork repo (just click the fork button on main project page)
 
