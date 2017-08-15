@@ -4,21 +4,33 @@ var myGamePiece;
 var myBackground;
 var myScore;
 var myObstacles = [];
-
+var keysPressed = {37 : false, 38 : false, 39 : false};
 
 function KeyDown(event)
 {
 	var event = window.event ? window.event : e;
-    switch (event.keyCode)
-	{
-		case 37 : moveLeft(); break;
-		case 38 : moveUp(); break;
-		case 39 : moveRight(); break;
-	}
+    keysPressed[event.keyCode] = true;
+    console.log("Key: "+event.keyCode)
+    if (keysPressed[37] && keysPressed[38]){
+        moveLeft();
+    }
+    else if (keysPressed[37]){
+        moveLeft();
+    }
+    else if (keysPressed[38]) {
+        moveUp();
+    }
+    if (keysPressed[39] && keysPressed[38]) {
+        moveRight();
+    }
+    else if (keysPressed[39]){
+        moveRight();
+    }	
 }
 function KeyUp(event)
 {
 	var event = window.event ? window.event : e;
+    keysPressed[event.keyCode] = false;
     switch (event.keyCode)
 	{
 		case 37 : stopMove(); break;
@@ -40,7 +52,8 @@ function startGame() {
 	//loop for creating new obstacles setting a random x coordinate for each
 	for (var i=0; i<100; i++){
 	var x = Math.floor((Math.random() * 20000) + 900);	
-	myObstacles[i] = new component(40, 50, "Pictures/zombie.png", x, 200, "image")
+    //var y = Math.floor(Math.random() * 200) + 0
+	myObstacles[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
 	}
 
 	//call start function
@@ -82,6 +95,8 @@ function component(width, height, color, x, y, type) {
     if (type == "image") {
         this.image = new Image();
         this.image.src = color;
+        this.image.width = width;
+        this.image.height = height;
     }
     this.width = width;
     this.height = height;
@@ -94,7 +109,7 @@ function component(width, height, color, x, y, type) {
 	this.gravity = 0;
 	
 	//sets speed game piece falls to bottom of canvas
-	this.gravitySpeed = 3.5;
+	this.gravitySpeed = 4.5;
 	
 	
 	//function to decide to decide what to display on screen, text, image or fill color
@@ -172,10 +187,10 @@ function updateGameArea() {
 //loop for obstacle collision
 for (var i=0; i<100; i++){
 	  if (myGamePiece.crashWith(myObstacles[i])) {
-      myGameArea.stop();
-      GameOver();
-	}
-	}
+        myGameArea.stop();
+        GameOver();
+	    }
+} 
 	
 	//clear canvas before each update
 	myGameArea.clear();
@@ -215,10 +230,40 @@ for (var i=0; i<100; i++){
 function stopMove(){
 myGamePiece.speedX = 0;
 myGamePiece.speedY = 0;
+        if (myGamePiece.y < 0) {
+            myGamePiece.speedY = 0;
+            myGamePiece.y = 0;
+        }
+        if (myGamePiece.x < 0){
+            myGamePiece.speedX = 0;
+            myGamePiece.x = 0;
+        }
+        if (myGamePiece.x > myGameArea.canvas.width-myGamePiece.width) {
+            myGamePiece.speedX = 0;
+            myGamePiece.x = myGameArea.canvas.width-myGamePiece.width;
+        }
 }
 
 function moveUp() {
-    myGamePiece.speedY = -10; 
+    if (myGamePiece.y >= 0 && myGamePiece.x >= 0 && myGamePiece.x <= myGameArea.canvas.width-myGamePiece.width) {
+        myGamePiece.speedY = -10; 
+        console.log("up allowed")
+    }
+    else {
+        if (myGamePiece.y < 0) {
+            myGamePiece.speedY = 0;
+            myGamePiece.y = 0;
+        }
+        if (myGamePiece.x < 0){
+            myGamePiece.speedX = 0;
+            myGamePiece.x = 0;
+        }
+        if (myGamePiece.x > myGameArea.canvas.width-myGamePiece.width) {
+            myGamePiece.speedX = 0;
+            myGamePiece.x = myGameArea.canvas.width-myGamePiece.width;
+        }
+    }
+    
 }
 
 function moveDown() {
@@ -226,9 +271,43 @@ function moveDown() {
 }
 
 function moveLeft() {
-    myGamePiece.speedX = -5;
+    if (myGamePiece.y >= 0 && myGamePiece.x >= 0 && myGamePiece.x <= myGameArea.canvas.width-myGamePiece.width) {
+        myGamePiece.speedX = -5;
+        console.log("left allowed")
+    }
+        else {
+        if (myGamePiece.y < 0) {
+            myGamePiece.speedY = 0;
+            myGamePiece.y = 0;
+        }
+        if (myGamePiece.x < 0){
+            myGamePiece.speedX = 0;
+            myGamePiece.x = 0;
+        }
+        if (myGamePiece.x > myGameArea.canvas.width-myGamePiece.width) {
+            myGamePiece.speedX = 0;
+            myGamePiece.x = myGameArea.canvas.width-myGamePiece.width;
+        }
+    }
 }
 
 function moveRight() {
-    myGamePiece.speedX = 5;
+    if (myGamePiece.y >= 0 && myGamePiece.x >= 0 && myGamePiece.x <= myGameArea.canvas.width-myGamePiece.width) {
+        myGamePiece.speedX = 5;
+        console.log("right allowed")
+    }  
+        else {
+        if (myGamePiece.y < 0) {
+            myGamePiece.speedY = 0;
+            myGamePiece.y = 0;
+        }
+        if (myGamePiece.x < 0){
+            myGamePiece.speedX = 0;
+            myGamePiece.x = 0;
+        }
+        if (myGamePiece.x > myGameArea.canvas.width-myGamePiece.width) {
+            myGamePiece.speedX = 0;
+            myGamePiece.x = myGameArea.canvas.width-myGamePiece.width;
+        }
+    }
 }
