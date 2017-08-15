@@ -10,6 +10,7 @@ Copyright:Copyright free game art by;
 
 <html>
 <link rel="stylesheet" type="text/css" href="Style-Sheets/JS_game.css">
+<link rel="stylesheet" type="text/css" href="Style-Sheets/GameOverModal.css">
 
 <head>
 	<meta charset="UTF-8">
@@ -30,9 +31,15 @@ Copyright:Copyright free game art by;
 
 <!-- call startGame function on page load-->
 <body onload="startGame()" onkeydown="KeyDown()" onkeyup="KeyUp()">
-
-
-
+  <div id="gameOverModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="gameOverText">GAME OVER</p>
+    <div id="restartButton">
+    <img src="Pictures/restart.png" width="90%" onClick="history.go(0)"/>
+    </div>
+  </div>
+</div>
 
 <!--buttons-->
 
@@ -40,11 +47,6 @@ Copyright:Copyright free game art by;
 <button class="button" onmousedown="moveleft()" onmouseup="stopMove()" ontouchstart="moveleft()" ontouchend="stopMove()">LEFT</button>
 <button class="button" onmousedown="moveup()" onmouseup="stopMove()" ontouchstart="moveup()" ontouchend="stopMove()">JUMP</button>
 <button class="button" onmousedown="moveright()" onmouseup="stopMove()" ontouchstart="moveright()" ontouchend="stopMove()">RIGHT</button>
-</div>
-
-<!--restart button-->
-<div id="restartButton">
-<img src="Pictures/restart.png" width="90%" onClick="history.go(0)"/>
 </div>
 
 </body>

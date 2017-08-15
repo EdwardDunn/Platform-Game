@@ -153,7 +153,19 @@ function component(width, height, color, x, y, type) {
 				this.y = rockbottom;
 			}
 }
-
+function GameOver() {
+    var modal = document.getElementById('gameOverModal');
+    modal.style.display = "block";
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }    
+}
 //update game area for period defined in game area function, currentl 20th of a millisecond (50 times a second)
 function updateGameArea() {
 
@@ -161,7 +173,7 @@ function updateGameArea() {
 for (var i=0; i<100; i++){
 	  if (myGamePiece.crashWith(myObstacles[i])) {
       myGameArea.stop();
-	  alert("GAME OVER!");
+      GameOver();
 	}
 	}
 	
@@ -195,7 +207,7 @@ for (var i=0; i<100; i++){
 	
 	//loop to set speed of obstacles
 	for (var i=0; i<100; i++){
-	myObstacles[i].x += -2; <!--move frame myObstacles by 1 after each frame-->
+	myObstacles[i].x += -2;
 		} 
 }
 
