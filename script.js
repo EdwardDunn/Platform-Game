@@ -8,9 +8,11 @@ var keysPressed = {37 : false, 38 : false, 39 : false};
 
 function KeyDown(event)
 {
-	var event = window.event ? window.event : e;
-    keysPressed[event.keyCode] = true;
-    console.log("Key: "+event.keyCode)
+    console.log(event)
+    var key;
+    key = event.which;
+    console.log(key)
+    keysPressed[key] = true;
     if (keysPressed[37] && keysPressed[38]){
         moveLeft();
     }
@@ -29,9 +31,11 @@ function KeyDown(event)
 }
 function KeyUp(event)
 {
-	var event = window.event ? window.event : e;
-    keysPressed[event.keyCode] = false;
-    switch (event.keyCode)
+    var key;
+    key = event.which;
+    console.log(key)
+    keysPressed[key] = false;
+    switch (key)
 	{
 		case 37 : stopMove(); break;
 		case 38 : stopMove(); break;

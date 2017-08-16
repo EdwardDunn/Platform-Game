@@ -30,7 +30,7 @@ Copyright:Copyright free game art by;
 </head>
 
 <!-- call startGame function on page load-->
-<body onload="startGame()" onkeydown="KeyDown()" onkeyup="KeyUp()">
+<body onload="startGame()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)">
   <div id="gameOverModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
@@ -44,9 +44,9 @@ Copyright:Copyright free game art by;
 <!--buttons-->
 
 <div id="buttonWrapper">
-<button class="button" onmousedown="moveleft()" onmouseup="stopMove()" ontouchstart="moveleft()" ontouchend="stopMove()">LEFT</button>
-<button class="button" onmousedown="moveup()" onmouseup="stopMove()" ontouchstart="moveup()" ontouchend="stopMove()">JUMP</button>
-<button class="button" onmousedown="moveright()" onmouseup="stopMove()" ontouchstart="moveright()" ontouchend="stopMove()">RIGHT</button>
+<button class="button" onmousedown="moveLeft()" onmouseup="stopMove()" ontouchstart="moveLeft()" ontouchend="stopMove()">LEFT</button>
+<button class="button" onmousedown="moveUp()" onmouseup="stopMove()" ontouchstart="moveUp()" ontouchend="stopMove()">JUMP</button>
+<button class="button" onmousedown="moveRight()" onmouseup="stopMove()" ontouchstart="moveRight()" ontouchend="stopMove()">RIGHT</button>
 </div>
 
 </body>
