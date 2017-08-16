@@ -315,3 +315,18 @@ function moveRight() {
         }
     }
 }
+var interval;
+function moveLeftMouse(){
+    interval = setInterval(moveLeft,1);
+}
+
+function moveRightMouse(){
+    interval = setInterval(moveRight,1);
+}
+function moveUpMouse(){
+    interval = setInterval(moveUp,1);
+}
+function onMouseUp(){
+    clearInterval(interval);
+     stopMove();
+}
