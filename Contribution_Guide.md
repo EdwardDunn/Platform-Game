@@ -23,6 +23,7 @@ Suggestions
 - New levels
 - Better controls
 
+**Note - if you're working on an open issue then place a comment on it so that others know its in progress**
 
 **Contributing steps**
 
