@@ -213,8 +213,8 @@ for (var i=0; i<100; i++){
 	//score update
 	myScore.text="SCORE: " + myGameArea.frameNo;
     myScore.update();
-	//when frame number reaches 11000 (point at which obstacles end) end game
-	if (myGameArea.frameNo == 11000){
+	//when frame number reaches 5000 (point at which obstacles end) end game
+	if (myGameArea.frameNo == 5000){
 	alert("CONGRATS YOU HAVE ESCAPED ALL THE BAD GUYS, PHEW! PRESS START TO TRY AGAIN");
 	myGameArea.stop();
 	}
