@@ -23,7 +23,6 @@ Suggestions
 - New levels
 - Better controls
 
-
 **Contributing steps**
 
 	1. Fork repo (just click the fork button on main project page)
@@ -66,4 +65,6 @@ Suggestions
      
 - Use the issue description you are working on for your commit message e.g. "Issue #10 Updated README.md"
 
-- If you're not working on one of the existing issues, remember to create a new one before you submit a Pull Request 
+- If you're not working on one of the existing issues, remember to create a new one before you submit a Pull Request
+
+- If another contributor has commented on an issue this usually means they are working on it, have a look at the comments.
