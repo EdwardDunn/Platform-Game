@@ -23,7 +23,6 @@ Suggestions
 - New levels
 - Better controls
 
-**Note - if you're working on an open issue then place a comment on it so that others know its in progress**
 
 **Contributing steps**
 
@@ -60,3 +59,11 @@ Suggestions
 
 	    To find your remote name
         git remote
+
+**Tips** 
+
+- If you're working on an open issue then place a comment on it so that others know it's in progress
+     
+- Use the issue description you are working on for your commit message e.g. "Issue #10 Updated README.md"
+
+- If you're not working on one of the existing issues, remember to create a new one before you submit a Pull Request 
