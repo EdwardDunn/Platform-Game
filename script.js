@@ -8,7 +8,7 @@ var keysPressed = {37 : false, 38 : false, 39 : false};
 
 function KeyDown(event)
 {
-    console.log(event)
+    console.log(event);
     var key;
     key = event.which;
     console.log(key)
@@ -249,8 +249,8 @@ myGamePiece.speedY = 0;
 }
 
 function moveUp() {
-    if (myGamePiece.y >= 0 && myGamePiece.x >= 0 && myGamePiece.x <= myGameArea.canvas.width-myGamePiece.width) {
-        myGamePiece.speedY = -10; 
+    if (myGamePiece.y >= 170  && myGamePiece.x >= 0 && myGamePiece.x <= myGameArea.canvas.width-myGamePiece.width) {
+        myGamePiece.speedY = -8; 
         console.log("up allowed")
     }
     else {
