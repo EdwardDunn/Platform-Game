@@ -1,5 +1,6 @@
+//Description: Level 1 of Game, this script contains all the javascript required for the game to work on the 
+//JS_game html page.
 
-//mario game piece
 var myGamePiece;
 var myBackground;
 var myScore;
@@ -42,7 +43,6 @@ function KeyUp(event)
 		case 39 : stopMove(); break;
 	}
 }
-
 
 function startGame() {
 
