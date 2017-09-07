@@ -1,11 +1,14 @@
 //Description: Level 1 of Game, this script contains all the javascript required for the game to work on the 
 //JS_game html page.
 
+const LEFT = 37;
+const UP = 38;
+const RIGHT = 39;
 var myGamePiece;
 var myBackground;
 var myScore;
 var myObstacles = [];
-var keysPressed = {37 : false, 38 : false, 39 : false};
+var keysPressed = {LEFT : false, UP : false, RIGHT : false};
 
 function KeyDown(event)
 {
@@ -14,19 +17,19 @@ function KeyDown(event)
     key = event.which;
     console.log(key)
     keysPressed[key] = true;
-    if (keysPressed[37] && keysPressed[38]){
+    if (keysPressed[LEFT] && keysPressed[UP]){
         moveLeft();
     }
-    else if (keysPressed[37]){
+    else if (keysPressed[LEFT]){
         moveLeft();
     }
-    else if (keysPressed[38]) {
+    else if (keysPressed[UP]) {
         moveUp();
     }
-    if (keysPressed[39] && keysPressed[38]) {
+    if (keysPressed[RIGHT] && keysPressed[UP]) {
         moveRight();
     }
-    else if (keysPressed[39]){
+    else if (keysPressed[RIGHT]){
         moveRight();
     }	
 }
@@ -38,9 +41,7 @@ function KeyUp(event)
     keysPressed[key] = false;
     switch (key)
 	{
-		case 37 : stopMove(); break;
-		case 38 : stopMove(); break;
-		case 39 : stopMove(); break;
+		case LEFT : case UP : case RIGHT : stopMove(); break;
 	}
 }
 
@@ -189,7 +190,7 @@ function GameOver() {
 function updateGameArea() {
 
 //loop for obstacle collision
-for (var i=0; i<100; i++){
+for (var i=0; i<myObstacles.length; i++){
 	  if (myGamePiece.crashWith(myObstacles[i])) {
         myGameArea.stop();
         GameOver();
@@ -225,7 +226,7 @@ for (var i=0; i<100; i++){
 	
 	
 	//loop to set speed of obstacles
-	for (var i=0; i<100; i++){
+	for (var i=0; i<myObstacles.length; i++){
 	myObstacles[i].x += -2;
 		} 
 }
