@@ -65,6 +65,26 @@ function startGame() {
     myGameArea.start();
 }
 
+function startLevel2() {
+
+	//character
+    myGamePiece = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
+	//background
+    myBackground = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image");
+	//score
+	myScore = new component("30px", "Consolas", "black", 100, 40, "text");
+
+	//loop for creating new obstacles setting a random x coordinate for each
+	for (var i=0; i<100; i++){
+	var x = Math.floor((Math.random() * 20000) + 900);	
+    //var y = Math.floor(Math.random() * 200) + 0
+	myObstacles[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
+	}
+
+	//call start function
+    myGameArea.start();
+}
+
 var myGameArea = {
 
 		//create html canvas 
