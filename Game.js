@@ -58,7 +58,6 @@ function startGame() {
 	//loop for creating new obstacles setting a random x coordinate for each
 	for (var i=0; i<100; i++){
 	var x = Math.floor((Math.random() * 20000) + 900);	
-    //var y = Math.floor(Math.random() * 200) + 0
 	myObstacles[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
 	}
 
@@ -78,7 +77,6 @@ function startLevel2() {
 	//loop for creating new obstacles setting a random x coordinate for each
 	for (var i=0; i<100; i++){
 	var x = Math.floor((Math.random() * 20000) + 900);	
-    //var y = Math.floor(Math.random() * 200) + 0
 	myObstacles[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
 	}
 
@@ -108,7 +106,7 @@ var myGameArea = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 	
-	//function to be used at a later date for object collision
+	//function used for stopping the game
     stop : function() {
         clearInterval(this.interval);
     }
@@ -251,17 +249,16 @@ for (var i=0; i<myObstacles.length; i++){
 	//score update
 	myScore.text="SCORE: " + myGameArea.frameNo;
     myScore.update();
-	//when frame number reaches 5000 (point at which obstacles end) end game
-	if (myGameArea.frameNo == 200){
 	
+	//when frame number reaches 3000 (point at which obstacles end) end game
+	if (myGameArea.frameNo == 3000){
+		myGameArea.stop();
 		currentLevel++;
 		
 		if(currentLevel == 2){
 			startLevel2();
 		}
 		else{
-			myGameArea.stop();
-			//alert("CONGRATS YOU HAVE ESCAPED ALL THE BAD GUYS, PHEW!");
 			GameComplete();
 		}
 	}	
@@ -274,7 +271,7 @@ for (var i=0; i<myObstacles.length; i++){
 	//loop to set speed of obstacles
 	for (var i=0; i<myObstacles.length; i++){
 	myObstacles[i].x += -2;
-		} 
+	} 
 }
 
 //stops game piece from constantly moving after button move pressed
