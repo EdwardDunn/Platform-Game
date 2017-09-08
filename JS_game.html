@@ -6,6 +6,7 @@ Description:
 <html>
 <link rel="stylesheet" type="text/css" href="Style-Sheets/JS_game.css">
 <link rel="stylesheet" type="text/css" href="Style-Sheets/GameOverModal.css">
+<link rel="stylesheet" type="text/css" href="Style-Sheets/GameCompleteModal.css">
 
 <head>
 	<meta charset="UTF-8">
@@ -27,14 +28,25 @@ Description:
 
 <!-- call startGame function on page load-->
 <body onload="startGame()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)">
-  <div id="gameOverModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p id="gameOverText">GAME OVER</p>
-    <div id="restartButton">
-    <img src="Pictures/restart.png" width="90%" onClick="history.go(0)"/>
-    </div>
-  </div>
+
+<div id="gameOverModal" class="modal">
+	<div class="modal-content">
+	<span class="close">&times;</span>
+	<p id="gameOverText">GAME OVER</p>
+		<div id="restartButton">
+		<img src="Pictures/restart.png" width="90%" onClick="history.go(0)"/>
+		</div>
+	</div>
+</div>
+
+<div id="gameCompleteModal" class="modal">
+	<div class="modal-content">
+	<span class="close">&times;</span>
+	<p id="gameOverText">You completed the game! Awesome Work!</p>
+		<div id="restartButton">
+		<img src="Pictures/restart.png" width="90%" onClick="history.go(0)"/>
+		</div>
+	</div>
 </div>
 
 <!--buttons-->

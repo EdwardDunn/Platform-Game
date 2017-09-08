@@ -4,6 +4,7 @@
 const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
+var currentLevel = 1;
 var myGamePiece;
 var myBackground;
 var myScore;
@@ -206,6 +207,22 @@ function GameOver() {
         }
     }    
 }
+
+function GameComplete(){
+	var modal = document.getElementById('gameCompleteModal');
+    modal.style.display = "block";
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    } 
+	
+}
+
 //update game area for period defined in game area function, currentl 20th of a millisecond (50 times a second)
 function updateGameArea() {
 
@@ -235,10 +252,19 @@ for (var i=0; i<myObstacles.length; i++){
 	myScore.text="SCORE: " + myGameArea.frameNo;
     myScore.update();
 	//when frame number reaches 5000 (point at which obstacles end) end game
-	if (myGameArea.frameNo == 5000){
-	alert("CONGRATS YOU HAVE ESCAPED ALL THE BAD GUYS, PHEW! PRESS START TO TRY AGAIN");
-	myGameArea.stop();
-	}
+	if (myGameArea.frameNo == 200){
+	
+		currentLevel++;
+		
+		if(currentLevel == 2){
+			startLevel2();
+		}
+		else{
+			myGameArea.stop();
+			//alert("CONGRATS YOU HAVE ESCAPED ALL THE BAD GUYS, PHEW!");
+			GameComplete();
+		}
+	}	
 	
 	//game piece update
 	myGamePiece.newPos();    
