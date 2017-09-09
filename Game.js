@@ -267,7 +267,7 @@ function updateGameArea() {
 	
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-	if (gameArea.frameNo == 200){
+	if (gameArea.frameNo == 3000){
 		gameArea.stop();
 		currentLevel++;
 		
