@@ -1,14 +1,14 @@
-//Description: Level 1 of Game, this script contains all the javascript required for the game to work on the 
+//Description: Game.js, this script contains all the javascript required for the game to work on the 
 //JS_game html page.
 
 const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 var currentLevel = 1;
-var myGamePiece;
-var myBackground;
-var myScore;
-var myObstacles = [];
+var playerCharacter;
+var background;
+var score;
+var enemyCharacters = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false};
 
 function KeyDown(event)
@@ -48,43 +48,43 @@ function KeyUp(event)
 
 function startGame() {
 
-	//character
-    myGamePiece = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
+	//player character
+    playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
 	//background
-    myBackground = new component(900, 400, "Pictures/background.jpg", 0, 0, "image");
+    background = new component(900, 400, "Pictures/background.jpg", 0, 0, "image");
 	//score
-	myScore = new component("30px", "Consolas", "black", 100, 40, "text");
+	score = new component("30px", "Consolas", "black", 100, 40, "text");
 
-	//loop for creating new obstacles setting a random x coordinate for each
+	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++){
 	var x = Math.floor((Math.random() * 20000) + 900);	
-	myObstacles[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
+	enemyCharacters[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
 	}
 
 	//call start function
-    myGameArea.start();
+    gameArea.start();
 }
 
 function startLevel2() {
 
-	//character
-    myGamePiece = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
+	//player character
+    playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
 	//background
-    myBackground = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image");
+    background = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image");
 	//score
-	myScore = new component("30px", "Consolas", "black", 100, 40, "text");
+	score = new component("30px", "Consolas", "black", 100, 40, "text");
 
-	//loop for creating new obstacles setting a random x coordinate for each
+	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++){
 	var x = Math.floor((Math.random() * 20000) + 900);	
-	myObstacles[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
+	enemyCharacters[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
 	}
 
 	//call start function
-    myGameArea.start();
+    gameArea.start();
 }
 
-var myGameArea = {
+var gameArea = {
 
 		//create html canvas 
 		canvas : document.createElement("canvas"),
@@ -138,7 +138,7 @@ function component(width, height, color, x, y, type) {
 	
 	//function to decide to decide what to display on screen, text, image or fill color
     this.update = function() {
-        ctx = myGameArea.context;
+        ctx = gameArea.context;
         if (type == "image") {
             ctx.drawImage(this.image, 
                 this.x, 
@@ -156,21 +156,21 @@ function component(width, height, color, x, y, type) {
         }
     }
 	
-	//obstacle collision function
+	//enemy character collision function
 	this.crashWith = function(otherobj) {
-        var myleft = this.x;
-        var myright = this.x + (this.width);
-        var mytop = this.y;
-        var mybottom = this.y + (this.height);
+        var left = this.x;
+        var right = this.x + (this.width);
+        var top = this.y;
+        var bottom = this.y + (this.height);
         var otherleft = otherobj.x;
         var otherright = otherobj.x + (otherobj.width);
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
         var crash = true;
-        if ((mybottom < othertop) ||
-               (mytop > otherbottom) ||
-               (myright < otherleft) ||
-               (myleft > otherright)) {
+        if ((bottom < othertop) ||
+               (top > otherbottom) ||
+               (right < otherleft) ||
+               (left > otherright)) {
            crash = false;
         }
         return crash;
@@ -187,12 +187,13 @@ function component(width, height, color, x, y, type) {
 	
 	//set floor on canvas
 	this.hitBottom = function() {
-		var rockbottom = myGameArea.canvas.height - this.height -150;
+		var rockbottom = gameArea.canvas.height - this.height -150;
 			if (this.y > rockbottom)
 				this.y = rockbottom;
 			}
 }
-function GameOver() {
+
+function gameOver() {
     var modal = document.getElementById('gameOverModal');
     modal.style.display = "block";
     var span = document.getElementsByClassName("close")[0];
@@ -206,7 +207,7 @@ function GameOver() {
     }    
 }
 
-function GameComplete(){
+function gameComplete(){
 	var modal = document.getElementById('gameCompleteModal');
     modal.style.display = "block";
     var span = document.getElementsByClassName("close")[0];
@@ -224,142 +225,145 @@ function GameComplete(){
 //update game area for period defined in game area function, currentl 20th of a millisecond (50 times a second)
 function updateGameArea() {
 
-//loop for obstacle collision
-for (var i=0; i<myObstacles.length; i++){
-	  if (myGamePiece.crashWith(myObstacles[i])) {
-        myGameArea.stop();
-        GameOver();
-	    }
-} 
+	//loop for enemy collision
+	for (var i=0; i<enemyCharacters.length; i++){
+		  if (playerCharacter.crashWith(enemyCharacters[i])) {
+			gameArea.stop();
+			gameOver();
+			}
+	} 
 	
 	//clear canvas before each update
-	myGameArea.clear();
+	gameArea.clear();
 	
 	//increment frame number for score counter
-	myGameArea.frameNo += 1;
+	gameArea.frameNo += 1;
 	
 	//update background
-    myBackground.update();
+    background.update();
 	
-	//obstacle update
+	//enemy update
 	for (var i=0; i<100; i++){
-	myObstacles[i].update();
+	enemyCharacters[i].update();
 	}
 	
 	//score update
-	myScore.text="SCORE: " + myGameArea.frameNo;
-    myScore.update();
+	score.text="SCORE: " + gameArea.frameNo;
+    score.update();
 	
 	//when frame number reaches 3000 (point at which obstacles end) end game
-	if (myGameArea.frameNo == 3000){
-		myGameArea.stop();
+	//check current level, if more than 2 (because there is two levels currently), show game complete modal
+	if (gameArea.frameNo == 3000){
+		gameArea.stop();
 		currentLevel++;
 		
 		if(currentLevel == 2){
 			startLevel2();
 		}
 		else{
-			GameComplete();
+			gameComplete();
 		}
 	}	
 	
-	//game piece update
-	myGamePiece.newPos();    
-    myGamePiece.update();  
+	//player character update
+	playerCharacter.newPos();    
+    playerCharacter.update();  
 	
 	
-	//loop to set speed of obstacles
-	for (var i=0; i<myObstacles.length; i++){
-	myObstacles[i].x += -2;
+	//loop to set speed of enemy characters
+	for (var i=0; i<enemyCharacters.length; i++){
+	enemyCharacters[i].x += -2;
 	} 
 }
 
-//stops game piece from constantly moving after button move pressed
+//stops player character from constantly moving after button move pressed
 function stopMove(){
-myGamePiece.speedX = 0;
-myGamePiece.speedY = 0;
-        if (myGamePiece.y < 0) {
-            myGamePiece.speedY = 0;
-            myGamePiece.y = 0;
+playerCharacter.speedX = 0;
+playerCharacter.speedY = 0;
+        if (playerCharacter.y < 0) {
+            playerCharacter.speedY = 0;
+            playerCharacter.y = 0;
         }
-        if (myGamePiece.x < 0){
-            myGamePiece.speedX = 0;
-            myGamePiece.x = 0;
+        if (playerCharacter.x < 0){
+            playerCharacter.speedX = 0;
+            playerCharacter.x = 0;
         }
-        if (myGamePiece.x > myGameArea.canvas.width-myGamePiece.width) {
-            myGamePiece.speedX = 0;
-            myGamePiece.x = myGameArea.canvas.width-myGamePiece.width;
+        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
+            playerCharacter.speedX = 0;
+            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
         }
 }
 
 function moveUp() {
-    if (myGamePiece.y >= 0 && myGamePiece.x >= 0 && myGamePiece.x <= myGameArea.canvas.width-myGamePiece.width) {
-        myGamePiece.speedY = -10; 
+    if (playerCharacter.y >= 0 && playerCharacter.x >= 0 && playerCharacter.x <= gameArea.canvas.width-playerCharacter.width) {
+        playerCharacter.speedY = -10; 
         console.log("up allowed")
     }
     else {
-        if (myGamePiece.y < 0) {
-            myGamePiece.speedY = 0;
-            myGamePiece.y = 0;
+        if (playerCharacter.y < 0) {
+            playerCharacter.speedY = 0;
+            playerCharacter.y = 0;
         }
-        if (myGamePiece.x < 0){
-            myGamePiece.speedX = 0;
-            myGamePiece.x = 0;
+        if (playerCharacter.x < 0){
+            playerCharacter.speedX = 0;
+            playerCharacter.x = 0;
         }
-        if (myGamePiece.x > myGameArea.canvas.width-myGamePiece.width) {
-            myGamePiece.speedX = 0;
-            myGamePiece.x = myGameArea.canvas.width-myGamePiece.width;
+        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
+            playerCharacter.speedX = 0;
+            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
         }
     }
     
 }
 
 function moveDown() {
-    myGamePiece.speedY = 10; 
+    playerCharacter.speedY = 10; 
 }
 
 function moveLeft() {
-    if (myGamePiece.y >= 0 && myGamePiece.x >= 0 && myGamePiece.x <= myGameArea.canvas.width-myGamePiece.width) {
-        myGamePiece.speedX = -5;
+    if (playerCharacter.y >= 0 && playerCharacter.x >= 0 && playerCharacter.x <= gameArea.canvas.width-playerCharacter.width) {
+        playerCharacter.speedX = -5;
         console.log("left allowed")
     }
         else {
-        if (myGamePiece.y < 0) {
-            myGamePiece.speedY = 0;
-            myGamePiece.y = 0;
+        if (playerCharacter.y < 0) {
+            playerCharacter.speedY = 0;
+            playerCharacter.y = 0;
         }
-        if (myGamePiece.x < 0){
-            myGamePiece.speedX = 0;
-            myGamePiece.x = 0;
+        if (playerCharacter.x < 0){
+            playerCharacter.speedX = 0;
+            playerCharacter.x = 0;
         }
-        if (myGamePiece.x > myGameArea.canvas.width-myGamePiece.width) {
-            myGamePiece.speedX = 0;
-            myGamePiece.x = myGameArea.canvas.width-myGamePiece.width;
+        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
+            playerCharacter.speedX = 0;
+            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
         }
     }
 }
 
 function moveRight() {
-    if (myGamePiece.y >= 0 && myGamePiece.x >= 0 && myGamePiece.x <= myGameArea.canvas.width-myGamePiece.width) {
-        myGamePiece.speedX = 5;
+    if (playerCharacter.y >= 0 && playerCharacter.x >= 0 && playerCharacter.x <= gameArea.canvas.width-playerCharacter.width) {
+        playerCharacter.speedX = 5;
         console.log("right allowed")
     }  
         else {
-        if (myGamePiece.y < 0) {
-            myGamePiece.speedY = 0;
-            myGamePiece.y = 0;
+        if (playerCharacter.y < 0) {
+            playerCharacter.speedY = 0;
+            playerCharacter.y = 0;
         }
-        if (myGamePiece.x < 0){
-            myGamePiece.speedX = 0;
-            myGamePiece.x = 0;
+        if (playerCharacter.x < 0){
+            playerCharacter.speedX = 0;
+            playerCharacter.x = 0;
         }
-        if (myGamePiece.x > myGameArea.canvas.width-myGamePiece.width) {
-            myGamePiece.speedX = 0;
-            myGamePiece.x = myGameArea.canvas.width-myGamePiece.width;
+        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
+            playerCharacter.speedX = 0;
+            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
         }
     }
 }
+
 var interval;
+
 function moveLeftMouse(){
     interval = setInterval(moveLeft,1);
 }
