@@ -8,6 +8,7 @@ var currentLevel = 1;
 var playerCharacter;
 var background;
 var score;
+var levelDisplay;
 var enemyCharacters = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false};
 
@@ -50,10 +51,15 @@ function startGame() {
 
 	//player character
     playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
+	
 	//background
     background = new component(900, 400, "Pictures/background.jpg", 0, 0, "image");
+	
 	//score
 	score = new component("30px", "Consolas", "black", 100, 40, "text");
+	
+	//current level display
+	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text");
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++){
@@ -69,10 +75,15 @@ function startLevel2() {
 
 	//player character
     playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
+	
 	//background
     background = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image");
+	
 	//score
 	score = new component("30px", "Consolas", "black", 100, 40, "text");
+	
+	//current level display
+	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text");
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++){
@@ -85,7 +96,6 @@ function startLevel2() {
 }
 
 var gameArea = {
-
 		//create html canvas 
 		canvas : document.createElement("canvas"),
 		start : function() {
@@ -248,12 +258,16 @@ function updateGameArea() {
 	}
 	
 	//score update
-	score.text="SCORE: " + gameArea.frameNo;
+	score.text = "SCORE: " + gameArea.frameNo;
     score.update();
+	
+	//LevelDisplay update
+	levelDisplay.text = "Level " + currentLevel;
+	levelDisplay.update();
 	
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-	if (gameArea.frameNo == 3000){
+	if (gameArea.frameNo == 200){
 		gameArea.stop();
 		currentLevel++;
 		
