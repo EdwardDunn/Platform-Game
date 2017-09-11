@@ -1,5 +1,10 @@
-//Description: Game.js, this script contains all the javascript required for the game to work on the 
-//JS_game html page.
+/*
+Description: Game.js, this script contains all the javascript required for the game to work on the JS_game html page.
+New levels can be added by creating a new startLevel? function. It is recommended that a new background is used for each
+level. 
+Author: Open Source - Contributor list can be seen in GitHub 
+Version: 1.0
+*/
 
 const LEFT = 37;
 const UP = 38;
@@ -142,7 +147,7 @@ function component(width, height, color, x, y, type) {
     this.y = y;    
 	this.gravity = 0;
 	
-	//sets speed game piece falls to bottom of canvas
+	//sets speed playerCharacter falls to bottom of canvas
 	this.gravitySpeed = 4.5;
 	
 	
