@@ -3,7 +3,6 @@ Platform Game Copyrights
 Added by: Edward Dunn
 Date: 05/09/2016
 
-
 	Description: main character
 	Source: http://www.gameart2d.com/freebies.html
 
@@ -12,7 +11,6 @@ Date: 05/09/2016
 		
 	Description: Background 
 	Source: http://frebers.com/download/game-background/
-
 	
 Added by: Goran Medic
 Date: 8/16/2017
@@ -22,7 +20,6 @@ Date: 8/16/2017
 	
 	Description: Background2
 	Source: http://www.frebers.com/download/night-game-background/
-
 
 Added by: Edward Dunn
 Date: 15/09/17
