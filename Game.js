@@ -90,7 +90,7 @@ function startGame() {
 function startLevel2() {
 
 	//player character
-    playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
+    playerCharacter = new component(60, 70, "Pictures/good_girl.png", 100, 120, "image");
 	
 	//background
     background = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image");
@@ -104,7 +104,7 @@ function startLevel2() {
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++){
 	var x = Math.floor((Math.random() * 20000) + 900);	
-	enemyCharacters[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
+	enemyCharacters[i] = new component(60, 50, "Pictures/bad_guy.png", x,200, "image")
 	}
 
 	//call start function
