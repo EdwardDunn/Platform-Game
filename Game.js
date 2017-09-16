@@ -9,6 +9,11 @@ Version: 1.0
 const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
+const SPACE = 32;
+
+// Add state to check if user is playing, complete or game-over
+var state = 'playing';
+
 var currentLevel = 1;
 var playerCharacter;
 var background;
@@ -38,7 +43,13 @@ function KeyDown(event)
     }
     else if (keysPressed[RIGHT]){
         moveRight();
-    }	
+    }
+    // Add SPACE key to restart game (only if it's complete or game-over)
+    else if (keysPressed[SPACE]) {
+        if (state == 'game-over' || state == 'complete') {
+            history.go(0);
+        }
+    }
 }
 function KeyUp(event)
 {
@@ -209,12 +220,9 @@ function component(width, height, color, x, y, type) {
 }
 
 function gameOver() {
+    state = 'game-over';
     var modal = document.getElementById('gameOverModal');
     modal.style.display = "block";
-    var span = document.getElementsByClassName("close")[0];
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
@@ -223,6 +231,7 @@ function gameOver() {
 }
 
 function gameComplete(){
+    state = 'complete';
 	var modal = document.getElementById('gameCompleteModal');
     modal.style.display = "block";
     var span = document.getElementsByClassName("close")[0];

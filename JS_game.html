@@ -3,14 +3,19 @@ Description:
 
 -->
 <html>
-<link rel="stylesheet" type="text/css" href="Style-Sheets/JS_game.css">
-<link rel="stylesheet" type="text/css" href="Style-Sheets/GameOverModal.css">
-<link rel="stylesheet" type="text/css" href="Style-Sheets/GameCompleteModal.css">
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Platform Game</title>
+
+	<link rel="stylesheet" type="text/css" href="Style-Sheets/JS_game.css">
+	<link rel="stylesheet" type="text/css" href="Style-Sheets/GameOverModal.css">
+	<link rel="stylesheet" type="text/css" href="Style-Sheets/GameCompleteModal.css">
+	<link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
+
 	<script type="text/javascript" src="Game.js"/></script>
+
 </head>
 
 <!-- call startGame function on page load-->
@@ -18,29 +23,37 @@ Description:
 
 <div id="gameOverModal" class="modal">
 	<div class="modal-content">
-	<span class="close">&times;</span>
-	<p id="gameOverText">GAME OVER</p>
+
+	<img id="gameOverLabel" src="Pictures/game_over.png" alt="GAME OVER">
+	<p id="gameOverDesc">Press RESTART button or Space to restart the game.</p>
+
 		<div id="restartButton">
-		<img src="Pictures/restart.png" width="90%" onClick="history.go(0)"/>
+		<img src="Pictures/restart.png" width="100%" onClick="history.go(0)"/>
 		</div>
 	</div>
 </div>
 
 <div id="gameCompleteModal" class="modal">
 	<div class="modal-content">
-	<span class="close">&times;</span>
-	<p id="gameOverText">You completed the game! Awesome Work!</p>
+	<img id="gameOverLabel" src="Pictures/victory.png" alt="VICTORY">
+	<p id="gameOverDesc">You completed the game! Awesome Work!</p>
 		<div id="restartButton">
-		<img src="Pictures/restart.png" width="90%" onClick="history.go(0)"/>
+		<img src="Pictures/restart.png" width="100%" onClick="history.go(0)"/>
 		</div>
 	</div>
 </div>
 
 <!--buttons-->
 <div id="buttonWrapper">
-<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">LEFT</button>
-<button class="button" onmousedown="moveUpMouse()" onmouseup="onMouseUp()" ontouchstart="moveUpMouse()" ontouchend="onMouseUp()">JUMP</button>
-<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">RIGHT</button>
+<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
+	<img src="Pictures/left.png" alt="LEFT">
+</button>
+<button class="button" onmousedown="moveUpMouse()" onmouseup="onMouseUp()" ontouchstart="moveUpMouse()" ontouchend="onMouseUp()">
+	<img src="Pictures/jump.png" alt="JUMP">
+</button>
+<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
+	<img src="Pictures/right.png" alt="RIGHT">
+</button>
 </div>
 
 </body>

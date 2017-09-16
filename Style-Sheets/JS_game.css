@@ -1,46 +1,61 @@
 body {
-background-color: #d6d7d8;
+  background-color: #d6d7d8;
+  font-family: 'Share Tech Mono', monospace;
 }
 
 canvas {	
-border:1px solid #d3d3d3;
-background-color: #f1f1f1;
-width: 90%;
-margin-left: 5%;
+  border:1px solid #d3d3d3;
+  background-color: #f1f1f1;
+  width: 90%;
+  margin-left: 5%;
 }
 
 #restartButton{
-margin: auto;
-width: 150px;
-padding: 40px;
+  margin: auto;
+  width: 150px;
+  margin-top: 40px;
+  cursor: pointer;
+}
+
+#restartButton:hover{
+  /* IE 11 and lower don't support filter */
+  -webkit-filter: saturate(1.6);
+  filter: saturate(1.6);
 }
 
 .button {
   display: inline-block;
-  padding: 18px 28px;
+  /* padding: 18px 28px; */
   font-size: 12px;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
   outline: none;
   color: #fff;
-  background-color: #575757;
+  background-color: transparent;
   border: none;
-  border-radius: 15px;
-  box-shadow: 0 9px #999;
+  /* border-radius: 15px;
+  box-shadow: 0 9px #999; */
+  -webkit-transition: 0.5s ease-out;
+  -moz-transition: 0.5s ease-out;
+  transition: 0.5s ease-out;
 }
 
 .button:hover {
-  background-color: #3e8e41;
+  /* IE 11 and lower don't support filter */
+  -webkit-filter: saturate(1.6);
+  filter: saturate(1.6);
 }
 
 .button:active {
-  background-color: #3e8e41;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
+  /* IE 11 and lower don't support filter */
+  -webkit-filter: saturate(1.6);
+  filter: saturate(1.6);
+  transform: translateY(1px);
 }
 
 #buttonWrapper{
+  margin-top: 20px;
 	text-align:center; 
 }
 
