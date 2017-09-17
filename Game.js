@@ -79,7 +79,7 @@ function startGame() {
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++){
-	var x = Math.floor((Math.random() * 20000) + 900);	
+	var x = Math.floor((Math.random() * (1200+i*300-900+i*300)) + (300*i+900));	
 	enemyCharacters[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
 	}
 
@@ -103,7 +103,7 @@ function startLevel2() {
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++){
-	var x = Math.floor((Math.random() * 20000) + 900);	
+	var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));	
 	enemyCharacters[i] = new component(60, 50, "Pictures/bad_guy.png", x,200, "image")
 	}
 
@@ -323,8 +323,8 @@ playerCharacter.speedY = 0;
 }
 
 function moveUp() {
-    if (playerCharacter.y >= 0 && playerCharacter.x >= 0 && playerCharacter.x <= gameArea.canvas.width-playerCharacter.width) {
-        playerCharacter.speedY = -10; 
+    if (playerCharacter.y >= 170 && playerCharacter.x >= 0 && playerCharacter.x <= gameArea.canvas.width-playerCharacter.width) {
+        playerCharacter.speedY = -7; 
         console.log("up allowed")
     }
     else {
@@ -345,7 +345,7 @@ function moveUp() {
 }
 
 function moveDown() {
-    playerCharacter.speedY = 10; 
+    playerCharacter.speedY = 7; 
 }
 
 function moveLeft() {
