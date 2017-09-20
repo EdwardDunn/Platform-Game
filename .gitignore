@@ -1,0 +1,12 @@
+### OS Specific
+#Mac OS
+*.DS_Store
+
+### IDE related
+# IntelliJ IDEs
+.idea
+
+# Eclipse IDE
+.project
+.settings
+.buildpath
