@@ -265,7 +265,7 @@ function gameComplete(){
 }
 
 /**
- * Update game area for period defined in game area function, currentl 20th of a millisecond (50 times a second)
+ * Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
  */
 function updateGameArea() {
 	//loop for enemy collision
