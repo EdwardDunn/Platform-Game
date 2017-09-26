@@ -30,7 +30,7 @@ Date: 15/09/17
 	Description: good_girl
 	Source: http://www.gameart2d.com/adventurer-girl---free-sprites.html
 
-Added by: Trehboy
+Added by: Treyhboy
 Date:9/26/2017
 
     Description: enemy2
