@@ -135,7 +135,7 @@ function startLevel3() {
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
 	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
-	    enemyCharacters[i] = new component(60, 50, "Pictures/fire_baddie.png", x,200, "image")
+	    enemyCharacters[i] = new component(60, 50, "Pictures/skull_baddie.png", x,200, "image")
 	}
 
 	//call start function
@@ -330,7 +330,7 @@ function updateGameArea() {
 		if(currentLevel === 2){
 			startLevel2();
 		}
-    if else(currentLevel === 3){
+    else if(currentLevel === 3){
       startLevel3();
     }
 		else{
