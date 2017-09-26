@@ -10,14 +10,14 @@ canvas {
   margin-left: 5%;
 }
 
-#restartButton{
+.restartButton{
   margin: auto;
   width: 150px;
   margin-top: 40px;
   cursor: pointer;
 }
 
-#restartButton:hover{
+.restartButton:hover{
   /* IE 11 and lower don't support filter */
   -webkit-filter: saturate(1.6);
   filter: saturate(1.6);

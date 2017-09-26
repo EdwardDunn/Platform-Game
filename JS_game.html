@@ -14,7 +14,7 @@ Description:
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/GameCompleteModal.css">
 	<link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
 
-	<script type="text/javascript" src="Game.js"/></script>
+	<script type="text/javascript" src="Game.js"></script>
 
 </head>
 
@@ -24,10 +24,10 @@ Description:
 <div id="gameOverModal" class="modal">
 	<div class="modal-content">
 
-	<img id="gameOverLabel" src="Pictures/game_over.png" alt="GAME OVER">
-	<p id="gameOverDesc">Press RESTART button or Space to restart the game.</p>
+	<img class="gameOverLabel" src="Pictures/game_over.png" alt="GAME OVER">
+	<p class="gameOverDesc">Press RESTART button or Space to restart the game.</p>
 
-		<div id="restartButton">
+		<div class="restartButton">
 		<img src="Pictures/restart.png" width="100%" onClick="history.go(0)"/>
 		</div>
 	</div>
@@ -35,9 +35,9 @@ Description:
 
 <div id="gameCompleteModal" class="modal">
 	<div class="modal-content">
-	<img id="gameOverLabel" src="Pictures/victory.png" alt="VICTORY">
-	<p id="gameOverDesc">You completed the game! Awesome Work!</p>
-		<div id="restartButton">
+	<img class="gameOverLabel" src="Pictures/victory.png" alt="VICTORY">
+	<p class="gameOverDesc">You completed the game! Awesome Work!</p>
+		<div class="restartButton">
 		<img src="Pictures/restart.png" width="100%" onClick="history.go(0)"/>
 		</div>
 	</div>

@@ -10,7 +10,9 @@ const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
-
+//flag and z to set the interval for flying birds
+var flag = 1;
+var z=0;
 // Add state to check if user is playing, complete or game-over
 var state = 'playing';
 
@@ -72,22 +74,28 @@ function KeyUp(event) {
  */
 function startGame() {
 	//player character
-    playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image");
+    playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image",1);
 
 	//background
-    background = new component(900, 400, "Pictures/background.jpg", 0, 0, "image");
+    background = new component(900, 400, "Pictures/background.jpg", 0, 0, "image",1);
 
 	//score
-	score = new component("30px", "Consolas", "black", 100, 40, "text");
+	score = new component("30px", "Consolas", "black", 100, 40, "text",1);
 
 	//current level display
-	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text");
+	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++) {
 	var x = Math.floor((Math.random() * (1200 + i * 300 - 900 + i * 300)) + (300 * i + 900));
-	enemyCharacters[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image")
-	}
+	//Random enemy character choose
+	if(Math.floor(Math.random()*(2)))
+    {   console.log("enemy 1");
+        enemyCharacters[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image",1)}
+    else
+    {   console.log("enemy 2");
+        enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x,200, "image",0)}
+    }
 
 	//call start function
     gameArea.start();
@@ -98,22 +106,29 @@ function startGame() {
  */
 function startLevel2() {
     //player character
-    playerCharacter = new component(60, 70, "Pictures/good_girl.png", 100, 120, "image");
+    playerCharacter = new component(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
 
 	//background
-    background = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image");
+    background = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image",1);
 
 	//score
-	score = new component("30px", "Consolas", "black", 100, 40, "text");
+	score = new component("30px", "Consolas", "black", 100, 40, "text",1);
 
 	//current level display
-	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text");
+	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
 	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
-	    enemyCharacters[i] = new component(60, 50, "Pictures/bad_guy.png", x,200, "image")
-	}
+
+        //Random enemy character choose
+        if(Math.floor(Math.random()*(2)))
+        {   console.log("enemy 1");
+            enemyCharacters[i] = new component(60, 50, "pictures/bad_guy.png", x,200, "image",0)}
+        else
+        {   console.log("enemy 2");
+            enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x,200, "image",0)}
+    }
 
 	//call start function
     gameArea.start();
@@ -155,10 +170,11 @@ var gameArea = {
  * @param y
  * @param type
  */
-function component(width, height, color, x, y, type) {
+function component(width, height, color, x, y, type,h) {
 
     //test if component is image
-	this.type = type;
+	this.h=h;
+    this.type = type;
     if (type === "image") {
         this.image = new Image();
         this.image.src = color;
@@ -169,7 +185,7 @@ function component(width, height, color, x, y, type) {
     this.height = height;
 
 	//change components position
-    this.speedX = 0;
+    this.speedX = 0
     this.speedY = 0;
     this.x = x;
     this.y = y;
@@ -207,10 +223,10 @@ function component(width, height, color, x, y, type) {
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
         var crash = true;
-        if ((bottom < othertop) ||
-               (top > otherbottom) ||
-               (right < otherleft) ||
-               (left > otherright)) {
+        if ((bottom < othertop + 10) ||
+               (top > otherbottom - 20) ||
+               (right < otherleft + 15) ||
+               (left > otherright - 15)) {
            crash = false;
         }
         return crash;
@@ -220,8 +236,11 @@ function component(width, height, color, x, y, type) {
     this.newPos = function() {
 		this.gravitySpeed += this.gravity;
         this.x += this.speedX;
+        //if(h)
         this.y += this.speedY + this.gravitySpeed;
-		this.hitBottom();
+		//else
+           // this.y += this.speedY + this.gravitySpeed;
+        this.hitBottom();
     };
 
 	//set floor on canvas
@@ -280,7 +299,7 @@ function updateGameArea() {
 	gameArea.clear();
 
 	//increment frame number for score counter
-	gameArea.frameNo += 1;
+	gameArea.frameNo += 2;
 
 	//update background
     background.update();
@@ -317,9 +336,25 @@ function updateGameArea() {
     playerCharacter.update();
 
 	//loop to set speed of enemy characters
-	for (var i = 0; i < enemyCharacters.length; i++){
-	    enemyCharacters[i].x += -2;
+	if(z==35) {
+        flag = !flag;
+        z=0;
 	}
+    z++;
+    for (var i = 0; i < enemyCharacters.length; i++){
+	    enemyCharacters[i].x += -3;
+
+	    //if statement for enemy birds to bounce
+	    if(!enemyCharacters[i].h) {
+            if (flag == 1) {
+                enemyCharacters[i].y += -3;
+            }
+            else {
+                enemyCharacters[i].y += +3;
+            }
+        }
+
+        }
 }
 
 /**
