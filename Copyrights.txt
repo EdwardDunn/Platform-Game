@@ -34,7 +34,7 @@ Added by: Dwayne Brissett
 Date: 10/25/2017
 
 	Description: background_3
-	Source: http://www.frebers.com/download/5-free-game-backgrounds/
+	Source: http://www.frebers.com/download/rocks-game-background/
 
 	Description: skull_baddie
 	Source: https://opengameart.org/content/bevouliin-flying-skull-sprite-sheets
