@@ -32,23 +32,20 @@ function KeyDown(event) {
     console.log(key);
     keysPressed[key] = true;
 
-    if (keysPressed[LEFT] && keysPressed[UP]){
-        moveLeft();
-    } else if (keysPressed[LEFT]){
-        moveLeft();
-    } else if (keysPressed[UP]) {
-        moveUp();
-    }
-
-    if (keysPressed[RIGHT] && keysPressed[UP]) {
-        moveRight();
-    } else if (keysPressed[RIGHT]){
-        moveRight();
-    } else if (keysPressed[SPACE]) { // Add SPACE key to restart game (only if it's complete or game-over)
-        if (state === 'game-over' || state === 'complete') {
+	if (keysPressed[LEFT]) {
+		moveLeft();	
+	}
+	if (keysPressed[RIGHT]) {
+		moveRight();	
+	}
+	if (keysPressed[UP]) {
+		moveUp();	
+	}
+	if (keysPressed[SPACE]) { // Add SPACE key to restart game (only if it's complete or game-over)
+		if (state === 'game-over' || state === 'complete') {
             history.go(0);
-        }
-    }
+        }	
+	}
 }
 
 /**
@@ -60,9 +57,23 @@ function KeyUp(event) {
     key = event.which;
     console.log(key);
     keysPressed[key] = false;
-    switch (key) {
-		case LEFT : case UP : case RIGHT : stopMove();
-		break;
+	switch (key) {
+		case UP:
+			playerCharacter.speedY = 0;
+			break;
+		case LEFT:
+			if (keysPressed[RIGHT]) {
+				moveRight();		
+			} else {
+				playerCharacter.speedX = 0;		
+			}
+			break;
+		case RIGHT:
+			if (keysPressed[LEFT]) {
+				moveLeft();		
+			} else {
+				playerCharacter.speedX = 0;		
+			}
 	}
 }
 
