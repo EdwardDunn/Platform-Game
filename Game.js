@@ -3,7 +3,6 @@ Description: Game.js, this script contains all the javascript required for the g
 New levels can be added by creating a new startLevel? function. It is recommended that a new background is used for each
 level.
 Author: Open Source - Contributor list can be seen in GitHub
-Version: 1.0
 */
 
 const LEFT = 37;
