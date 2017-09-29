@@ -1,8 +1,8 @@
 /*
 Description: Game.js, this script contains all the javascript required for the game to work on the JS_game html page.
 New levels can be added by creating a new startLevel? function. It is recommended that a new background is used for each
-level. 
-Author: Open Source - Contributor list can be seen in GitHub 
+level.
+Author: Open Source - Contributor list can be seen in GitHub
 */
 
 const LEFT = 37;
@@ -112,6 +112,29 @@ function startLevel2() {
 	for (var i = 0; i < 100; i++) {
 	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
 	    enemyCharacters[i] = new component(60, 50, "Pictures/bad_guy.png", x,200, "image")
+	}
+
+	//call start function
+    gameArea.start();
+}
+
+function startLevel3() {
+    //player character
+    playerCharacter = new component(60, 70, "Pictures/good_girl.png", 100, 120, "image");
+
+	//background
+    background = new component(900, 400, "Pictures/background_3.jpg", 0, 0, "image");
+
+	//score
+	score = new component("30px", "Consolas", "black", 100, 40, "text");
+
+	//current level display
+	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text");
+
+	//loop for creating new enemy characters setting a random x coordinate for each
+	for (var i = 0; i < 100; i++) {
+	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
+	    enemyCharacters[i] = new component(60, 50, "Pictures/skull_baddie.png", x,200, "image")
 	}
 
 	//call start function
@@ -306,6 +329,9 @@ function updateGameArea() {
 		if(currentLevel === 2){
 			startLevel2();
 		}
+    else if(currentLevel === 3){
+      startLevel3();
+    }
 		else{
 			gameComplete();
 		}
