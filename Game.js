@@ -148,7 +148,10 @@ function startLevel2() {
 }
 
 function startLevel3() {
-    //player character
+        //to synchronize the start cordinate of enemy character
+	flag= 1;
+        z=0
+	//player character
     playerCharacter = new component(60, 70, "Pictures/good_girl.png", 100, 120, "image");
 
 	//background
