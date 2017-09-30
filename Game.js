@@ -105,6 +105,8 @@ function startGame() {
  *
  */
 function startLevel2() {
+    flag= 1;
+    z=0
     //player character
     playerCharacter = new component(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
 
