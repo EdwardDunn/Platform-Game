@@ -8,16 +8,16 @@ Date: 05/09/2016
 
 	Description: 1st Zombie
 	Source: http://opengameart.org/content/bevouliin-free-zombie-sprite-sheets-game-character-for-game-developers
-		
-	Description: Background 
+
+	Description: Background
 	Source: http://frebers.com/download/game-background/
-	
+
 Added by: Goran Medic
 Date: 8/16/2017
 
 	Description: Background3
 	Source: http://www.frebers.com/download/free-games-background/
-	
+
 	Description: Background2
 	Source: http://www.frebers.com/download/night-game-background/
 
@@ -28,11 +28,21 @@ Date: 15/09/17
 	Source: https://opengameart.org/content/limbo-land-monster-sprites
 
 	Description: good_girl
-	Source: http://www.gameart2d.com/adventurer-girl---free-sprites.html
+	Source: http://www.gameart2d.com/adventurer-girl---free-sprites.htm
+
+Added by: Dwayne Brissett
+Date: 10/25/2017
+
+	Description: background_3
+	Source: http://www.frebers.com/download/rocks-game-background/
+
+	Description: skull_baddie
+	Source: https://opengameart.org/content/bevouliin-flying-skull-sprite-sheets
 
 Added by: Treyhboy
 Date:9/26/2017
 
     Description: enemy2
-    	Source: http://www.dribble.com/download/enemy2/
+        Source: http://www.dribble.com/download/enemy2/
+
 

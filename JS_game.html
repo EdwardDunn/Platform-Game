@@ -1,6 +1,7 @@
 <!---
-Description:
-
+Description: Home page for game. Calls startGame() function in JS_Game.js file on page load and
+contains code for game over and game complete modals.
+Author: Open Source - Contributor list can be seen in GitHub 
 -->
 <html>
 <head>
@@ -19,7 +20,7 @@ Description:
 </head>
 
 <!-- call startGame function on page load-->
-<body onload="startGame()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)">
+<body onload="startGame()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
 
 <div id="gameOverModal" class="modal">
 	<div class="modal-content">

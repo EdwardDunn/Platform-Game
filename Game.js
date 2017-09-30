@@ -1,9 +1,8 @@
 /*
 Description: Game.js, this script contains all the javascript required for the game to work on the JS_game html page.
 New levels can be added by creating a new startLevel? function. It is recommended that a new background is used for each
-level. 
-Author: Open Source - Contributor list can be seen in GitHub 
-Version: 1.0
+level.
+Author: Open Source - Contributor list can be seen in GitHub
 */
 
 const LEFT = 37;
@@ -35,23 +34,20 @@ function KeyDown(event) {
     console.log(key);
     keysPressed[key] = true;
 
-    if (keysPressed[LEFT] && keysPressed[UP]){
-        moveLeft();
-    } else if (keysPressed[LEFT]){
-        moveLeft();
-    } else if (keysPressed[UP]) {
-        moveUp();
-    }
-
-    if (keysPressed[RIGHT] && keysPressed[UP]) {
-        moveRight();
-    } else if (keysPressed[RIGHT]){
-        moveRight();
-    } else if (keysPressed[SPACE]) { // Add SPACE key to restart game (only if it's complete or game-over)
-        if (state === 'game-over' || state === 'complete') {
+	if (keysPressed[LEFT]) {
+		moveLeft();	
+	}
+	if (keysPressed[RIGHT]) {
+		moveRight();	
+	}
+	if (keysPressed[UP]) {
+		moveUp();	
+	}
+	if (keysPressed[SPACE]) { // Add SPACE key to restart game (only if it's complete or game-over)
+		if (state === 'game-over' || state === 'complete') {
             history.go(0);
-        }
-    }
+        }	
+	}
 }
 
 /**
@@ -63,9 +59,23 @@ function KeyUp(event) {
     key = event.which;
     console.log(key);
     keysPressed[key] = false;
-    switch (key) {
-		case LEFT : case UP : case RIGHT : stopMove();
-		break;
+	switch (key) {
+		case UP:
+			playerCharacter.speedY = 0;
+			break;
+		case LEFT:
+			if (keysPressed[RIGHT]) {
+				moveRight();		
+			} else {
+				playerCharacter.speedX = 0;		
+			}
+			break;
+		case RIGHT:
+			if (keysPressed[LEFT]) {
+				moveLeft();		
+			} else {
+				playerCharacter.speedX = 0;		
+			}
 	}
 }
 
@@ -131,6 +141,29 @@ function startLevel2() {
         {   console.log("enemy 2");
             enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x,200, "image",0)}
     }
+
+	//call start function
+    gameArea.start();
+}
+
+function startLevel3() {
+    //player character
+    playerCharacter = new component(60, 70, "Pictures/good_girl.png", 100, 120, "image");
+
+	//background
+    background = new component(900, 400, "Pictures/background_3.jpg", 0, 0, "image");
+
+	//score
+	score = new component("30px", "Consolas", "black", 100, 40, "text");
+
+	//current level display
+	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text");
+
+	//loop for creating new enemy characters setting a random x coordinate for each
+	for (var i = 0; i < 100; i++) {
+	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
+	    enemyCharacters[i] = new component(60, 50, "Pictures/skull_baddie.png", x,200, "image")
+	}
 
 	//call start function
     gameArea.start();
@@ -328,6 +361,9 @@ function updateGameArea() {
 		if(currentLevel === 2){
 			startLevel2();
 		}
+    else if(currentLevel === 3){
+      startLevel3();
+    }
 		else{
 			gameComplete();
 		}
