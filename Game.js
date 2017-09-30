@@ -9,7 +9,8 @@ const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
-//flag and z to set the interval for flying birds
+//flag to take care of y axis cordinate increase or decrease
+//z to set a interval at which flag is changed 
 var flag = 1;
 var z=0;
 // Add state to check if user is playing, complete or game-over
@@ -162,7 +163,15 @@ function startLevel3() {
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
 	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
-	    enemyCharacters[i] = new component(60, 50, "Pictures/skull_baddie.png", x,200, "image")
+	
+        //if statement to choose random enemy from flying birds and skullman
+	if(Math.floor(Math.random()*(2)))
+        	{   console.log("enemy 1");
+            	enemyCharacters[i] = new component(60, 50, "Pictures/skull_baddie.png", x,200, "image")
+	 else
+        	{   console.log("enemy 2");
+            	enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x,200, "image",0)}
+    		}
 	}
 
 	//call start function
@@ -206,9 +215,9 @@ var gameArea = {
  * @param type
  */
 function component(width, height, color, x, y, type,h) {
-
+    //h to test if it is enemy 1 or 2
+    this.h=h;
     //test if component is image
-	this.h=h;
     this.type = type;
     if (type === "image") {
         this.image = new Image();
@@ -271,10 +280,7 @@ function component(width, height, color, x, y, type,h) {
     this.newPos = function() {
 		this.gravitySpeed += this.gravity;
         this.x += this.speedX;
-        //if(h)
         this.y += this.speedY + this.gravitySpeed;
-		//else
-           // this.y += this.speedY + this.gravitySpeed;
         this.hitBottom();
     };
 
@@ -346,7 +352,7 @@ function updateGameArea() {
 
 	//score update
 	score.text = "SCORE: " + gameArea.frameNo;
-    score.update();
+        score.update();
 
 	//LevelDisplay update
 	levelDisplay.text = "Level " + currentLevel;
@@ -373,16 +379,20 @@ function updateGameArea() {
 	playerCharacter.newPos();
     playerCharacter.update();
 
-	//loop to set speed of enemy characters
+	//if statement to reverse the flag so that the y cordinate of birds would be changed
+	//z keeps the track and change flag after every 35 iteration
 	if(z==35) {
-        flag = !flag;
-        z=0;
-	}
-    z++;
+           flag = !flag;
+           z=0;
+         }
+	//z increased in every iteration
+        z++;
+	//loop to set speed of enemy characters
     for (var i = 0; i < enemyCharacters.length; i++){
-	    enemyCharacters[i].x += -3;
+	    enemyCharacters[i].x += -2;
 
-	    //if statement for enemy birds to bounce
+	    //if statement to check if y cordinate has to increase or decrease
+	    //should birds go up or down
 	    if(!enemyCharacters[i].h) {
             if (flag == 1) {
                 enemyCharacters[i].y += -3;
