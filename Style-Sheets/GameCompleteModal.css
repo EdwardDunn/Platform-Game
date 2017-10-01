@@ -46,14 +46,14 @@
     font-size: 28px;
 }
 
-#gameOverLabel {
+.gameOverLabel {
     width: 267px;
     height: 74px;
     display: block;
     margin: auto;
 }
 
-#gameOverDesc {
+.gameOverDesc {
     text-align: center;
     font-size: 20px;
     color: #54300e;
