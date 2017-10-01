@@ -152,30 +152,31 @@ function startLevel3() {
 	flag= 1;
         z=0
 	//player character
-    playerCharacter = new component(60, 70, "Pictures/good_girl.png", 100, 120, "image");
+    playerCharacter = new component(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
 
 	//background
-    background = new component(900, 400, "Pictures/background_3.jpg", 0, 0, "image");
+    background = new component(900, 400, "Pictures/background_3.jpg", 0, 0, "image",1);
 
 	//score
-	score = new component("30px", "Consolas", "black", 100, 40, "text");
+	score = new component("30px", "Consolas", "black", 100, 40, "text",1);
 
 	//current level display
-	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text");
+	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
-	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
-	
+        var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
+
         //if statement to choose random enemy from flying birds and skullman
-	if(Math.floor(Math.random()*(2)))
-        	{   console.log("enemy 1");
-            	enemyCharacters[i] = new component(60, 50, "Pictures/skull_baddie.png", x,200, "image")
-	 else
-        	{   console.log("enemy 2");
-            	enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x,200, "image",0)}
-    		}
-	}
+        if (Math.floor(Math.random() * (2))) {
+            console.log("enemy 1");
+            enemyCharacters[i] = new component(60, 50, "Pictures/skull_baddie.png", x, 200, "image", 1);
+        }
+        else {
+            console.log("enemy 2");
+            enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x, 200, "image", 0);
+        }
+    }
 
 	//call start function
     gameArea.start();
