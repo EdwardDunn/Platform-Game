@@ -9,6 +9,12 @@ const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
+let key_string = {
+	37: 'left',
+	38:'up',
+	39:'right',
+	32:'space'
+};
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed 
 var flag = 1;
@@ -29,10 +35,14 @@ var keysPressed = {LEFT : false, UP : false, RIGHT : false};
  * @constructor
  */
 function KeyDown(event) {
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+	if (event.repeat) {
+		return;
+	}
     console.log(event);
     var key;
     key = event.which;
-    console.log(key);
+    console.log(key_string[key] + ' down');
     keysPressed[key] = true;
 
 	if (keysPressed[LEFT]) {
@@ -58,7 +68,7 @@ function KeyDown(event) {
 function KeyUp(event) {
     var key;
     key = event.which;
-    console.log(key);
+    console.log(key_string[key] + ' up');
     keysPressed[key] = false;
 	switch (key) {
 		case UP:
@@ -286,6 +296,7 @@ function component(width, height, color, x, y, type,h) {
         this.x += this.speedX;
         this.y += this.speedY + this.gravitySpeed;
         this.hitBottom();
+		//console.log(`${this.x},${this.y}`);
     };
 
 	//set floor on canvas
