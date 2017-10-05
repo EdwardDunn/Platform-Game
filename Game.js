@@ -338,7 +338,24 @@ function gameComplete(){
         }
     }
 }
-
+function correctCharacterPos() {
+	if (playerCharacter.y < 0) {
+           playerCharacter.speedY = 0;
+           playerCharacter.y = 0;
+    }
+    if (playerCharacter.x < 0){
+         playerCharacter.speedX = 0;
+         playerCharacter.x = 0;
+    }
+    if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
+        playerCharacter.speedX = 0;
+        playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
+    }
+    if (playerCharacter.y > gameArea.canvas.height-playerCharacter.height) {
+        playerCharacter.speedY = 0;
+        playerCharacter.y = gameArea.canvas.height-playerCharacter.height;
+    }
+}
 /**
  * Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
  */
@@ -392,6 +409,7 @@ function updateGameArea() {
 
 	//player character update
 	playerCharacter.newPos();
+	correctCharacterPos();
     playerCharacter.update();
 
 	//if statement to reverse the flag so that the y cordinate of birds would be changed
@@ -444,24 +462,8 @@ function stopMove(){
  *
  */
 function moveUp() {
-    if (playerCharacter.y >= 170 && playerCharacter.x >= 0 &&
-        playerCharacter.x <= gameArea.canvas.width - playerCharacter.width) {
-        playerCharacter.speedY = -7;
-        console.log("up allowed")
-    } else {
-        if (playerCharacter.y < 0) {
-            playerCharacter.speedY = 0;
-            playerCharacter.y = 0;
-        }
-        if (playerCharacter.x < 0){
-            playerCharacter.speedX = 0;
-            playerCharacter.x = 0;
-        }
-        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
-            playerCharacter.speedX = 0;
-            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
-        }
-    }
+	playerCharacter.speedY = -7;
+        
 }
 
 /**
@@ -475,48 +477,10 @@ function moveDown() {
  *
  */
 function moveLeft() {
-    if (playerCharacter.y >= 0 && playerCharacter.x >= 0 &&
-        playerCharacter.x <= gameArea.canvas.width - playerCharacter.width) {
-        playerCharacter.speedX = -5;
-        console.log("left allowed")
-    } else {
-        if (playerCharacter.y < 0) {
-            playerCharacter.speedY = 0;
-            playerCharacter.y = 0;
-        }
-        if (playerCharacter.x < 0){
-            playerCharacter.speedX = 0;
-            playerCharacter.x = 0;
-        }
-        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
-            playerCharacter.speedX = 0;
-            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
-        }
-    }
+    playerCharacter.speedX = -5;
 }
-
-/**
- *
- */
 function moveRight() {
-    if (playerCharacter.y >= 0 && playerCharacter.x >= 0 && playerCharacter.x <= gameArea.canvas.width-playerCharacter.width) {
-        playerCharacter.speedX = 5;
-        console.log("right allowed")
-    }
-        else {
-        if (playerCharacter.y < 0) {
-            playerCharacter.speedY = 0;
-            playerCharacter.y = 0;
-        }
-        if (playerCharacter.x < 0) {
-            playerCharacter.speedX = 0;
-            playerCharacter.x = 0;
-        }
-        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
-            playerCharacter.speedX = 0;
-            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
-        }
-    }
+    playerCharacter.speedX = 5;
 }
 
 var interval;
