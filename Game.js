@@ -9,6 +9,9 @@ const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
+
+
+
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed 
 var flag = 1;
@@ -29,6 +32,11 @@ var keysPressed = {LEFT : false, UP : false, RIGHT : false};
  * @constructor
  */
 function KeyDown(event) {
+	//avoid auto-repeated keydown event
+	if (event.repeat) {
+		return;
+	}
+
     console.log(event);
     var key;
     key = event.which;
@@ -286,6 +294,7 @@ function component(width, height, color, x, y, type,h) {
         this.x += this.speedX;
         this.y += this.speedY + this.gravitySpeed;
         this.hitBottom();
+		//console.log(`${this.x},${this.y}`);
     };
 
 	//set floor on canvas
@@ -327,7 +336,27 @@ function gameComplete(){
         }
     }
 }
-
+/*
+ *Ajust character to a valid position if it moves out of border
+ * */
+function correctCharacterPos() {
+	if (playerCharacter.y < 0) {
+           playerCharacter.speedY = 0;
+           playerCharacter.y = 0;
+    }
+    if (playerCharacter.x < 0){
+         playerCharacter.speedX = 0;
+         playerCharacter.x = 0;
+    }
+    if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
+        playerCharacter.speedX = 0;
+        playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
+    }
+    if (playerCharacter.y > gameArea.canvas.height-playerCharacter.height) {
+        playerCharacter.speedY = 0;
+        playerCharacter.y = gameArea.canvas.height-playerCharacter.height;
+    }
+}
 /**
  * Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
  */
@@ -381,6 +410,7 @@ function updateGameArea() {
 
 	//player character update
 	playerCharacter.newPos();
+	correctCharacterPos();
     playerCharacter.update();
 
 	//if statement to reverse the flag so that the y cordinate of birds would be changed
@@ -429,28 +459,10 @@ function stopMove(){
     }
 }
 
-/**
- *
- */
 function moveUp() {
-    if (playerCharacter.y >= 170 && playerCharacter.x >= 0 &&
-        playerCharacter.x <= gameArea.canvas.width - playerCharacter.width) {
-        playerCharacter.speedY = -7;
-        console.log("up allowed")
-    } else {
-        if (playerCharacter.y < 0) {
-            playerCharacter.speedY = 0;
-            playerCharacter.y = 0;
-        }
-        if (playerCharacter.x < 0){
-            playerCharacter.speedX = 0;
-            playerCharacter.x = 0;
-        }
-        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
-            playerCharacter.speedX = 0;
-            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
-        }
-    }
+	if (playerCharacter.y >= 170) {
+		playerCharacter.speedY = -7;
+	}
 }
 
 /**
@@ -464,48 +476,10 @@ function moveDown() {
  *
  */
 function moveLeft() {
-    if (playerCharacter.y >= 0 && playerCharacter.x >= 0 &&
-        playerCharacter.x <= gameArea.canvas.width - playerCharacter.width) {
-        playerCharacter.speedX = -5;
-        console.log("left allowed")
-    } else {
-        if (playerCharacter.y < 0) {
-            playerCharacter.speedY = 0;
-            playerCharacter.y = 0;
-        }
-        if (playerCharacter.x < 0){
-            playerCharacter.speedX = 0;
-            playerCharacter.x = 0;
-        }
-        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
-            playerCharacter.speedX = 0;
-            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
-        }
-    }
+    playerCharacter.speedX = -5;
 }
-
-/**
- *
- */
 function moveRight() {
-    if (playerCharacter.y >= 0 && playerCharacter.x >= 0 && playerCharacter.x <= gameArea.canvas.width-playerCharacter.width) {
-        playerCharacter.speedX = 5;
-        console.log("right allowed")
-    }
-        else {
-        if (playerCharacter.y < 0) {
-            playerCharacter.speedY = 0;
-            playerCharacter.y = 0;
-        }
-        if (playerCharacter.x < 0) {
-            playerCharacter.speedX = 0;
-            playerCharacter.x = 0;
-        }
-        if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
-            playerCharacter.speedX = 0;
-            playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
-        }
-    }
+    playerCharacter.speedX = 5;
 }
 
 var interval;
