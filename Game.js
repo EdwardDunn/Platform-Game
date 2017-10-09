@@ -22,7 +22,7 @@ var state = 'playing';
 var currentLevel = 1;
 var playerCharacter;
 var background;
-var score;
+var scoreBoard;
 var levelDisplay;
 var enemyCharacters = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false};
@@ -99,7 +99,7 @@ function startGame() {
     background = new component(900, 400, "Pictures/background.jpg", 0, 0, "image",1);
 
 	//score
-	score = new component("30px", "Consolas", "black", 100, 40, "text",1);
+	scoreBoard = new component("30px", "Consolas", "black", 100, 40, "text",1);
 
 	//current level display
 	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
@@ -133,7 +133,7 @@ function startLevel2() {
     background = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image",1);
 
 	//score
-	score = new component("30px", "Consolas", "black", 100, 40, "text",1);
+	scoreBoard = new component("30px", "Consolas", "black", 100, 40, "text",1);
 
 	//current level display
 	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
@@ -166,7 +166,7 @@ function startLevel3() {
     background = new component(900, 400, "Pictures/background_3.jpg", 0, 0, "image",1);
 
 	//score
-	score = new component("30px", "Consolas", "black", 100, 40, "text",1);
+	scoreBoard = new component("30px", "Consolas", "black", 100, 40, "text",1);
 
 	//current level display
 	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
@@ -203,6 +203,7 @@ var gameArea = {
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
+		this.score = 0;
         //update interval
         this.interval = setInterval(updateGameArea, 20);
     },
@@ -229,6 +230,7 @@ var gameArea = {
 function component(width, height, color, x, y, type,h) {
     //h to test if it is enemy 1 or 2
     this.h=h;
+	this.alive = true;
     //test if component is image
     this.type = type;
     if (type === "image") {
@@ -287,6 +289,23 @@ function component(width, height, color, x, y, type,h) {
         }
         return crash;
     };
+	
+	this.jumpsOn = function(otherobj) {
+        var bottomY = this.y + (this.height);
+        var middleX = this.x+ (this.width/2);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var smoosh = false;
+        if ((bottomY > othertop - 15) &&
+               (bottomY < otherbottom -(otherobj.height- 10)) &&
+               (middleX > otherleft) &&
+               (middleX < otherright)) {
+           smoosh = true;
+        }
+        return smoosh;
+    };
 
 	//gravity property
     this.newPos = function() {
@@ -300,9 +319,16 @@ function component(width, height, color, x, y, type,h) {
 	//set floor on canvas
 	this.hitBottom = function() {
 		var rockbottom = gameArea.canvas.height - this.height -150;
-			if (this.y > rockbottom)
-				this.y = rockbottom;
-			}
+		if (this.y > rockbottom)
+			this.y = rockbottom;
+	}
+	
+	this.setAlive= function(alive){
+		this.alive = alive;
+	}
+	this.isAlive = function(){
+		return this.alive;
+	}
 }
 
 /**
@@ -363,17 +389,25 @@ function correctCharacterPos() {
 function updateGameArea() {
 	//loop for enemy collision
 	for (var i=0; i<enemyCharacters.length; i++){
-		  if (playerCharacter.crashWith(enemyCharacters[i])) {
-		      gameArea.stop();
-		      gameOver();
-		  }
+		if(enemyCharacters[i].isAlive()){
+			if (playerCharacter.jumpsOn(enemyCharacters[i])) {
+				enemyCharacters[i].setAlive(false);
+				incrementScore(100);
+			}
+			else if (playerCharacter.crashWith(enemyCharacters[i])) {
+				gameArea.stop();
+				gameOver();
+			}
+		}
 	}
 
 	//clear canvas before each update
 	gameArea.clear();
 
 	//increment frame number for score counter
-	gameArea.frameNo += 2;
+	incrementFrameNumber(2);
+	
+	incrementScore(2);
 
 	//update background
     background.update();
@@ -384,8 +418,8 @@ function updateGameArea() {
 	}
 
 	//score update
-	score.text = "SCORE: " + gameArea.frameNo;
-        score.update();
+	scoreBoard.text = "SCORE: " + gameArea.score;
+        scoreBoard.update();
 
 	//LevelDisplay update
 	levelDisplay.text = "Level " + currentLevel;
@@ -393,16 +427,16 @@ function updateGameArea() {
 
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-	if (gameArea.frameNo === 3000){
+	if (gameArea.score === 3000){
 		gameArea.stop();
 		currentLevel++;
 
 		if(currentLevel === 2){
 			startLevel2();
 		}
-    else if(currentLevel === 3){
-      startLevel3();
-    }
+		else if(currentLevel === 3){
+		  startLevel3();
+		}
 		else{
 			gameComplete();
 		}
@@ -423,21 +457,36 @@ function updateGameArea() {
         z++;
 	//loop to set speed of enemy characters
     for (var i = 0; i < enemyCharacters.length; i++){
-	    enemyCharacters[i].x += -2;
+		if(enemyCharacters[i].isAlive()){
+			enemyCharacters[i].x += -2;
 
-	    //if statement to check if y cordinate has to increase or decrease
-	    //should birds go up or down
-	    if(!enemyCharacters[i].h) {
-            if (flag == 1) {
-                enemyCharacters[i].y += -3;
-            }
-            else {
-                enemyCharacters[i].y += +3;
-            }
-        }
-
-        }
+			//if statement to check if y cordinate has to increase or decrease
+			//should birds go up or down
+			if(!enemyCharacters[i].h) {
+				if (flag == 1) {
+					enemyCharacters[i].y += -3;
+				}
+				else {
+					enemyCharacters[i].y += +3;
+				}
+			}
+		}
+		else{ // ideally we should be playing a death animation of some kind. but for now we can simply make the enemy drop out of the screen.
+			enemyCharacters[i].y += +10;
+		}
+	}
 }
+
+
+function incrementFrameNumber(value){
+	gameArea.frameNo += value;
+}
+
+function incrementScore(value){
+	gameArea.score += value;
+}
+
+
 
 /**
  * Stops player character from constantly moving after button move pressed
