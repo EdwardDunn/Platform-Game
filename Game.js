@@ -504,7 +504,7 @@ function flashScore(){
         scoreBoard.color = "black";
     }
   
-    if(gameArea.bonusActiveTime > 1000){
+    if(gameArea.bonusActiveTime > 1200){
         scoreBoard.color = "black";
         clearInterval(gameArea.bonusInterval);
     }
