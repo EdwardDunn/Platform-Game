@@ -10,14 +10,12 @@ const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
 
-
-
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed 
 var flag = 1;
 var z=0;
 // Add state to check if user is playing, complete or game-over
-var state = 'playing';
+var state = 'instructions';
 
 var currentLevel = 1;
 var playerCharacter;
@@ -109,15 +107,27 @@ function startGame() {
 	var x = Math.floor((Math.random() * (1200 + i * 300 - 900 + i * 300)) + (300 * i + 900));
 	//Random enemy character choose
 	if(Math.floor(Math.random()*(2)))
-    {   console.log("enemy 1");
+    {   
+        console.log("enemy 1");
         enemyCharacters[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image",1)}
     else
-    {   console.log("enemy 2");
+    {   
+        console.log("enemy 2");
         enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x,200, "image",0)}
     }
 
-	//call start function
-    gameArea.start();
+    // call start function
+    if(state === 'instructions')
+        gameArea.showInstructions();
+    else
+        gameArea.start();
+}
+
+function showInstructions()
+{
+    state = 'game';
+    var modal = document.getElementById('instructionsModal');
+    modal.style.display = "block";
 }
 
 /**
@@ -196,12 +206,38 @@ function startLevel3() {
 var gameArea = {
     //create html canvas
     canvas : document.createElement("canvas"),
-    start : function() {
+
+    showInstructions : function() {        
         //canvas size
         this.canvas.width = 900;
         this.canvas.height = 400;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+
+        this.frameNo = 0;
+		this.score = 0;
+        
+        updateGameArea();
+
+        showInstructions();
+    },
+
+    start : function() {
+        // hide modals
+        var modals = document.getElementsByClassName('modal');
+        for(var i = 0; i < modals.length; i++)
+        {
+            var modal = modals[i];
+
+            modal.style.display = "none";
+        }
+        
+        //canvas size
+        this.canvas.width = 900;
+        this.canvas.height = 400;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+
         this.frameNo = 0;
 		this.score = 0;
         //update interval
@@ -383,6 +419,12 @@ function correctCharacterPos() {
         playerCharacter.y = gameArea.canvas.height-playerCharacter.height;
     }
 }
+
+function startGameElements()
+{
+    background.update();    
+}
+
 /**
  * Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
  */
@@ -404,40 +446,39 @@ function updateGameArea() {
 	//clear canvas before each update
 	gameArea.clear();
 
-	//increment frame number for score counter
-	incrementFrameNumber(2);
-	
-	incrementScore(2);
-
 	//update background
     background.update();
+
+	//score update
+	scoreBoard.text = "SCORE: " + gameArea.score;
+    scoreBoard.update();
+
+	//increment frame number for score counter
+	incrementFrameNumber(2);
+	incrementScore(2);
+
+	//LevelDisplay update
+	levelDisplay.text = "Level " + currentLevel;
+	levelDisplay.update();
 
 	//enemy update
 	for (var i=0; i<100; i++) {
 	    enemyCharacters[i].update();
 	}
 
-	//score update
-	scoreBoard.text = "SCORE: " + gameArea.score;
-        scoreBoard.update();
-
-	//LevelDisplay update
-	levelDisplay.text = "Level " + currentLevel;
-	levelDisplay.update();
-
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-	if (gameArea.score === 3000){
+	if (gameArea.score >= 3000) {
 		gameArea.stop();
 		currentLevel++;
 
-		if(currentLevel === 2){
+		if(currentLevel === 2) {
 			startLevel2();
 		}
-		else if(currentLevel === 3){
+		else if(currentLevel === 3) {
 		  startLevel3();
 		}
-		else{
+		else {
 			gameComplete();
 		}
 	}

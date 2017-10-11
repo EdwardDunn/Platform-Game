@@ -23,6 +23,19 @@ canvas {
   filter: saturate(1.6);
 }
 
+.startButton{
+  margin: auto;
+  width: 150px;
+  margin-top: 40px;
+  cursor: pointer;
+}
+
+.startButton:hover{
+  /* IE 11 and lower don't support filter */
+  -webkit-filter: saturate(1.6);
+  filter: saturate(1.6);
+}
+
 .button {
   display: inline-block;
   /* padding: 18px 28px; */
