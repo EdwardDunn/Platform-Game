@@ -203,7 +203,10 @@ var gameArea = {
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
-		this.score = 0;
+	this.score = 0;
+	// These 2 variables are used to give a visual indicator when a bonus is awarded
+	this.bonusActiveTime = 0;
+        this.bonusInterval = null;
         //update interval
         this.interval = setInterval(updateGameArea, 20);
     },
@@ -230,12 +233,14 @@ var gameArea = {
 function component(width, height, color, x, y, type,h) {
     //h to test if it is enemy 1 or 2
     this.h=h;
+    // make the color parameter a property so it can be changed later  
+    this.color = color;
 	this.alive = true;
     //test if component is image
     this.type = type;
     if (type === "image") {
         this.image = new Image();
-        this.image.src = color;
+        this.image.src = this.color;
         this.image.width = width;
         this.image.height = height;
     }
@@ -262,10 +267,10 @@ function component(width, height, color, x, y, type,h) {
                 this.width, this.height);
         } else if (this.type === "text") {
             ctx.font = this.width + " " + this.height;
-            ctx.fillStyle = color;
+            ctx.fillStyle = this.color;
             ctx.fillText(this.text, this.x, this.y);
         } else {
-            ctx.fillStyle = color;
+            ctx.fillStyle = this.color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     };
@@ -393,6 +398,8 @@ function updateGameArea() {
 			if (playerCharacter.jumpsOn(enemyCharacters[i])) {
 				enemyCharacters[i].setAlive(false);
 				incrementScore(100);
+				gameArea.bonusActiveTime = 0;
+        			gameArea.bonusInterval = setInterval(flashScore,150);
 			}
 			else if (playerCharacter.crashWith(enemyCharacters[i])) {
 				gameArea.stop();
@@ -486,7 +493,24 @@ function incrementScore(value){
 	gameArea.score += value;
 }
 
-
+/**
+ * Flashes scoreboard when bonus is awarded. 
+ * Should only be called with "gameArea.bonusActiveTime.setInterval(flashScore, ###)"
+ */
+function flashScore(){
+    if(scoreBoard.color == "black"){
+        scoreBoard.color = "white";
+    }else{
+        scoreBoard.color = "black";
+    }
+  
+    if(gameArea.bonusActiveTime > 1200){
+        scoreBoard.color = "black";
+        clearInterval(gameArea.bonusInterval);
+    }
+  
+    gameArea.bonusActiveTime += 150;
+}
 
 /**
  * Stops player character from constantly moving after button move pressed
