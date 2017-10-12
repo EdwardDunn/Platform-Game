@@ -21,12 +21,16 @@ Author: Open Source - Contributor list can be seen in GitHub
 </head>
 
 <!-- call startGame function on page load-->
-<body onload="startGame()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
+<body onload="showInstructions()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
+
+<canvas id="canvas" width=300 height=300></canvas>
 
 <div id="instructionsModal" class="modal">
 	<div class="modal-content">
 
-	<img class="instructionsLabel" src="Pictures/instructions.png" alt="INSTRUCTIONS">
+	<!-- <img class="instructionsLabel" src="Pictures/instructions.png" alt="INSTRUCTIONS"> -->
+
+	<h3>Instructions</h3>
 
 	<p>How to play the game:</p>
 	<ul>
@@ -42,7 +46,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 	</ul>
 
 		<div class="startButton">
-		<img src="Pictures/restart.png" width="100%" onClick="gameArea.start()"/>
+		<img src="Pictures/restart.png" width="100%" onClick="startGame()"/>
 		</div>
 	</div>
 </div>
