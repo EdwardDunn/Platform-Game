@@ -11,6 +11,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 	<title>Platform Game</title>
 
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/JS_game.css">
+	<link rel="stylesheet" type="text/css" href="Style-Sheets/InstructionsModal.css">
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/GameOverModal.css">
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/GameCompleteModal.css">
 	<link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
@@ -20,7 +21,35 @@ Author: Open Source - Contributor list can be seen in GitHub
 </head>
 
 <!-- call startGame function on page load-->
-<body onload="startGame()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
+<body onload="showInstructions()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
+
+<canvas id="canvas" width=300 height=300></canvas>
+
+<div id="instructionsModal" class="modal">
+	<div class="modal-content">
+
+	<!-- <img class="instructionsLabel" src="Pictures/instructions.png" alt="INSTRUCTIONS"> -->
+
+	<h3>Instructions</h3>
+
+	<p>How to play the game:</p>
+	<ul>
+		<li>Complete each level by avoiding the enemy characters</li>
+		<li>You can kill the enemy by jumping on them</li>
+		<li>Killing an enemy grants you bonus score</li>
+	</ul>
+
+	<p>Controllers</p>
+	<ul>
+		<li>On screen buttons</li>
+		<li>Keyboard arrows</li>
+	</ul>
+
+		<div class="startButton">
+		<img src="Pictures/restart.png" width="100%" onClick="startGame()"/>
+		</div>
+	</div>
+</div>
 
 <div id="gameOverModal" class="modal">
 	<div class="modal-content">
@@ -29,7 +58,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 	<p class="gameOverDesc">Press RESTART button or Space to restart the game.</p>
 
 		<div class="restartButton">
-		<img src="Pictures/restart.png" width="100%" onClick="history.go(0)"/>
+		<img src="Pictures/restart.png" width="100%" onClick="startGame()"/>
 		</div>
 	</div>
 </div>

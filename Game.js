@@ -10,14 +10,12 @@ const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
 
-
-
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed 
 var flag = 1;
 var z=0;
 // Add state to check if user is playing, complete or game-over
-var state = 'playing';
+var state = 'instructions';
 
 var currentLevel = 1;
 var playerCharacter;
@@ -37,10 +35,10 @@ function KeyDown(event) {
 		return;
 	}
 
-    console.log(event);
+    // console.log(event);
     var key;
     key = event.which;
-    console.log(key);
+    // console.log(key);
     keysPressed[key] = true;
 
 	if (keysPressed[LEFT]) {
@@ -66,7 +64,7 @@ function KeyDown(event) {
 function KeyUp(event) {
     var key;
     key = event.which;
-    console.log(key);
+    // console.log(key);
     keysPressed[key] = false;
 	switch (key) {
 		case UP:
@@ -88,35 +86,54 @@ function KeyUp(event) {
 	}
 }
 
-/**
- *
- */
+
+function showInstructions() {
+    gameArea.init();    
+    
+    //background
+    background = new component();
+    background.init(900, 400, "Pictures/background.jpg", 0, 0, "image", 1, true);
+    
+    var modal = document.getElementById('instructionsModal');
+    modal.style.display = "block";
+}
+
 function startGame() {
+
 	//player character
-    playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image",1);
+    playerCharacter = new component();
+    playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 120, "image",1);
 
 	//background
-    background = new component(900, 400, "Pictures/background.jpg", 0, 0, "image",1);
+    background = new component();
+    background.init(900, 400, "Pictures/background.jpg", 0, 0, "image",1);
 
 	//score
-	scoreBoard = new component("30px", "Consolas", "black", 100, 40, "text",1);
+    scoreBoard = new component();
+    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1);
 
 	//current level display
-	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
+    levelDisplay = new component();
+    levelDisplay.init("30px", "Consolas", "black", 600, 40, "text",1);
+    
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++) {
-	var x = Math.floor((Math.random() * (1200 + i * 300 - 900 + i * 300)) + (300 * i + 900));
-	//Random enemy character choose
-	if(Math.floor(Math.random()*(2)))
-    {   console.log("enemy 1");
-        enemyCharacters[i] = new component(40, 50, "Pictures/zombie.png", x,200, "image",1)}
-    else
-    {   console.log("enemy 2");
-        enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x,200, "image",0)}
+        var x = Math.floor((Math.random() * (1200 + i * 300 - 900 + i * 300)) + (300 * i + 900));
+        //Random enemy character choose
+        if(Math.floor(Math.random()*(2)))
+        {   
+            enemyCharacters[i] = new component();
+            enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x,200, "image",1);
+        }
+        else
+        {   
+            enemyCharacters[i] = new component();
+            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x,200, "image",0);
+        }
     }
 
-	//call start function
+    gameArea.init();
     gameArea.start();
 }
 
@@ -127,16 +144,20 @@ function startLevel2() {
     flag= 1;
     z=0
     //player character
-    playerCharacter = new component(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
+    playerCharacter = new component();
+    playerCharacter.init(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
 
 	//background
-    background = new component(900, 400, "Pictures/background2.jpg", 0, 0, "image",1);
+    background = new component();
+    background.init(900, 400, "Pictures/background2.jpg", 0, 0, "image",1);
 
 	//score
-	scoreBoard = new component("30px", "Consolas", "black", 100, 40, "text",1);
+    scoreBoard = new component();
+    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1)
 
 	//current level display
-	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
+    levelDisplay = new component();
+    levelDisplay.init("30px", "Consolas", "black", 600, 40, "text",1);
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
@@ -144,14 +165,22 @@ function startLevel2() {
 
         //Random enemy character choose
         if(Math.floor(Math.random()*(2)))
-        {   console.log("enemy 1");
-            enemyCharacters[i] = new component(60, 50, "pictures/bad_guy.png", x,200, "image",0)}
+        {   
+            // console.log("enemy 1");
+            enemyCharacters[i] = new component();
+            enemyCharacters[i].init(60, 50, "pictures/bad_guy.png", x,200, "image",0);
+        }
         else
-        {   console.log("enemy 2");
-            enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x,200, "image",0)}
+        {   
+            // console.log("enemy 2");
+            enemyCharacters[i] = new component();
+            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x,200, "image",0);
+        }
+
     }
 
-	//call start function
+    //call start function
+    gameArea.init();
     gameArea.start();
 }
 
@@ -160,16 +189,20 @@ function startLevel3() {
 	flag= 1;
         z=0
 	//player character
-    playerCharacter = new component(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
+    playerCharacter = new component();
+    playerCharacter.init(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
 
 	//background
-    background = new component(900, 400, "Pictures/background_3.jpg", 0, 0, "image",1);
+    background = new component();
+    background.init(900, 400, "Pictures/background_3.jpg", 0, 0, "image",1);
 
 	//score
-	scoreBoard = new component("30px", "Consolas", "black", 100, 40, "text",1);
+    scoreBoard = new component();
+    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1);
 
 	//current level display
-	levelDisplay = new component("30px", "Consolas", "black", 600, 40, "text",1);
+    levelDisplay = new component();
+    levelDisplay.init("30px", "Consolas", "black", 600, 40, "text",1);
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
@@ -177,16 +210,19 @@ function startLevel3() {
 
         //if statement to choose random enemy from flying birds and skullman
         if (Math.floor(Math.random() * (2))) {
-            console.log("enemy 1");
-            enemyCharacters[i] = new component(60, 50, "Pictures/skull_baddie.png", x, 200, "image", 1);
+            // console.log("enemy 1");
+            enemyCharacters[i] = new component();
+            enemyCharacters[i].init(60, 50, "Pictures/skull_baddie.png", x, 200, "image", 1);
         }
         else {
-            console.log("enemy 2");
-            enemyCharacters[i] = new component(80, 60, "pictures/enemy2.png", x, 200, "image", 0);
+            // console.log("enemy 2");
+            enemyCharacters[i] = new component();
+            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x, 200, "image", 0);
         }
     }
 
-	//call start function
+    //call start function
+    gameArea.init();    
     gameArea.start();
 }
 
@@ -194,19 +230,29 @@ function startLevel3() {
  * @type {{canvas: Element, start: gameArea.start, clear: gameArea.clear, stop: gameArea.stop}}
  */
 var gameArea = {
-    //create html canvas
-    canvas : document.createElement("canvas"),
-    start : function() {
-        //canvas size
+    init : function() {
+        this.canvas = document.getElementById("canvas");        
+
         this.canvas.width = 900;
         this.canvas.height = 400;
         this.context = this.canvas.getContext("2d");
+
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    },
+
+    start : function() {
         this.frameNo = 0;
-	this.score = 0;
-	// These 2 variables are used to give a visual indicator when a bonus is awarded
-	this.bonusActiveTime = 0;
-        this.bonusInterval = null;
+        this.score = 0;
+
+        // hide modals
+        var modals = document.getElementsByClassName('modal');
+        for(var i = 0; i < modals.length; i++)
+        {
+            var modal = modals[i];
+
+            modal.style.display = "none";
+        }
+        
         //update interval
         this.interval = setInterval(updateGameArea, 20);
     },
@@ -230,48 +276,59 @@ var gameArea = {
  * @param y
  * @param type
  */
-function component(width, height, color, x, y, type,h) {
-    //h to test if it is enemy 1 or 2
-    this.h=h;
-    // make the color parameter a property so it can be changed later  
-    this.color = color;
-	this.alive = true;
-    //test if component is image
-    this.type = type;
-    if (type === "image") {
-        this.image = new Image();
-        this.image.src = this.color;
-        this.image.width = width;
-        this.image.height = height;
+function component() {
+    this.init = function(width, height, color, x, y, type, h, initialShow = false) {
+        //h to test if it is enemy 1 or 2
+        this.h=h;
+        this.alive = true;
+        
+        this.color = color;
+        //test if component is image
+        this.type = type;
+        
+        this.ctx = gameArea.context;    
+        
+        if (type === "image") {
+            this.image = new Image();
+            this.image.src = color;            
+            this.image.width = width;
+            this.image.height = height;
+
+            if(initialShow)          
+            {
+                var imgCopy = this.image;
+                var ctxCopy = this.ctx;
+                this.image.onload = function() {
+                    ctxCopy.drawImage(imgCopy, this.x, this.y, this.width, this.height);                
+                }
+            }
+        }
+
+        this.width = width;
+        this.height = height;
+
+        //change components position
+        this.speedX = 0
+        this.speedY = 0;
+        this.x = x;
+        this.y = y;
+        this.gravity = 0;
+
+        //sets speed playerCharacter falls to bottom of canvas
+        this.gravitySpeed = 4.5;
     }
-    this.width = width;
-    this.height = height;
-
-	//change components position
-    this.speedX = 0
-    this.speedY = 0;
-    this.x = x;
-    this.y = y;
-	this.gravity = 0;
-
-	//sets speed playerCharacter falls to bottom of canvas
-	this.gravitySpeed = 4.5;
 
 	//function to decide to decide what to display on screen, text, image or fill color
-    this.update = function() {
-        ctx = gameArea.context;
-        if (type === "image") {
-            ctx.drawImage(this.image,
-                this.x,
-                this.y,
-                this.width, this.height);
+    this.update = function(callback) {
+        if (this.type === "image") {
+            this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);                            
         } else if (this.type === "text") {
-            ctx.font = this.width + " " + this.height;
-            ctx.fillStyle = this.color;
-            ctx.fillText(this.text, this.x, this.y);
+            this.ctx.font = this.width + " " + this.height;
+            this.ctx.fillStyle = this.color;
+            this.ctx.fillText(this.text, this.x, this.y);
         } else {
-            ctx.fillStyle = this.color;
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+            this.ctx.fillStyle = color;
+            this.ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     };
 
@@ -358,9 +415,11 @@ function gameComplete(){
 	var modal = document.getElementById('gameCompleteModal');
     modal.style.display = "block";
     var span = document.getElementsByClassName("close")[0];
+    
     span.onclick = function() {
         modal.style.display = "none";
     };
+
     window.onclick = function(event) {
         if (event.target === modal) {
             modal.style.display = "none";
@@ -388,6 +447,12 @@ function correctCharacterPos() {
         playerCharacter.y = gameArea.canvas.height-playerCharacter.height;
     }
 }
+
+function startGameElements()
+{
+    background.update();    
+}
+
 /**
  * Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
  */
@@ -398,8 +463,6 @@ function updateGameArea() {
 			if (playerCharacter.jumpsOn(enemyCharacters[i])) {
 				enemyCharacters[i].setAlive(false);
 				incrementScore(100);
-				gameArea.bonusActiveTime = 0;
-        			gameArea.bonusInterval = setInterval(flashScore,150);
 			}
 			else if (playerCharacter.crashWith(enemyCharacters[i])) {
 				gameArea.stop();
@@ -411,40 +474,41 @@ function updateGameArea() {
 	//clear canvas before each update
 	gameArea.clear();
 
-	//increment frame number for score counter
-	incrementFrameNumber(2);
-	
-	incrementScore(2);
-
 	//update background
     background.update();
+
+	//score update
+	scoreBoard.text = "SCORE: " + gameArea.score;
+    scoreBoard.update();
+
+	//increment frame number for score counter
+	incrementFrameNumber(2);
+	incrementScore(2);
+
+	//LevelDisplay update
+	levelDisplay.text = "Level " + currentLevel;
+	levelDisplay.update();
 
 	//enemy update
 	for (var i=0; i<100; i++) {
 	    enemyCharacters[i].update();
 	}
 
-	//score update
-	scoreBoard.text = "SCORE: " + gameArea.score;
-        scoreBoard.update();
-
-	//LevelDisplay update
-	levelDisplay.text = "Level " + currentLevel;
-	levelDisplay.update();
-
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-	if (gameArea.score === 3000){
+	if (gameArea.score >= 3000) {
 		gameArea.stop();
 		currentLevel++;
+    
+        console.log(currentLevel);
 
-		if(currentLevel === 2){
+		if(currentLevel === 2) {
 			startLevel2();
 		}
-		else if(currentLevel === 3){
+		else if(currentLevel === 3) {
 		  startLevel3();
 		}
-		else{
+		else if(currentLevel > 3) {
 			gameComplete();
 		}
 	}
@@ -493,24 +557,7 @@ function incrementScore(value){
 	gameArea.score += value;
 }
 
-/**
- * Flashes scoreboard when bonus is awarded. 
- * Should only be called with "gameArea.bonusActiveTime.setInterval(flashScore, ###)"
- */
-function flashScore(){
-    if(scoreBoard.color == "black"){
-        scoreBoard.color = "white";
-    }else{
-        scoreBoard.color = "black";
-    }
-  
-    if(gameArea.bonusActiveTime > 1200){
-        scoreBoard.color = "black";
-        clearInterval(gameArea.bonusInterval);
-    }
-  
-    gameArea.bonusActiveTime += 150;
-}
+
 
 /**
  * Stops player character from constantly moving after button move pressed
