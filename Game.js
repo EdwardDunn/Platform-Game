@@ -100,6 +100,8 @@ function showInstructions() {
 
 function startGame() {
 
+    flag= 1;
+    z=0;
 	//player character
     playerCharacter = new component();
     playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 120, "image",1);
@@ -129,7 +131,7 @@ function startGame() {
         else
         {   
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x,200, "image",0);
+            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
         }
     }
 
@@ -142,10 +144,10 @@ function startGame() {
  */
 function startLevel2() {
     flag= 1;
-    z=0
+    z=0;
     //player character
     playerCharacter = new component();
-    playerCharacter.init(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
+    playerCharacter.init(60, 70, "Pictures/good_girl.png", 100, 120, "image",1);
 
 	//background
     background = new component();
@@ -168,13 +170,13 @@ function startLevel2() {
         {   
             // console.log("enemy 1");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(60, 50, "pictures/bad_guy.png", x,200, "image",0);
+            enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x,200, "image",0);
         }
         else
         {   
             // console.log("enemy 2");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x,200, "image",0);
+            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
         }
 
     }
@@ -185,27 +187,27 @@ function startLevel2() {
 }
 
 function startLevel3() {
-        //to synchronize the start cordinate of enemy character
-	flag= 1;
-        z=0
-	//player character
+    //to synchronize the start cordinate of enemy character
+    flag = 1;
+    z = 0;
+    //player character
     playerCharacter = new component();
-    playerCharacter.init(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
+    playerCharacter.init(60, 70, "pictures/good_girl.png", 100, 120, "image", 1);
 
-	//background
+    //background
     background = new component();
-    background.init(900, 400, "Pictures/background_3.jpg", 0, 0, "image",1);
+    background.init(900, 400, "Pictures/background_3.jpg", 0, 0, "image", 1);
 
-	//score
+    //score
     scoreBoard = new component();
-    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1);
+    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
 
-	//current level display
+    //current level display
     levelDisplay = new component();
-    levelDisplay.init("30px", "Consolas", "black", 600, 40, "text",1);
+    levelDisplay.init("30px", "Consolas", "black", 600, 40, "text", 1);
 
-	//loop for creating new enemy characters setting a random x coordinate for each
-	for (var i = 0; i < 100; i++) {
+    //loop for creating new enemy characters setting a random x coordinate for each
+    for (var i = 0; i < 100; i++) {
         var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
 
         //if statement to choose random enemy from flying birds and skullman
@@ -217,9 +219,51 @@ function startLevel3() {
         else {
             // console.log("enemy 2");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x, 200, "image", 0);
+            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
         }
     }
+
+    //call start function
+    gameArea.init();
+    gameArea.start();
+}
+
+    function startLevel4() {
+        //to synchronize the start cordinate of enemy character
+        flag = 1;
+        z = 0;
+        //player character
+        playerCharacter = new component();
+        playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 120, "image", 1);
+
+        //background
+        background = new component();
+        background.init(900, 400, "Pictures/background2.jpg", 0, 0, "image", 1);
+
+        //score
+        scoreBoard = new component();
+        scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
+
+        //current level display
+        levelDisplay = new component();
+        levelDisplay.init("30px", "Consolas", "black", 600, 40, "text", 1);
+
+        //loop for creating new enemy characters setting a random x coordinate for each
+        for (var i = 0; i < 100; i++) {
+            var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
+
+            //if statement to choose random enemy from flying birds and skullman
+            if (Math.floor(Math.random() * (2))) {
+                // console.log("enemy 1");
+                enemyCharacters[i] = new component();
+                enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", 1);
+            }
+            else {
+                // console.log("enemy 2");
+                enemyCharacters[i] = new component();
+                enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
+            }
+        }
 
     //call start function
     gameArea.init();    
@@ -496,7 +540,7 @@ function updateGameArea() {
 
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-	if (gameArea.score >= 3000) {
+    if (gameArea.score >= 3000) {
 		gameArea.stop();
 		currentLevel++;
     
@@ -508,7 +552,11 @@ function updateGameArea() {
 		else if(currentLevel === 3) {
 		  startLevel3();
 		}
-		else if(currentLevel > 3) {
+		else if(currentLevel === 4)
+        {
+            startLevel4();
+        }
+		else if(currentLevel > 4) {
 			gameComplete();
 		}
 	}
@@ -529,7 +577,12 @@ function updateGameArea() {
 	//loop to set speed of enemy characters
     for (var i = 0; i < enemyCharacters.length; i++){
 		if(enemyCharacters[i].isAlive()){
-			enemyCharacters[i].x += -2;
+			//check if level is 3 or greater
+            //vary the speed of enemy characters if level is 3 or greater
+		    if(currentLevel >= 3 && enemyCharacters[i].h )
+                enemyCharacters[i].x += -4;
+			else
+		    enemyCharacters[i].x += -2;
 
 			//if statement to check if y cordinate has to increase or decrease
 			//should birds go up or down
@@ -618,3 +671,5 @@ function onMouseUp(){
     clearInterval(interval);
      stopMove();
 }
+
+
