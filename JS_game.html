@@ -22,10 +22,22 @@ Author: Open Source - Contributor list can be seen in GitHub
 
 <!-- call startGame function on page load-->
 <body onload="showInstructions()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
-
+	<audio id="bgm" style="display: none" controls>
+  		<source src="Audio/bgnd_mus.wav" type="audio/wav">
+  		Your browser does not support the audio element.
+	</audio>
+	<audio id="jump" style="display: none" controls>
+		<source src="Audio/jump_04.wav" type="audio/wav">
+			Your browser does not support the audio element.
+	</audio>
+	<audio id="gameover" style="display: none" controls>
+		<source src="Audio/gameover.wav" type="audio/wav">
+			Your browser does not support the audio element.
+	</audio>
 <canvas id="canvas" width=300 height=300></canvas>
 
 <div id="instructionsModal" class="modal">
+
 	<div class="modal-content">
 
 	<!-- <img class="instructionsLabel" src="Pictures/instructions.png" alt="INSTRUCTIONS"> -->
@@ -46,7 +58,8 @@ Author: Open Source - Contributor list can be seen in GitHub
 	</ul>
 
 		<div class="startButton">
-		<img src="Pictures/play.png" width="100%" onClick="startGame()"/>
+		<img src="Pictures/play.png" width="100%" onClick="startGame()" />
+		<!-- onload="startAudio()"  -->
 		</div>
 	</div>
 </div>
@@ -58,7 +71,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 	<p class="gameOverDesc">Press RESTART button or Space to restart the game.</p>
 
 		<div class="restartButton">
-		<img src="Pictures/restart.png" width="100%" onClick="startGame()"/>
+		<img src="Pictures/restart.png" width="100%" onClick="startGame()" />
 		</div>
 	</div>
 </div>

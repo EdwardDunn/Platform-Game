@@ -48,6 +48,9 @@ function KeyDown(event) {
 		moveRight();	
 	}
 	if (keysPressed[UP]) {
+        jump_audio=document.getElementById("jump")
+    jump.autoplay=true;
+    jump.load();
 		moveUp();	
 	}
 	if (keysPressed[SPACE]) { // Add SPACE key to restart game (only if it's complete or game-over)
@@ -93,13 +96,14 @@ function showInstructions() {
     //background
     background = new component();
     background.init(900, 400, "Pictures/background.jpg", 0, 0, "image", 1, true);
-    
     var modal = document.getElementById('instructionsModal');
     modal.style.display = "block";
 }
-
+function startAudio()
+{
+    
+}
 function startGame() {
-
     flag= 1;
     z=0;
 	//player character
@@ -109,7 +113,7 @@ function startGame() {
 	//background
     background = new component();
     background.init(900, 400, "Pictures/background.jpg", 0, 0, "image",1);
-
+    
 	//score
     scoreBoard = new component();
     scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1);
@@ -117,6 +121,12 @@ function startGame() {
 	//current level display
     levelDisplay = new component();
     levelDisplay.init("30px", "Consolas", "black", 600, 40, "text",1);
+
+    audio = document.getElementById("bgm");
+    audio.autoplay=true;
+    audio.loop=true;
+    audio.load();
+    
     
 
 	//loop for creating new enemy characters setting a random x coordinate for each
@@ -131,12 +141,13 @@ function startGame() {
         else
         {   
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
+            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x,200, "image",0);
         }
     }
 
     gameArea.init();
     gameArea.start();
+    //startAudio();
 }
 
 /**
@@ -147,7 +158,7 @@ function startLevel2() {
     z=0;
     //player character
     playerCharacter = new component();
-    playerCharacter.init(60, 70, "Pictures/good_girl.png", 100, 120, "image",1);
+    playerCharacter.init(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
 
 	//background
     background = new component();
@@ -170,13 +181,13 @@ function startLevel2() {
         {   
             // console.log("enemy 1");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x,200, "image",0);
+            enemyCharacters[i].init(60, 50, "pictures/bad_guy.png", x,200, "image",0);
         }
         else
         {   
             // console.log("enemy 2");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
+            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x,200, "image",0);
         }
 
     }
@@ -219,7 +230,7 @@ function startLevel3() {
         else {
             // console.log("enemy 2");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
+            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x, 200, "image", 0);
         }
     }
 
@@ -261,7 +272,7 @@ function startLevel3() {
             else {
                 // console.log("enemy 2");
                 enemyCharacters[i] = new component();
-                enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
+                enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x, 200, "image", 0);
             }
         }
 
@@ -282,12 +293,13 @@ var gameArea = {
         this.context = this.canvas.getContext("2d");
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        
+
     },
 
     start : function() {
         this.frameNo = 0;
         this.score = 0;
-
         // hide modals
         var modals = document.getElementsByClassName('modal');
         for(var i = 0; i < modals.length; i++)
@@ -300,7 +312,10 @@ var gameArea = {
         //update interval
         this.interval = setInterval(updateGameArea, 20);
     },
-
+    /*startAudio : function()
+    {
+        
+    },*/
     //function used for refreshing page
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -444,6 +459,15 @@ function gameOver() {
     state = 'game-over';
     var modal = document.getElementById('gameOverModal');
     modal.style.display = "block";
+
+    audio = document.getElementById("bgm");
+    audio.pause();
+
+    gameover = document.getElementById("gameover")
+                gameover.autoplay=true;
+                gameover.load();
+
+
     window.onclick = function(event) {
         if (event.target === modal) {
             modal.style.display = "none";
@@ -471,7 +495,7 @@ function gameComplete(){
     }
 }
 /*
- *Ajust character to a valid position if it moves out of border
+ *Adjust character to a valid position if it moves out of border
  * */
 function correctCharacterPos() {
 	if (playerCharacter.y < 0) {
@@ -509,7 +533,7 @@ function updateGameArea() {
 				incrementScore(100);
 			}
 			else if (playerCharacter.crashWith(enemyCharacters[i])) {
-				gameArea.stop();
+                gameArea.stop();
 				gameOver();
 			}
 		}
@@ -635,6 +659,7 @@ function stopMove(){
 function moveUp() {
 	if (playerCharacter.y >= 170) {
 		playerCharacter.speedY = -7;
+        
 	}
 }
 
@@ -668,6 +693,7 @@ function moveUpMouse(){
     interval = setInterval(moveUp,1);
 }
 function onMouseUp(){
+
     clearInterval(interval);
      stopMove();
 }
