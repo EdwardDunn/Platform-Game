@@ -441,6 +441,7 @@ function component() {
  *
  */
 function gameOver() {
+    interval && clearInterval(interval);
     state = 'game-over';
     var modal = document.getElementById('gameOverModal');
     modal.style.display = "block";
