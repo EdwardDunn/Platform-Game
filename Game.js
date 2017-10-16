@@ -138,7 +138,7 @@ function startGame() {
         else
         {   
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x,200, "image",0);
+            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
         }
     }
 
@@ -155,7 +155,7 @@ function startLevel2() {
     z=0;
     //player character
     playerCharacter = new component();
-    playerCharacter.init(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
+    playerCharacter.init(60, 70, "Pictures/good_girl.png", 100, 120, "image",1);
 
 	//background
     background = new component();
@@ -178,13 +178,13 @@ function startLevel2() {
         {   
             // console.log("enemy 1");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(60, 50, "pictures/bad_guy.png", x,200, "image",0);
+            enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x,200, "image",0);
         }
         else
         {   
             // console.log("enemy 2");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x,200, "image",0);
+            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
         }
 
     }
@@ -200,7 +200,7 @@ function startLevel3() {
     z = 0;
     //player character
     playerCharacter = new component();
-    playerCharacter.init(60, 70, "pictures/good_girl.png", 100, 120, "image", 1);
+    playerCharacter.init(60, 70, "Pictures/good_girl.png", 100, 120, "image", 1);
 
     //background
     background = new component();
@@ -227,7 +227,7 @@ function startLevel3() {
         else {
             // console.log("enemy 2");
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x, 200, "image", 0);
+            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
         }
     }
 
@@ -269,7 +269,7 @@ function startLevel3() {
             else {
                 // console.log("enemy 2");
                 enemyCharacters[i] = new component();
-                enemyCharacters[i].init(80, 60, "pictures/enemy2.png", x, 200, "image", 0);
+                enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
             }
         }
 
