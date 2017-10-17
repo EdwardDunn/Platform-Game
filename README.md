@@ -13,6 +13,10 @@ The game is made using the HTML canvas feature.
 The aim of the game is to evade all the bad guys!
 
 
+**Licenses**
+
+Currently no existing software being used in the application
+
 
 
 
