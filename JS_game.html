@@ -1,9 +1,10 @@
 <!---
 Description: Home page for game. Calls startGame() function in JS_Game.js file on page load and
 contains code for game over and game complete modals.
-Author: Open Source - Contributor list can be seen in GitHub 
+Author: Open Source - Contributor list can be seen in GitHub
 -->
-<html>
+<!DOCTYPE html>
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,6 +22,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 </head>
 
 <!-- call startGame function on page load-->
+
 <body onload="showInstructions()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
 	<audio id="bgm" style="display: none" controls>
   		<source src="Audio/bgnd_mus.wav" type="audio/wav">
@@ -34,70 +36,71 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<source src="Audio/gameover.wav" type="audio/wav">
 			Your browser does not support the audio element.
 	</audio>
-<canvas id="canvas" width=300 height=300></canvas>
+	<canvas id="canvas" width=300 height=300></canvas>
 
-<div id="instructionsModal" class="modal">
+	<div id="instructionsModal" class="modal">
 
-	<div class="modal-content">
+		<div class="modal-content">
 
-	<!-- <img class="instructionsLabel" src="Pictures/instructions.png" alt="INSTRUCTIONS"> -->
+			<!-- <img class="instructionsLabel" src="Pictures/instructions.png" alt="INSTRUCTIONS"> -->
 
-	<h3>Instructions</h3>
+			<h3>Instructions</h3>
 
-	<p>How to play the game:</p>
-	<ul>
-		<li>Complete each level by avoiding the enemy characters</li>
-		<li>You can kill the enemy by jumping on them</li>
-		<li>Killing an enemy grants you bonus score</li>
-	</ul>
+			<p>How to play the game:</p>
+			<ul>
+				<li>Complete each level by avoiding the enemy characters</li>
+				<li>You can kill the enemy by jumping on them</li>
+				<li>Killing an enemy grants you bonus score</li>
+			</ul>
 
-	<p>Controllers</p>
-	<ul>
-		<li>On screen buttons</li>
-		<li>Keyboard arrows</li>
-	</ul>
+			<p>Controllers</p>
+			<ul>
+				<li>On screen buttons</li>
+				<li>Keyboard arrows</li>
+			</ul>
 
-		<div class="startButton">
-		<img src="Pictures/play.png" width="100%" onClick="startGame()" />
-		<!-- onload="startAudio()"  -->
+			<div class="startButton">
+				<img src="Pictures/play.png" width="100%" onClick="startGame()" alt="PlayButton" />
+				<!-- onload="startAudio()"  -->
+			</div>
 		</div>
 	</div>
-</div>
 
-<div id="gameOverModal" class="modal">
-	<div class="modal-content">
+	<div id="gameOverModal" class="modal">
+		<div class="modal-content">
 
-	<img class="gameOverLabel" src="Pictures/game_over.png" alt="GAME OVER">
-	<p class="gameOverDesc">Press RESTART button or Space to restart the game.</p>
+			<img class="gameOverLabel" src="Pictures/game_over.png" alt="GAME OVER">
+			<p class="gameOverDesc">Press RESTART button or Space to restart the game.</p>
 
-		<div class="restartButton">
-		<img src="Pictures/restart.png" width="100%" onClick="startGame()" />
+			<div class="restartButton">
+				<img src="Pictures/restart.png" width="100%" onClick="startGame()" alt="RestartButton" />
+			</div>
 		</div>
 	</div>
-</div>
 
-<div id="gameCompleteModal" class="modal">
-	<div class="modal-content">
-	<img class="gameOverLabel" src="Pictures/victory.png" alt="VICTORY">
-	<p class="gameOverDesc">You completed the game! Awesome Work!</p>
-		<div class="restartButton">
-		<img src="Pictures/restart.png" width="100%" onClick="history.go(0)"/>
+	<div id="gameCompleteModal" class="modal">
+		<div class="modal-content">
+			<img class="gameOverLabel" src="Pictures/victory.png" alt="VICTORY">
+			<p class="gameOverDesc">You completed the game! Awesome Work!</p>
+			<div class="restartButton">
+				<img src="Pictures/restart.png" width="100%" onClick="history.go(0)" alt="RestartButton" />
+			</div>
 		</div>
 	</div>
-</div>
 
-<!--buttons-->
-<div id="buttonWrapper">
-<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
+	<!--buttons-->
+	<div id="buttonWrapper">
+		<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
 	<img src="Pictures/left.png" alt="LEFT">
 </button>
-<button class="button" onmousedown="moveUpMouse()" onmouseup="onMouseUp()" ontouchstart="moveUpMouse()" ontouchend="onMouseUp()">
+		<button class="button" onmousedown="moveUpMouse()" onmouseup="onMouseUp()" ontouchstart="moveUpMouse()" ontouchend="onMouseUp()">
 	<img src="Pictures/jump.png" alt="JUMP">
 </button>
-<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
+		<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
 	<img src="Pictures/right.png" alt="RIGHT">
 </button>
-</div>
+	</div>
 
 </body>
+
 </html>
