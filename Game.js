@@ -23,6 +23,8 @@ var score;
 var levelDisplay;
 var enemyCharacters = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false};
+var idleArray = [];
+
 
 /**
  * @param event
@@ -79,13 +81,24 @@ function KeyUp(event) {
 			}
 	}
 }
-
+/**
+ * Load Resources - REMOVE
+ */
+function loadResources() {
+    var maxFrames = 9;
+    for (let x = 0; x < maxFrames; x++ ) {
+        let img = new Image();
+        img.src = "Pictures/Sprite Sheets/Idle__00" + x + ".png";
+        idleArray.push(img);
+    }
+}
 /**
  *
  */
 function startGame() {
-	//player character
-    playerCharacter = new component(60, 70, "Pictures/good_guy.png", 100, 120, "image",1);
+    loadResources();
+    //player character               
+    playerCharacter = new component(60, 70, "pictures/good_guy.png", 100, 120, "image",1);
 
 	//background
     background = new component(900, 400, "Pictures/background.jpg", 0, 0, "image",1);
@@ -151,7 +164,7 @@ function startLevel3() {
         //to synchronize the start cordinate of enemy character
 	flag= 1;
         z=0
-	//player character
+	//player character              
     playerCharacter = new component(60, 70, "pictures/good_girl.png", 100, 120, "image",1);
 
 	//background
@@ -245,11 +258,19 @@ function component(width, height, color, x, y, type,h) {
 	//function to decide to decide what to display on screen, text, image or fill color
     this.update = function() {
         ctx = gameArea.context;
+        /*function animate() {
+            ctx.clearRect(this.x, this.y, this.width, this.height);
+            var msPerImg = 100;
+            var currentTime = new Date().valueOf();
+            var idleToDraw = this.image[Math.floor(currentTime/msPerImg) % this.image.length];
+            ctx.drawImage(idleToDraw, this.x, this.y);
+        }*/
         if (type === "image") {
+            //animate();
             ctx.drawImage(this.image,
                 this.x,
                 this.y,
-                this.width, this.height);
+                this.width, this.height); 
         } else if (this.type === "text") {
             ctx.font = this.width + " " + this.height;
             ctx.fillStyle = color;
@@ -259,7 +280,7 @@ function component(width, height, color, x, y, type,h) {
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     };
-
+    
 	//enemy character collision function
 	this.crashWith = function(otherobj) {
         var left = this.x;
@@ -295,6 +316,7 @@ function component(width, height, color, x, y, type,h) {
 				this.y = rockbottom;
 			}
 }
+
 
 /**
  *
@@ -408,6 +430,83 @@ function updateGameArea() {
 
         }
 }
+    /**
+     *      REMOVE
+     * @param {*} url 
+     * @param {*} srcHeight 
+     * @param {*} srcWidth 
+     * @param {*} destHeight 
+     * @param {*} destWidth 
+     * @param {*} frame 
+     * @param {*} playerX 
+     * @param {*} playerY 
+     */
+
+function runRight(url, srcHeight, srcWidth, destHeight, destWidth, frame, playerX, playerY) {
+    var sprite = new Image();
+    sprite.src = url;
+    var shift = 0;
+    var height = srcHeight;
+    var width = srcWidth;
+    var frameWidth = destWidth;
+    var frameHeight = destHeight;
+    var totalFrames = frame;
+    var currentFrame = 0;
+    var x = playerX;
+    var y = playerY;
+
+    
+    
+    ctx.clearRect(x,y, frameWidth, frameHeight);
+    ctx.drawImage(sprite, shift, 0, frameWidth, frameHeight, width, height, x, y);
+    
+    shift += frameWidth + 1;
+    
+     if(currentFrame == totalFrames) {
+        shift = 0;
+        currentFrame = 0;
+    }
+
+    currentFrame++;
+    
+    requestAnimationFrame(runRight);
+        
+    
+    /*
+    this.runRight = function() {
+        ctx.clearRect(x,y, frameWidth, frameHeight);
+        ctx.drawImage(sprite, shift, 0, srcWidth, srcHeight, x, y, destWidth, destHeight);
+
+        shift += frameWidth + 1;
+
+        if(currentFrame == totalFrames) {
+            shift = 0;
+            currentFrame = 0;
+        }
+        currentFrame++;
+
+        requestAnimationFrame(runRight);
+    }{*}
+    */
+};
+function animatePlayerCharacter () {
+    var spriteImageCounter = 0;
+    var frames = 9;
+    var timer = setInterval(spriteTimer, 100/2);    
+    
+    
+    function spriteTimer() {
+        if(spriteImageCounter < frames){
+            playerCharacter.image.src = "Pictures/Sprite_Sheets/Run__00" + spriteImageCounter + ".png";
+            spriteImageCounter++;
+        }else {
+            spriteImageCounter = 0;
+        }
+    }
+    function stopAnimation() {
+        clearInterval(timer);
+    }
+}
 
 /**
  * Stops player character from constantly moving after button move pressed
@@ -506,6 +605,8 @@ function moveRight() {
             playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
         }
     }
+    animatePlayerCharacter();   
+    //runRight("Pictures/Sprite Sheets/good_guy_sheet.png", 507, 415, 70, 60, 20,playerCharacter.x, playerCharacter.y);
 }
 
 var interval;
