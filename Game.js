@@ -361,6 +361,7 @@ function component() {
         }
 
         this.width = width;
+        this.initHeight = height; // to get squeezed height later
         this.height = height;
 
         //change components position
@@ -438,7 +439,7 @@ function component() {
 	this.hitBottom = function() {
 		var rockbottom = gameArea.canvas.height - this.height -150;
 		if (this.y > rockbottom)
-			this.y = rockbottom;
+            this.y = rockbottom;
 	}
 	
 	this.setAlive= function(alive){
@@ -617,8 +618,10 @@ function updateGameArea() {
 				}
 			}
 		}
-		else{ // ideally we should be playing a death animation of some kind. but for now we can simply make the enemy drop out of the screen.
-			enemyCharacters[i].y += +10;
+        else{ // if dead; enemy will be 'squeezed' and fall to the ground. Feel free to improve by adding further animation. 
+            enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
+            enemyCharacters[i].y += 10;
+            enemyCharacters[i].hitBottom();
 		}
 	}
 }
