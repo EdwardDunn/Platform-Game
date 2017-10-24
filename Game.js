@@ -362,6 +362,7 @@ function component() {
 
         this.width = width;
         this.initHeight = height; // to get squeezed height later
+		this.alpha = 1;
         this.height = height;
 
         //change components position
@@ -378,8 +379,9 @@ function component() {
 	//function to decide to decide what to display on screen, text, image or fill color
     this.update = function(callback) {
         if (this.type === "image") {
+			this.ctx.globalAlpha = this.alpha;
             this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);                            
-        } else if (this.type === "text") {
+		} else if (this.type === "text") {
             this.ctx.font = this.width + " " + this.height;
             this.ctx.fillStyle = this.color;
             this.ctx.fillText(this.text, this.x, this.y);
@@ -618,9 +620,13 @@ function updateGameArea() {
 				}
 			}
 		}
-        else{ // if dead; enemy will be 'squeezed' and fall to the ground. Feel free to improve by adding further animation. 
+        else{ // if dead; enemy will be 'squeezed', fall to the ground and fade away. Feel free to improve by adding further animation. 
             enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
-            enemyCharacters[i].y += 10;
+            enemyCharacters[i].y += 10;			
+			enemyCharacters[i].alpha += -0.01;			
+			if(enemyCharacters[i].alpha < 0){
+				enemyCharacters[i].alpha = 0;
+			}				
             enemyCharacters[i].hitBottom();
 		}
 	}
