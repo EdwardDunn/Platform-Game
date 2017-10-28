@@ -103,6 +103,7 @@ function showInstructions() {
 function startGame() {
     flag= 1;
     z=0;
+    currentLevel = 1;
 	//player character
     playerCharacter = new component();
     playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 120, "image",1);
