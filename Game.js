@@ -23,7 +23,6 @@ var score;
 var levelDisplay;
 var enemyCharacters = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false};
-var idleArray = []; // REMOVE
 
 
 /**
@@ -81,17 +80,7 @@ function KeyUp(event) {
 			}
 	}
 }
-/**
- * Load Resources - REMOVE
- */
-function loadResources() {
-    var maxFrames = 9;
-    for (let x = 0; x < maxFrames; x++ ) {
-        let img = new Image();
-        img.src = "Pictures/Sprite_Sheets/Idle__00" + x + ".png";
-        idleArray.push(img);
-    }
-}
+
 /**
  *
  */
@@ -260,15 +249,9 @@ function component(width, height, color, x, y, type,h) {
 	//function to decide to decide what to display on screen, text, image or fill color
     this.update = function() {
         ctx = gameArea.context;
-        /*function animate() {
-            ctx.clearRect(this.x, this.y, this.width, this.height);
-            var msPerImg = 100;
-            var currentTime = new Date().valueOf();
-            var idleToDraw = this.image[Math.floor(currentTime/msPerImg) % this.image.length];
-            ctx.drawImage(idleToDraw, this.x, this.y);
-        }*/
+    
         if (type === "image") {
-            //animate();
+            
             ctx.drawImage(this.image,
                 this.x,
                 this.y,
@@ -432,67 +415,6 @@ function updateGameArea() {
 
         }
 }
-    /**
-     *      REMOVE
-     * @param {*} url 
-     * @param {*} srcHeight 
-     * @param {*} srcWidth 
-     * @param {*} destHeight 
-     * @param {*} destWidth 
-     * @param {*} frame 
-     * @param {*} playerX 
-     * @param {*} playerY 
-     */
-
-function runRight(url, srcHeight, srcWidth, destHeight, destWidth, frame, playerX, playerY) {
-    var sprite = new Image();
-    sprite.src = url;
-    var shift = 0;
-    var height = srcHeight;
-    var width = srcWidth;
-    var frameWidth = destWidth;
-    var frameHeight = destHeight;
-    var totalFrames = frame;
-    var currentFrame = 0;
-    var x = playerX;
-    var y = playerY;
-
-    
-    
-    ctx.clearRect(x,y, frameWidth, frameHeight);
-    ctx.drawImage(sprite, shift, 0, frameWidth, frameHeight, width, height, x, y);
-    
-    shift += frameWidth + 1;
-    
-     if(currentFrame == totalFrames) {
-        shift = 0;
-        currentFrame = 0;
-    }
-
-    currentFrame++;
-    
-    requestAnimationFrame(runRight);
-        
-    
-    /*
-    this.runRight = function() {
-        ctx.clearRect(x,y, frameWidth, frameHeight);
-        ctx.drawImage(sprite, shift, 0, srcWidth, srcHeight, x, y, destWidth, destHeight);
-
-        shift += frameWidth + 1;
-
-        if(currentFrame == totalFrames) {
-            shift = 0;
-            currentFrame = 0;
-        }
-        currentFrame++;
-
-        requestAnimationFrame(runRight);
-    }{*}
-    */
-};
-
-
 
 function animatePlayerCharacter () {
     var currentTime = new Date().valueOf();
@@ -504,24 +426,10 @@ function animatePlayerCharacter () {
    
     //requestAnimationFrame(animatePlayerCharacter); Smoother animation but Character will run forever 
     
-    /* Alternate code that doesn't really work
-    var spriteImageCounter = 0;
-    var timer = setInterval(spriteTimer, 1000);   
     
-    function spriteTimer() {
-        if(spriteImageCounter < frames){
-            playerCharacter.image.src = "Pictures/Sprite_Sheets/Run__00" + spriteImageCounter + ".png";
-            spriteImageCounter++;
-        }else {
-            spriteImageCounter = 0;
-        }
-        requestAnimationFrame(spriteTimer);
-    }
-    */
     
 }
-/* Duplicate above code to make idlePlayerCharacter and switch image src to the idle png files
-That will stop him from running */
+
 function idlePlayerCharacter() {
     var currentTime = new Date().valueOf();
     var requestID;
@@ -552,8 +460,6 @@ function stopMove(){
         playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
     }
     idlePlayerCharacter();
-    //var requestID = requestAnimationFrame(animatePlayerCharacter);    
-    //cancelAnimationFrame(requestID);
 
 }
 
