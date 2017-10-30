@@ -23,7 +23,7 @@ var score;
 var levelDisplay;
 var enemyCharacters = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false};
-var idleArray = [];
+var idleArray = []; // REMOVE
 
 
 /**
@@ -88,13 +88,14 @@ function loadResources() {
     var maxFrames = 9;
     for (let x = 0; x < maxFrames; x++ ) {
         let img = new Image();
-        img.src = "Pictures/Sprite Sheets/Idle__00" + x + ".png";
+        img.src = "Pictures/Sprite_Sheets/Idle__00" + x + ".png";
         idleArray.push(img);
     }
 }
 /**
  *
  */
+
 function startGame() {
     loadResources();
     //player character               
@@ -232,6 +233,7 @@ var gameArea = {
  * @param type
  */
 function component(width, height, color, x, y, type,h) {
+    
     //h to test if it is enemy 1 or 2
     this.h=h;
     //test if component is image
@@ -251,7 +253,7 @@ function component(width, height, color, x, y, type,h) {
     this.x = x;
     this.y = y;
 	this.gravity = 0;
-
+    
 	//sets speed playerCharacter falls to bottom of canvas
 	this.gravitySpeed = 4.5;
 
@@ -489,11 +491,22 @@ function runRight(url, srcHeight, srcWidth, destHeight, destWidth, frame, player
     }{*}
     */
 };
+
+
+
 function animatePlayerCharacter () {
-    var spriteImageCounter = 0;
-    var frames = 9;
-    var timer = setInterval(spriteTimer, 100/2);    
+    var currentTime = new Date().valueOf();
+    var requestID;
     
+    var frames = 9;
+    var spriteImageCounter = Math.floor(currentTime/100) % frames;
+    var toDraw = playerCharacter.image.src = "Pictures/Sprite_Sheets/Run__00" + spriteImageCounter + ".png";
+   
+    //requestAnimationFrame(animatePlayerCharacter); Smoother animation but Character will run forever 
+    
+    /* Alternate code that doesn't really work
+    var spriteImageCounter = 0;
+    var timer = setInterval(spriteTimer, 1000);   
     
     function spriteTimer() {
         if(spriteImageCounter < frames){
@@ -502,11 +515,23 @@ function animatePlayerCharacter () {
         }else {
             spriteImageCounter = 0;
         }
+        requestAnimationFrame(spriteTimer);
     }
-    function stopAnimation() {
-        clearInterval(timer);
-    }
+    */
+    
 }
+/* Duplicate above code to make idlePlayerCharacter and switch image src to the idle png files
+That will stop him from running */
+function idlePlayerCharacter() {
+    var currentTime = new Date().valueOf();
+    var requestID;
+    
+    var frames = 9;
+    var spriteImageCounter = Math.floor(currentTime/100) % frames;
+    var toDraw = playerCharacter.image.src = "Pictures/Sprite_Sheets/Idle__00" + spriteImageCounter + ".png";
+    requestAnimationFrame(idlePlayerCharacter);
+}
+
 
 /**
  * Stops player character from constantly moving after button move pressed
@@ -526,6 +551,10 @@ function stopMove(){
         playerCharacter.speedX = 0;
         playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
     }
+    idlePlayerCharacter();
+    //var requestID = requestAnimationFrame(animatePlayerCharacter);    
+    //cancelAnimationFrame(requestID);
+
 }
 
 /**
@@ -606,7 +635,7 @@ function moveRight() {
         }
     }
     animatePlayerCharacter();   
-    //runRight("Pictures/Sprite Sheets/good_guy_sheet.png", 507, 415, 70, 60, 20,playerCharacter.x, playerCharacter.y);
+    
 }
 
 var interval;
