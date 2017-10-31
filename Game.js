@@ -202,7 +202,7 @@ function startLevel2() {
 		for (var i=0; i<100; i++) {
 	        var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
 					clouds[i] = new component();
-					clouds[i].init(60, 60, "Pictures/cloud2.png", x, 40, "image", 1);
+					clouds[i].init(65, 50, "Pictures/cloud2.png", x, 40, "image", 1);
 	  }
 
     //call start function
@@ -251,7 +251,7 @@ function startLevel3() {
 		for (var i=0; i<100; i++) {
 	        var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
 					clouds[i] = new component();
-					clouds[i].init(60, 34, "Pictures/cloud.png", x, 40, "image", 1);
+					clouds[i].init(60, 40, "Pictures/cloud3.png", x, 40, "image", 1);
 	  }
 
     //call start function
@@ -300,7 +300,7 @@ function startLevel3() {
 				for (var i=0; i<100; i++) {
 			        var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
 							clouds[i] = new component();
-							clouds[i].init(60, 60, "Pictures/cloud2.png", x, 40, "image", 1);
+							clouds[i].init(65, 50, "Pictures/cloud2.png", x, 40, "image", 1);
 			  }
 
     //call start function
@@ -601,7 +601,7 @@ function updateGameArea() {
 
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-    if (gameArea.score >= 3000) {
+    if (gameArea.score >= 600) {
 		gameArea.stop();
 		currentLevel++;
 
