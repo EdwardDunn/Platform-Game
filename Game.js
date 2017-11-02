@@ -497,13 +497,6 @@ function gameOver() {
     gameover = document.getElementById("gameover")
                 gameover.autoplay=true;
                 gameover.load();
-
-
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    }
 }
 
 /**
@@ -518,12 +511,6 @@ function gameComplete(){
     span.onclick = function() {
         modal.style.display = "none";
     };
-
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    }
 }
 /*
  *Adjust character to a valid position if it moves out of border
