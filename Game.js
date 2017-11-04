@@ -54,10 +54,8 @@ function KeyDown(event) {
 		jump.load();
 		moveUp();
 	}
-	if (keysPressed[SPACE]) { // Add SPACE key to restart game (only if it's complete or game-over)
-		if (state === 'game-over' || state === 'complete') {
-            history.go(0);
-        }
+	if (keysPressed[SPACE]) { // Add SPACE key to restart game
+		restartGame();
 	}
 }
 
@@ -498,7 +496,14 @@ function gameOver() {
                 gameover.autoplay=true;
                 gameover.load();
 }
-
+/**
+*
+*/
+function restartGame(){
+	gameArea.stop();
+	//interval && clearInterval(interval);
+	startGame();
+}
 /**
  *
  */
