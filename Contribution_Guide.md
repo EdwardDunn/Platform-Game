@@ -3,6 +3,8 @@
 This project has been created for open source beginners. 
 No contributions are too small, give it a go!
 
+</br>
+
 **For help with contributing here are a few guides**
 
 Working on your first Pull Request?
@@ -15,6 +17,8 @@ You can learn how from this [free series](https://egghead.io/series/how-to-contr
 Copyright - If you are adding any new images please only use copyright free images and update 
 copyright file. 
 
+</br>
+
 **Feel free to add any new features**
 
 Suggestions
@@ -22,6 +26,13 @@ Suggestions
 - New bad guys
 - New levels
 - Better controls
+</br>
+
+**Play the game and if you have any suggestions, create a new issue outlining what you propose.**
+
+**Alternatively look at the current open issues that are not assigned to other contributors yet.**
+
+</br>
 
 **Contributing steps**
 

@@ -44,5 +44,16 @@ Date:9/26/2017
 
     Description: enemy2
         Source: http://www.dribble.com/download/enemy2/
+    Description: newchar
+        Source: http://www.dribble.com/download/enemy3/
 
 
+Added by: maanvin
+Date:10/15/2017
+
+	Description : background_music
+		Source: http://freesound.org/people/uso_sketch/sounds/403920/
+	Description : jump_sound
+		Source: https://opengameart.org/content/platformer-jumping-sounds
+	Description : game over sound
+		Source: http://freesound.org/people/themusicalnomad/sounds/253886/
