@@ -26,7 +26,6 @@ var enemyCharacters = [];
 var clouds = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false};
 
-
 /**
  * @param event
  * @constructor
@@ -363,8 +362,49 @@ var gameArea = {
  * @param y
  * @param type
  */
+function component() {
+    this.init = function(width, height, color, x, y, type, h, initialShow = false) {
+        //h to test if it is enemy 1 or 2
+        this.h=h;
+        this.alive = true;
+
+        this.color = color;
+        //test if component is image
+        this.type = type;
+
+        this.ctx = gameArea.context;
+
+        if (type === "image") {
+            this.image = new Image();
+            this.image.src = color;
+            this.image.width = width;
+            this.image.height = height;
+
+            if(initialShow)
+            {
+                var imgCopy = this.image;
+                var ctxCopy = this.ctx;
+                this.image.onload = function() {
+                    ctxCopy.drawImage(imgCopy, this.x, this.y, this.width, this.height);
+                }
+            }
+        }
+
+        this.width = width;
+        this.initHeight = height; // to get squeezed height later
+		this.alpha = 1;
+        this.height = height;
+
+        //change components position
+        this.speedX = 0
+        this.speedY = 0;
+        this.x = x;
+        this.y = y;
+        this.gravity = 0;
+
+        //sets speed playerCharacter falls to bottom of canvas
         this.gravitySpeed = 4.5;
-    
+    }
 
 	//function to decide to decide what to display on screen, text, image or fill color
     this.update = function(callback) {
@@ -380,7 +420,7 @@ var gameArea = {
             this.ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     };
-    
+
 	//enemy character collision function
 	this.crashWith = function(otherobj) {
         var left = this.x;
@@ -416,6 +456,7 @@ var gameArea = {
            smoosh = true;
         }
         return smoosh;
+    };
 
 	//gravity property
     this.newPos = function() {
@@ -440,7 +481,6 @@ var gameArea = {
 		return this.alive;
 	}
 }
-
 
 /**
  *
@@ -644,8 +684,6 @@ function stopMove(){
         playerCharacter.speedX = 0;
         playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
     }
-    idlePlayerCharacter();
-
 }
 
 function moveUp() {
