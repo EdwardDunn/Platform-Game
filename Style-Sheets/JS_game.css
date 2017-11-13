@@ -68,8 +68,13 @@ canvas {
 }
 
 #buttonWrapper{
-  margin-top: 20px;
+  margin-top: 10px;
 	text-align:center; 
 }
-
+#restartButtonNearScore{
+    left: 1060px;
+    top: 20px;
+    position: absolute;
+    height: 55px;
+}
 

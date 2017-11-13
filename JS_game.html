@@ -37,6 +37,9 @@ Author: Open Source - Contributor list can be seen in GitHub
             Your browser does not support the audio element.
     </audio>
     <canvas id="canvas" width=300 height=300></canvas>
+    <button id="restartButtonNearScore" class="button" onClick="restartGame()">
+				<img src="Pictures/restart.png" alt="RestartButton" />
+	</button>    
 
     <div id="instructionsModal" class="modal">
 
@@ -83,7 +86,7 @@ Author: Open Source - Contributor list can be seen in GitHub
             <img class="gameOverLabel" src="Pictures/victory.png" alt="VICTORY">
             <p class="gameOverDesc">You completed the game! Awesome Work!</p>
             <div class="restartButton">
-                <img src="Pictures/restart.png" width="100%" onClick="history.go(0)" alt="RestartButton" />
+                <img src="Pictures/restart.png" width="100%" onClick="restartButton()" alt="RestartButton" />
             </div>
         </div>
     </div>
@@ -98,10 +101,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 		</button>
         <button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
 			<img src="Pictures/right.png" alt="RIGHT">
-		</button>
-		<button class="button" onClick="restartGame()">
-				<img src="Pictures/restart.png" alt="RestartButton" />
-		</button>
+		</button>	    
     </div>
 
 </body>
