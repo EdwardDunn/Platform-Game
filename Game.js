@@ -9,6 +9,7 @@ const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
+const p=80;
 
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed
@@ -24,7 +25,8 @@ var scoreBoard;
 var levelDisplay;
 var enemyCharacters = [];
 var clouds = [];
-var keysPressed = {LEFT : false, UP : false, RIGHT : false};
+var keysPressed = {LEFT : false, UP : false, RIGHT : false,p: false};
+var gamePaused=false;
 
 /**
  * @param event
@@ -59,7 +61,18 @@ function KeyDown(event) {
             history.go(0);
         }
 	}
+	if(keysPressed[p]){
+		keysPressed[p]=false;
+		pauseGame();
+	}
 }
+
+
+function pauseGame() {
+	// alert("THE GAME HAS BEEN PAUSED");
+	gamePaused=!gamePaused;
+}
+
 
 /**
  * @param event
@@ -560,6 +573,15 @@ function flashScore(){
  */
 function updateGameArea() {
 	//loop for enemy collision
+	var pausemodal= document.getElementById('gamePauseModal');
+	if(gamePaused){
+    	pausemodal.style.display = "block";
+		return;
+	}
+	else{
+		pausemodal.style.display = "none";
+	}
+
 	for (var i=0; i<enemyCharacters.length; i++){
 		if(enemyCharacters[i].isAlive()){
 			if (playerCharacter.jumpsOn(enemyCharacters[i])) {
@@ -567,7 +589,6 @@ function updateGameArea() {
 				incrementScore(100);
 				gameArea.bonusActiveTime = 0;
 				gameArea.bonusInterval = setInterval(flashScore,150);
-			
 				
 			}
 			else if (playerCharacter.crashWith(enemyCharacters[i])) {
