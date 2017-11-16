@@ -76,9 +76,9 @@ Suggestions
      
 - Use the issue description you are working on for your commit message e.g. "Issue #10 Updated README.md"
 
-- If you're not working on one of the existing issues, remember to create a new one before you submit a Pull Request
+- If you're **not** working on one of the existing issues, remember to create a new one before you submit a Pull Request
 
 - If another contributor has commented on an issue this usually means they are working on it, have a look at the comments.
 
 - Before you create a new pull request, test your changes to ensure they work correctly. Try playing the game a few times in different 
-  browsers.
+  browsers e.g. Google and FireFox.
