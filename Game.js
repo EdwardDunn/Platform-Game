@@ -602,7 +602,7 @@ function updateGameArea() {
 
 	//cloud update
 	for (var i=0; i<100; i++) {
-			clouds[i].x += 1;
+			clouds[i].x += 0.5;
 			clouds[i].update();
 	}
 
