@@ -39,6 +39,7 @@ canvas {
 .button {
   display: inline-block;
   /* padding: 18px 28px; */
+  width:13.3%;
   font-size: 12px;
   cursor: pointer;
   text-align: center;
@@ -66,15 +67,18 @@ canvas {
   filter: saturate(1.6);
   transform: translateY(1px);
 }
+.buttonImages{
+    width:100%;
+    height:100%;
+}
 
 #buttonWrapper{
-  margin-top: 10px;
-	text-align:center; 
+  margin-top: 20px;
+  text-align:center; 
 }
 #restartButtonNearScore{
-    left: 1060px;
-    top: 20px;
+    right: 7%;
+    margin-bottom: 7%;   
     position: absolute;
-    height: 55px;
 }
 

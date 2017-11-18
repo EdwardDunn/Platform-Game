@@ -38,7 +38,7 @@ Author: Open Source - Contributor list can be seen in GitHub
     </audio>
     <canvas id="canvas" width=300 height=300></canvas>
     <button id="restartButtonNearScore" class="button" onClick="restartGame()">
-				<img src="Pictures/restart.png" alt="RestartButton" />
+		<img class="buttonImages" src="Pictures/restart.png" alt="RestartButton" />
 	</button>    
 
     <div id="instructionsModal" class="modal">
@@ -63,7 +63,7 @@ Author: Open Source - Contributor list can be seen in GitHub
             </ul>
 
             <div class="startButton">
-                <img src="Pictures/play.png" width="100%" onClick="startGame()" alt="PlayButton" />
+                <img class="buttonImages" src="Pictures/play.png" width="100%" onClick="startGame()" alt="PlayButton" />
                 <!-- onload="startAudio()"  -->
             </div>
         </div>
@@ -76,7 +76,7 @@ Author: Open Source - Contributor list can be seen in GitHub
             <p class="gameOverDesc">Press RESTART button or Space to restart the game.</p>
 
             <div class="restartButton">
-                <img src="Pictures/restart.png" width="100%" onClick="startGame()" alt="RestartButton" />
+                <img class="buttonImages" src="Pictures/restart.png" width="100%" onClick="startGame()" alt="RestartButton" />
             </div>
         </div>
     </div>
@@ -94,13 +94,13 @@ Author: Open Source - Contributor list can be seen in GitHub
     <!--buttons-->
     <div id="buttonWrapper">
         <button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
-			<img src="Pictures/left.png" alt="LEFT">
+			<img class="buttonImages" src="Pictures/left.png" alt="LEFT">
 		</button>
         <button class="button" onmousedown="moveUpMouse()" onmouseup="onMouseUp()" ontouchstart="moveUpMouse()" ontouchend="onMouseUp()">
-			<img src="Pictures/jump.png" alt="JUMP">
+			<img class="buttonImages" src="Pictures/jump.png" alt="JUMP">
 		</button>
         <button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
-			<img src="Pictures/right.png" alt="RIGHT">
+			<img class="buttonImages" src="Pictures/right.png" alt="RIGHT">
 		</button>	    
     </div>
 
