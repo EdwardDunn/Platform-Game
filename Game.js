@@ -71,7 +71,7 @@ function KeyDown(event) {
 
 	if (keysPressed[m]) {
 	    keysPressed[m]=false;
-	    muteMusice();
+	    muteMusic();
 	}
 }
 
