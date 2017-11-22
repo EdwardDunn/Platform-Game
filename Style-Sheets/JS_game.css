@@ -39,7 +39,6 @@ canvas {
 .button {
   display: inline-block;
   /* padding: 18px 28px; */
-  width:13.3%;
   font-size: 12px;
   cursor: pointer;
   text-align: center;
@@ -77,6 +76,7 @@ canvas {
   text-align:center; 
 }
 #restartButtonNearScore{
+    width:13.3%;
     right: 7%;
     margin-bottom: 7%;   
     position: absolute;
