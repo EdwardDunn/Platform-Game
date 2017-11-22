@@ -10,6 +10,8 @@ const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
 const p=80;
+const m=77;
+
 
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed
@@ -25,8 +27,9 @@ var scoreBoard;
 var levelDisplay;
 var enemyCharacters = [];
 var clouds = [];
-var keysPressed = {LEFT : false, UP : false, RIGHT : false,p: false};
+var keysPressed = {LEFT : false, UP : false, RIGHT : false,p: false, m: false};
 var gamePaused=false;
+let musicMuted=false;
 
 /**
  * @param event
@@ -65,8 +68,23 @@ function KeyDown(event) {
 		keysPressed[p]=false;
 		pauseGame();
 	}
+
+	if (keysPressed[m]) {
+	    keysPressed[m]=false;
+	    muteMusice();
+	}
 }
 
+// Toggle music at 'M' key press
+function muteMusic() {
+    musicMuted = !musicMuted;
+    if (musicMuted) {
+	audio.pause();
+    }
+    else {
+	audio.load();
+    }
+}
 
 function pauseGame() {
 	// alert("THE GAME HAS BEEN PAUSED");
@@ -137,8 +155,9 @@ function startGame() {
     audio = document.getElementById("bgm");
     audio.autoplay=true;
     audio.loop=true;
-    audio.load();
-
+    if (!musicMuted) {
+	audio.load();
+    }
 
 
 	//loop for creating new enemy characters setting a random x coordinate for each
