@@ -136,7 +136,7 @@ function startGame() {
     currentLevel = 1;
 	//player character
     playerCharacter = new component();
-    playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 120, "image",1);
+	playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 20, "image",1);
 
 	//background
     background = new component();
@@ -165,12 +165,12 @@ function startGame() {
         if(Math.floor(Math.random()*(2)))
         {
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x,200, "image",1);
+			enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x,200, "image",1);
         }
         else
         {
             enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
+			enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
         }
     }
 
@@ -195,7 +195,7 @@ function startLevel2() {
 
 	//background
     background = new component();
-    background.init(900, 400, "Pictures/background2.jpg", 0, 0, "image",1);
+    background.init(900, 400, "Pictures/background_2.jpg", 0, 0, "image",1);
 
 	//score
     scoreBoard = new component();
@@ -296,7 +296,7 @@ function startLevel4() {
 
 	//background
 	background = new component();
-	background.init(900, 400, "Pictures/background2.jpg", 0, 0, "image", 1);
+	background.init(900, 400, "Pictures/background_4.jpg", 0, 0, "image", 1);
 
 	//score
 	scoreBoard = new component();
@@ -327,7 +327,7 @@ function startLevel4() {
 	for (var i=0; i<100; i++) {
 		var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
 				clouds[i] = new component();
-				clouds[i].init(65, 50, "Pictures/cloud2.png", x, 40, "image", 1);
+				clouds[i].init(65, 50, "Pictures/cloud3.png", x, 40, "image", 1);
 	}
 
 //call start function
