@@ -51,9 +51,13 @@ Date:9/26/2017
 Added by: maanvin
 Date:10/15/2017
 
-	Description : background_music
-		Source: http://freesound.org/people/uso_sketch/sounds/403920/
 	Description : jump_sound
 		Source: https://opengameart.org/content/platformer-jumping-sounds
 	Description : game over sound
 		Source: http://freesound.org/people/themusicalnomad/sounds/253886/
+
+Added by: doudoudidev
+Date:12/09/2017
+
+	Description : background_music
+		Source: https://opengameart.org/content/high-tech-lab
