@@ -56,6 +56,12 @@ Date:10/15/2017
 	Description : game over sound
 		Source: http://freesound.org/people/themusicalnomad/sounds/253886/
 
+Added by: Edward Dunn
+Date: 29/11/17
+
+	Description: background_4
+		Source: http://www.frebers.com/download/5-games-background-illustration/
+
 Added by: doudoudidev
 Date:12/09/2017
 
