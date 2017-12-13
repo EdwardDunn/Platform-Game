@@ -1,27 +1,10 @@
-**README**
+# Platform Game (Codename: The Jumping Dead)
+An HTML/JavaScript platformer created using [W3 Schools' Game Tutorial](http://www.w3schools.com/graphics/game_canvas.asp ) as a learning guide. The game uses the HTML canvas element to support functionality.
 
-**Help Wanted**
+The goal is to evade all the bad guys!
 
-I am looking for new contributors to this project as it is only the basic structure of the game and needs a lot
-more features added. Please read the contributing guide if you would like to contribute.
+### Help Wanted
+New contributors are welcome to work on this game, as it's only in the early stages and needs a lot of additional features. Please read the [CONTRIBUTING](https://github.com/EdwardDunn/Platform-Game/blob/master/CONTRIBUTING.md) document if you'd like to contribute.
 
-**Description**
-
-HTML/Javascript game, made using [W3 schools game tutorial](http://www.w3schools.com/graphics/game_canvas.asp ) as a learning guide. 
-The game is made using the HTML canvas feature. 
-
-The aim of the game is to evade all the bad guys!
-
-
-**Licenses**
-
-Currently no existing software being used in the application
-
-
-
-
-
-
-
-
-
+### Licenses
+This project is filed under the MIT license.
