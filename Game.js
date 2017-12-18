@@ -54,9 +54,11 @@ function KeyDown(event) {
 		moveRight();
 	}
 	if (keysPressed[UP]) {
-		jump_audio=document.getElementById("jump")
-		jump.autoplay=true;
-		jump.load();
+		if (!musicMuted) {
+			jump_audio=document.getElementById("jump")
+			jump.autoplay=true;
+			jump.load();
+		}
 		moveUp();
 	}
 	if (keysPressed[SPACE]) { // Add SPACE key to restart game
@@ -525,9 +527,11 @@ function gameOver() {
     audio = document.getElementById("bgm");
     audio.pause();
 
-    gameover = document.getElementById("gameover")
-    gameover.autoplay=true;
-	gameover.load();
+	if (!musicMuted) {
+    	gameover = document.getElementById("gameover")
+    	gameover.autoplay=true;
+		gameover.load();
+	}
 }
 /**
 *
@@ -784,11 +788,14 @@ function moveRightMouse(){
     interval = setInterval(moveRight,1);
 }
 function moveUpMouse(){
-	jump_audio=document.getElementById("jump")
-	jump.autoplay=true;
-	jump.load();
-    	interval = setInterval(moveUp,1);
+	if (!musicMuted) {
+		jump_audio=document.getElementById("jump")
+		jump.autoplay=true;
+		jump.load();
+	}
+    interval = setInterval(moveUp,1);
 }
+
 function onMouseUp(){
     clearInterval(interval);
      stopMove();
