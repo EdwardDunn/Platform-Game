@@ -27,7 +27,7 @@ var scoreBoard;
 var levelDisplay;
 var enemyCharacters = [];
 var clouds = [];
-var keysPressed = {LEFT : false, UP : false, RIGHT : false,p: false, m: false};
+var keysPressed = {LEFT : false, UP : false, RIGHT : false, p: false, m: false};
 var gamePaused=false;
 let musicMuted=false;
 
@@ -55,7 +55,6 @@ function KeyDown(event) {
 	}
 	if (keysPressed[UP]) {
 		if (!musicMuted) {
-			jump_audio=document.getElementById("jump")
 			jump.autoplay=true;
 			jump.load();
 		}
@@ -669,8 +668,7 @@ function updateGameArea() {
 		else if(currentLevel === 3) {
 		  startLevel3();
 		}
-		else if(currentLevel === 4)
-        {
+		else if(currentLevel === 4) {
             startLevel4();
         }
 		else if(currentLevel > 4) {
@@ -789,7 +787,6 @@ function moveRightMouse(){
 }
 function moveUpMouse(){
 	if (!musicMuted) {
-		jump_audio=document.getElementById("jump")
 		jump.autoplay=true;
 		jump.load();
 	}
