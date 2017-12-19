@@ -32,6 +32,10 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<source src="Audio/jump_04.wav" type="audio/wav">
 			Your browser does not support the audio element.
 	</audio>
+	<audio id="kill_e" style="display: none" controls>
+		<source src="Audio/kill_enemy.wav" type="audio/wav">
+			Your browser does not support the audio element.
+	</audio>
 	<audio id="gameover" style="display: none" controls>
 		<source src="Audio/gameover.wav" type="audio/wav">
 			Your browser does not support the audio element.
@@ -39,7 +43,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 	<canvas id="canvas" width=300 height=300></canvas>
 	<button id="restartButtonNearScore" class="button" onClick="restartGame()">
 		<img class="buttonImages" src="Pictures/restart.png" alt="RestartButton" />
-	</button>	
+	</button>
 
 	<div id="instructionsModal" class="modal">
 
@@ -98,7 +102,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<p class="gamePause">You paused the game!</p>
 		<p class="gamePlayPause">Press p to play</p>
 	</div>
-	
+
 	<!--buttons-->
 	<div id="buttonWrapper">
 		<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
@@ -109,7 +113,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 		</button>
 		<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
 			<img class="buttonImages" src="Pictures/right.png" alt="RIGHT">
-		</button>		
+		</button>
 	</div>
 
 </body>

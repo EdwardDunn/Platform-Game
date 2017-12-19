@@ -587,11 +587,11 @@ function flashScore(){
     }else{
         scoreBoard.color = "black";
    }
- 
+
    if(gameArea.bonusActiveTime > 1200){
         scoreBoard.color = "black";
        clearInterval(gameArea.bonusInterval);
-   }  
+   }
     gameArea.bonusActiveTime += 150;
 }
 
@@ -612,11 +612,14 @@ function updateGameArea() {
 	for (var i=0; i<enemyCharacters.length; i++){
 		if(enemyCharacters[i].isAlive()){
 			if (playerCharacter.jumpsOn(enemyCharacters[i])) {
+				kill_audio=document.getElementById("kill_e");
+				kill_e.autoplay=true;
+				kill_e.load();
 				enemyCharacters[i].setAlive(false);
 				incrementScore(100);
 				gameArea.bonusActiveTime = 0;
 				gameArea.bonusInterval = setInterval(flashScore,150);
-				
+
 			}
 			else if (playerCharacter.crashWith(enemyCharacters[i])) {
                 gameArea.stop();
