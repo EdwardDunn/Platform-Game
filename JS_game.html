@@ -9,7 +9,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Platform Game</title>
+	<title>The Jumping Dead</title>
 
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/JS_game.css">
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/InstructionsModal.css">
@@ -17,25 +17,31 @@ Author: Open Source - Contributor list can be seen in GitHub
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/GameCompleteModal.css">
 	<link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
 
+	<!--Main game script-->
 	<script type="text/javascript" src="Game.js"></script>
 
 </head>
 
-<!-- call startGame function on page load-->
-
+<!--On page load call showInstructions method-->
 <body onload="showInstructions()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
+	
+	<!--Audio elements-->
 	<audio id="bgm" style="display: none" controls>
 		<source src="Audio/bgnd_mus.flac" type="audio/flac">
 		Your browser does not support the audio element.
 	</audio>
+	
 	<audio id="jump" style="display: none" controls>
 		<source src="Audio/jump_04.wav" type="audio/wav">
 			Your browser does not support the audio element.
 	</audio>
+	
 	<audio id="gameover" style="display: none" controls>
 		<source src="Audio/gameover.wav" type="audio/wav">
 			Your browser does not support the audio element.
 	</audio>
+	
+	<!--Restart button on game page-->
 	<canvas id="canvas" width=300 height=300></canvas>
 	<button id="restartButtonNearScore" class="button" onClick="restartGame()">
 		<img class="buttonImages" src="Pictures/restart.png" alt="RestartButton" />
@@ -52,17 +58,18 @@ Author: Open Source - Contributor list can be seen in GitHub
 				<li>Complete each level by avoiding the enemy characters</li>
 				<li>You can kill the enemy by jumping on them</li>
 				<li>Killing an enemy grants you bonus score</li>
-				<li>Press 'P' to pause game</li>
+				<li>Press 'p' to pause game</li>
 			</ul>
 
 			<p>Controllers</p>
 			<ul>
 				<li>On screen buttons</li>
 				<li>Keyboard arrows</li>
-				<li>Press 'P' to pause game</li>
-				<li>Press 'M' to toggle music</li>
+				<li>Press 'p' to pause game</li>
+				<li>Press 'm' to toggle music</li>
 			</ul>
 
+			<!--Play button-->
 			<div class="startButton">
 				<img class="buttonImages" src="Pictures/play.png" width="100%" onClick="startGame()" alt="PlayButton" />
 			</div>
@@ -97,7 +104,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<p class="gamePlayPause">Press p to play</p>
 	</div>
 	
-	<!--buttons-->
+	<!--Game play buttons-->
 	<div id="buttonWrapper">
 		<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
 			<img class="buttonImages" src="Pictures/left.png" alt="LEFT">
