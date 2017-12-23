@@ -534,11 +534,15 @@ function gameComplete(){
     state = 'complete';
 	var modal = document.getElementById('gameCompleteModal');
     modal.style.display = "block";
-    var span = document.getElementsByClassName("close")[0];
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    };
+	gameArea.stop();
+	
+	if (!musicMuted) {
+		audio = document.getElementById("bgm");
+		audio.pause();
+    	gamewon = document.getElementById("gamewon")
+    	gamewon.autoplay=true;
+		gamewon.load();
+	}
 }
 /*
  *Adjust character to a valid position if it moves out of border
