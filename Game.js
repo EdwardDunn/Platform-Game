@@ -30,6 +30,7 @@ var clouds = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false, P: false, M: false};
 var gamePaused=false;
 let musicMuted=false;
+let musicToggled = false; //this is just for muting music when game paused
 
 /**
  * @param event
@@ -593,11 +594,19 @@ function updateGameArea() {
 	//loop for enemy collision
 	var pausemodal= document.getElementById('gamePauseModal');
 	if(gamePaused){
-    	pausemodal.style.display = "block";
+		pausemodal.style.display = "block";
+		if (!musicMuted) {
+			muteMusic();
+			musicToggled = true;
+		}
 		return;
 	}
 	else{
 		pausemodal.style.display = "none";
+		if (musicToggled) {
+			muteMusic();
+			musicToggled = false;
+		}
 	}
 
 	for (var i=0; i<enemyCharacters.length; i++){
