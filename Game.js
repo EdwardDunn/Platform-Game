@@ -9,14 +9,14 @@ const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
-const p=80;
-const m=77;
+const P = 80;
+const M = 77;
 
 
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed
 var flag = 1;
-var z=0;
+var z = 0;
 // Add state to check if user is playing, complete or game-over
 var state = 'instructions';
 
@@ -27,7 +27,7 @@ var scoreBoard;
 var levelDisplay;
 var enemyCharacters = [];
 var clouds = [];
-var keysPressed = {LEFT : false, UP : false, RIGHT : false,p: false, m: false};
+var keysPressed = {LEFT : false, UP : false, RIGHT : false, P: false, M: false};
 var gamePaused=false;
 let musicMuted=false;
 
@@ -41,10 +41,8 @@ function KeyDown(event) {
 		return;
 	}
 
-    // console.log(event);
     var key;
     key = event.which;
-    // console.log(key);
     keysPressed[key] = true;
 
 	if (keysPressed[LEFT]) {
@@ -54,21 +52,22 @@ function KeyDown(event) {
 		moveRight();
 	}
 	if (keysPressed[UP]) {
-		jump_audio=document.getElementById("jump")
-		jump.autoplay=true;
-		jump.load();
+		if (!musicMuted) {
+			jump.autoplay=true;
+			jump.load();
+		}
 		moveUp();
 	}
 	if (keysPressed[SPACE]) { // Add SPACE key to restart game
 		restartGame();
 	}
-	if(keysPressed[p]){
-		keysPressed[p]=false;
+	if(keysPressed[P]){
+		keysPressed[P]=false;
 		pauseGame();
 	}
 
-	if (keysPressed[m]) {
-	    keysPressed[m]=false;
+	if (keysPressed[M]) {
+	    keysPressed[M]=false;
 	    muteMusic();
 	}
 }
@@ -85,7 +84,6 @@ function muteMusic() {
 }
 
 function pauseGame() {
-	// alert("THE GAME HAS BEEN PAUSED");
 	gamePaused=!gamePaused;
 }
 
@@ -97,7 +95,6 @@ function pauseGame() {
 function KeyUp(event) {
     var key;
     key = event.which;
-    // console.log(key);
     keysPressed[key] = false;
 	switch (key) {
 		case UP:
@@ -195,7 +192,6 @@ function startGame() {
 
     gameArea.init();
     gameArea.start();
-    //startAudio();
 }
 
 function startLevel2() {
@@ -298,12 +294,10 @@ function startLevel3() {
         //if statement to choose random enemy from flying birds and skullman
 		/*
         if (Math.floor(Math.random() * (2))) {
-            // console.log("enemy 1");
             enemyCharacters[i] = new component();
             enemyCharacters[i].init(60, 50, "Pictures/skull_baddie.png", x, 200, "image", 1);
         }
         else {
-            // console.log("enemy 2");
             enemyCharacters[i] = new component();
             enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
         } */
@@ -359,12 +353,10 @@ function startLevel4() {
 		//if statement to choose random enemy from flying birds and skullman
 		/*
 		if (Math.floor(Math.random() * (2))) {
-			// console.log("enemy 1");
 			enemyCharacters[i] = new component();
 			enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", 1);
 		}
 		else {
-			// console.log("enemy 2");
 			enemyCharacters[i] = new component();
 			enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
 		} */
@@ -500,10 +492,7 @@ var gameArea = {
         //update interval
         this.interval = setInterval(updateGameArea, 20);
     },
-    /*startAudio : function()
-    {
 
-    },*/
     //function used for refreshing page
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -669,16 +658,17 @@ function gameOver() {
     audio = document.getElementById("bgm");
     audio.pause();
 
-    gameover = document.getElementById("gameover")
-    gameover.autoplay=true;
-	gameover.load();
+	if (!musicMuted) {
+    	gameover = document.getElementById("gameover")
+    	gameover.autoplay=true;
+		gameover.load();
+	}
 }
 /**
 *
 */
 function restartGame(){
 	gameArea.stop();
-	//interval && clearInterval(interval);
 	startGame();
 }
 /**
@@ -688,11 +678,15 @@ function gameComplete(){
     state = 'complete';
 	var modal = document.getElementById('gameCompleteModal');
     modal.style.display = "block";
-    var span = document.getElementsByClassName("close")[0];
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    };
+	gameArea.stop();
+	
+	if (!musicMuted) {
+		audio = document.getElementById("bgm");
+		audio.pause();
+    	gamewon = document.getElementById("gamewon")
+    	gamewon.autoplay=true;
+		gamewon.load();
+	}
 }
 /*
  *Adjust character to a valid position if it moves out of border
@@ -801,7 +795,7 @@ function updateGameArea() {
 		gameArea.stop();
 		currentLevel++;
 
-        console.log(currentLevel);
+    console.log(currentLevel);
 		switch(currentLevel){
 			case 2:
 				startLevel2();
@@ -818,6 +812,7 @@ function updateGameArea() {
 			default:
 				gameComplete();
 		}	
+
 	}
 
 	//player character update
@@ -942,11 +937,13 @@ function moveRightMouse(){
     interval = setInterval(moveRight,1);
 }
 function moveUpMouse(){
-	jump_audio=document.getElementById("jump")
-	jump.autoplay=true;
-	jump.load();
-    	interval = setInterval(moveUp,1);
+	if (!musicMuted) {
+		jump.autoplay=true;
+		jump.load();
+	}
+    interval = setInterval(moveUp,1);
 }
+
 function onMouseUp(){
     clearInterval(interval);
      stopMove();
