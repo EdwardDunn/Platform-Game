@@ -170,17 +170,6 @@ function startGame() {
 				enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x, 200, "image", enemyType);
 				break;
 		} 
-        //Random enemy character choose
-        /*if(Math.floor(Math.random()*(2)))
-        {
-            enemyCharacters[i] = new component();
-			enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x,200, "image",1);
-        }
-        else
-        {
-            enemyCharacters[i] = new component();
-			enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
-        } */
     }
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -228,19 +217,6 @@ function startLevel2() {
 				enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x, 200, "image", 0);
 				break;
 		}
-        //Random enemy character choose
-        /*if(Math.floor(Math.random()*(2)))
-        {
-            // console.log("enemy 1");
-            enemyCharacters[i] = new component();
-            enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x,200, "image",0);
-        }
-        else
-        {
-            // console.log("enemy 2");
-            enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
-        } */
 
     }
 
@@ -291,16 +267,7 @@ function startLevel3() {
 				enemyCharacters[i].init(60, 50, "Pictures/skull_baddie.png", x, 200, "image", enemyType);
 				break;
 		}
-        //if statement to choose random enemy from flying birds and skullman
-		/*
-        if (Math.floor(Math.random() * (2))) {
-            enemyCharacters[i] = new component();
-            enemyCharacters[i].init(60, 50, "Pictures/skull_baddie.png", x, 200, "image", 1);
-        }
-        else {
-            enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
-        } */
+        
     }
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -350,16 +317,7 @@ function startLevel4() {
 				enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", enemyType);
 				break;
 		}
-		//if statement to choose random enemy from flying birds and skullman
-		/*
-		if (Math.floor(Math.random() * (2))) {
-			enemyCharacters[i] = new component();
-			enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", 1);
-		}
-		else {
-			enemyCharacters[i] = new component();
-			enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
-		} */
+		
 	}
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -425,25 +383,6 @@ function startLevel5() {
 				break;	
 		}
 		
-		//if statement to choose random enemy from flying birds and skullman
-		/*if (Math.floor(Math.random() * (3)) === 2) {
-			console.log("enemy 1");
-			enemyCharacters[i] = new component();
-			enemyCharacters[i].init(80, 60, "Pictures/prova.png", x, 170, "image", 2);
-			console.log(enemyCharacters[i].h);
-		}
-		else if(Math.floor(Math.random() * (2))){
-			console.log("enemy 2");
-			enemyCharacters[i] = new component();
-			enemyCharacters[i].init(80, 60, "Pictures/newchar.png", x, 200, "image", 1);
-			console.log(enemyCharacters[i].h);
-		}
-		else{
-			console.log("enemy 3");
-			enemyCharacters[i] = new component();
-			enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
-			console.log(enemyCharacters[i].h);
-		}*/
 	} 
 
 	//loop for creating new clouds setting a random x coordinate for each
