@@ -11,6 +11,7 @@ const RIGHT = 39;
 const SPACE = 32;
 const P = 80;
 const M = 77;
+const LEVEL_COMPLETION_SCORE = 3000;
 
 
 //flag to take care of y axis cordinate increase or decrease
@@ -656,7 +657,7 @@ function updateGameArea() {
 
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-    if (gameArea.score >= 3000) {
+    if (gameArea.score >= LEVEL_COMPLETION_SCORE) {
 		gameArea.stop();
 		currentLevel++;
 
