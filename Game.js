@@ -338,7 +338,7 @@ function startLevel5() {
 	z = 0;
 	//player character
 	playerCharacter = new component();
-	playerCharacter.init(60, 70, "Pictures/ninja.png", 100, 120, "image", 1);
+	playerCharacter.init(60, 70, "Pictures/ninja.png", 450, 120, "image", 1);
 
 	//background
 	background = new component();
