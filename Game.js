@@ -160,17 +160,18 @@ function startGame() {
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i=0; i<100; i++) {
         var x = Math.floor((Math.random() * (1200 + i * 300 - 900 + i * 300)) + (300 * i + 900));
-        //Random enemy character choose
-        if(Math.floor(Math.random()*(2)))
-        {
-            enemyCharacters[i] = new component();
-			enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x,200, "image",1);
-        }
-        else
-        {
-            enemyCharacters[i] = new component();
-			enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
-        }
+		
+		var enemyType = Math.floor(Math.random() * (2));
+		switch(enemyType){
+			case 0:
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", enemyType);
+				break;
+			case 1: 
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x, 200, "image", enemyType);
+				break;
+		} 
     }
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -206,20 +207,18 @@ function startLevel2() {
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
 	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
-
-        //Random enemy character choose
-        if(Math.floor(Math.random()*(2)))
-        {
-            // console.log("enemy 1");
-            enemyCharacters[i] = new component();
-            enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x,200, "image",0);
-        }
-        else
-        {
-            // console.log("enemy 2");
-            enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x,200, "image",0);
-        }
+		
+		var enemyType = Math.floor(Math.random() * (2));
+		switch(enemyType){
+			case 0:
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
+				break;
+			case 1: 
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x, 200, "image", 0);
+				break;
+		}
 
     }
 
@@ -258,16 +257,19 @@ function startLevel3() {
     //loop for creating new enemy characters setting a random x coordinate for each
     for (var i = 0; i < 100; i++) {
         var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
-
-        //if statement to choose random enemy from flying birds and skullman
-        if (Math.floor(Math.random() * (2))) {
-            enemyCharacters[i] = new component();
-            enemyCharacters[i].init(60, 50, "Pictures/skull_baddie.png", x, 200, "image", 1);
-        }
-        else {
-            enemyCharacters[i] = new component();
-            enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
-        }
+		
+		var enemyType = Math.floor(Math.random() * (2));
+		switch(enemyType){
+			case 0:
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", enemyType);
+				break;
+			case 1: 
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(60, 50, "Pictures/skull_baddie.png", x, 200, "image", enemyType);
+				break;
+		}
+        
     }
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -306,15 +308,18 @@ function startLevel4() {
 	for (var i = 0; i < 100; i++) {
 		var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
 
-		//if statement to choose random enemy from flying birds and skullman
-		if (Math.floor(Math.random() * (2))) {
-			enemyCharacters[i] = new component();
-			enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", 1);
+		var enemyType = Math.floor(Math.random() * (2));
+		switch(enemyType){
+			case 0:
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", enemyType);
+				break;
+			case 1: 
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", enemyType);
+				break;
 		}
-		else {
-			enemyCharacters[i] = new component();
-			enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
-		}
+		
 	}
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -323,6 +328,72 @@ function startLevel4() {
 				clouds[i] = new component();
 				clouds[i].init(65, 50, "Pictures/cloud3.png", x, 40, "image", 1);
 	}
+
+//call start function
+gameArea.init();
+gameArea.start();
+}
+
+function startLevel5() {
+	//to synchronize the start cordinate of enemy character
+	flag = 1;
+	z = 0;
+	//player character
+	playerCharacter = new component();
+	playerCharacter.init(60, 70, "Pictures/ninja.png", 450, 120, "image", 1);
+
+	//background
+	background = new component();
+	background.init(900, 400, "Pictures/background_5.jpg", 0, 0, "image", 1);
+
+	//score
+	scoreBoard = new component();
+	scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
+
+	//current level display
+	levelDisplay = new component();
+	levelDisplay.init("30px", "Consolas", "black", 600, 40, "text", 1);
+
+	//loop for creating new enemy characters setting a random x coordinate for each
+	for (var i = 0; i < 100; i++) {
+		//enemyType is the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)..
+		//when you want to add a new type of enemy, increment the number inside the Math.random and
+		//insert in the correct case the enemy
+		var enemyType = Math.floor(Math.random() * (4));
+		switch(enemyType){
+			case 0:
+				var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", enemyType);
+				break;
+			case 1: 
+				var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 200, "image", enemyType);
+				console.log("la x nemico è "+ x);
+				break;
+			case 2:
+				var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(80, 14, "Pictures/sword.png", x, 170, "image", enemyType);
+				break;
+			case 3:
+				//in this case the x value is calculate as the clouds
+				var x = Math.floor((Math.random() * (900 - i * 300) + 1));
+				enemyCharacters[i] = new component();
+				enemyCharacters[i].init(80, 73, "Pictures/enemyGuy.png", x, 200, "image", enemyType);
+				break;	
+		}
+		
+	} 
+
+	//loop for creating new clouds setting a random x coordinate for each
+	for (var i=0; i<100; i++) {
+		var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
+		console.log("la x nuvola è "+ x);
+				clouds[i] = new component();
+				clouds[i].init(65, 50, "Pictures/cloud3.png", x, 40, "image", 1);
+	} 
 
 //call start function
 gameArea.init();
@@ -423,7 +494,10 @@ function component() {
 	this.x = x;
 	this.y = y;
 	this.gravity = 0;
-
+	
+	//angle
+	this.angle = 0;
+	
 	//sets speed playerCharacter falls to bottom of canvas
 	this.gravitySpeed = 4.5;
 }
@@ -432,7 +506,16 @@ function component() {
 	this.update = function(callback) {
 		if (this.type === "image") {
 			this.ctx.globalAlpha = this.alpha;
-			this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+			if(this.angle != 0){
+				this.ctx.save();
+				this.ctx.translate( this.x + this.width/2, this.y + this.height/2 );
+				this.ctx.rotate(this.angle);
+				this.ctx.translate( -this.x - this.width/2, -this.y - this.height/2 );
+				this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+				this.ctx.restore();
+			  } else {
+				this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+			  }
 		} else if (this.type === "text") {
 			this.ctx.font = this.width + " " + this.height;
 			this.ctx.fillStyle = this.color;
@@ -661,20 +744,24 @@ function updateGameArea() {
 		gameArea.stop();
 		currentLevel++;
 
-        console.log(currentLevel);
+    console.log(currentLevel);
+		switch(currentLevel){
+			case 2:
+				startLevel2();
+				break;
+			case 3:
+				startLevel3();
+				break;
+			case 4:
+				startLevel4();
+				break;
+			case 5:
+				startLevel5();
+				break;
+			default:
+				gameComplete();
+		}	
 
-		if(currentLevel === 2) {
-			startLevel2();
-		}
-		else if(currentLevel === 3) {
-		  startLevel3();
-		}
-		else if(currentLevel === 4) {
-            startLevel4();
-        }
-		else if(currentLevel > 4) {
-			gameComplete();
-		}
 	}
 
 	//player character update
@@ -695,10 +782,16 @@ function updateGameArea() {
 		if(enemyCharacters[i].isAlive()){
 			//check if level is 3 or greater
             //vary the speed of enemy characters if level is 3 or greater
-		    if(currentLevel >= 3 && enemyCharacters[i].h )
-                enemyCharacters[i].x += -4;
-			else
-		    enemyCharacters[i].x += -2;
+		    if(currentLevel >= 3 && enemyCharacters[i].h ){
+				if(currentLevel === 5 &&enemyCharacters[i].h ===3){
+					enemyCharacters[i].x -= -4; //it enter from the left
+				}else{
+					enemyCharacters[i].x += -4;
+				}
+				
+			}else{
+				enemyCharacters[i].x += -2;
+			}
 
 			//if statement to check if y cordinate has to increase or decrease
 			//should birds go up or down
@@ -710,6 +803,12 @@ function updateGameArea() {
 					enemyCharacters[i].y += +3;
 				}
 			}
+			
+			//if h===2 the enemy must rotate
+			if(enemyCharacters[i].h === 2){
+				enemyCharacters[i].angle += 10 * Math.PI / 180;
+			}
+			
 		}
         else{ // if dead; enemy will be 'squeezed', fall to the ground and fade away. Feel free to improve by adding further animation.
             enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
