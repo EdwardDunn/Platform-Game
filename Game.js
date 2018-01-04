@@ -9,14 +9,15 @@ const LEFT = 37;
 const UP = 38;
 const RIGHT = 39;
 const SPACE = 32;
-const p=80;
-const m=77;
+const P = 80;
+const M = 77;
+const LEVEL_COMPLETION_SCORE = 3000;
 
 
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed
 var flag = 1;
-var z=0;
+var z = 0;
 // Add state to check if user is playing, complete or game-over
 var state = 'instructions';
 
@@ -27,9 +28,10 @@ var scoreBoard;
 var levelDisplay;
 var enemyCharacters = [];
 var clouds = [];
-var keysPressed = {LEFT : false, UP : false, RIGHT : false,p: false, m: false};
+var keysPressed = {LEFT : false, UP : false, RIGHT : false, P: false, M: false};
 var gamePaused=false;
 let musicMuted=false;
+let musicToggled = false; //this is just for muting music when game paused
 
 /**
  * @param event
@@ -41,10 +43,8 @@ function KeyDown(event) {
 		return;
 	}
 
-    // console.log(event);
     var key;
     key = event.which;
-    // console.log(key);
     keysPressed[key] = true;
 
 	if (keysPressed[LEFT]) {
@@ -60,18 +60,17 @@ function KeyDown(event) {
 			jump.load();
 			moveUp();
 		}
-		
 	}
 	if (keysPressed[SPACE]) { // Add SPACE key to restart game
 		restartGame();
 	}
-	if(keysPressed[p]){
-		keysPressed[p]=false;
+	if(keysPressed[P]){
+		keysPressed[P]=false;
 		pauseGame();
 	}
 
-	if (keysPressed[m]) {
-	    keysPressed[m]=false;
+	if (keysPressed[M]) {
+	    keysPressed[M]=false;
 	    muteMusic();
 	}
 }
@@ -88,7 +87,6 @@ function muteMusic() {
 }
 
 function pauseGame() {
-	// alert("THE GAME HAS BEEN PAUSED");
 	gamePaused=!gamePaused;
 }
 
@@ -100,7 +98,6 @@ function pauseGame() {
 function KeyUp(event) {
     var key;
     key = event.which;
-    // console.log(key);
     keysPressed[key] = false;
 	switch (key) {
 		case UP:
@@ -175,7 +172,7 @@ function startGame() {
 				enemyCharacters[i] = new component();
 				enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x, 200, "image", enemyType);
 				break;
-		}
+		} 
     }
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -187,7 +184,6 @@ function startGame() {
 
     gameArea.init();
     gameArea.start();
-    //startAudio();
 }
 
 function startLevel2() {
@@ -224,6 +220,7 @@ function startLevel2() {
 				enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x, 200, "image", 0);
 				break;
 		}
+
     }
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -273,6 +270,7 @@ function startLevel3() {
 				enemyCharacters[i].init(60, 50, "Pictures/skull_baddie.png", x, 200, "image", enemyType);
 				break;
 		}
+        
     }
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -322,6 +320,7 @@ function startLevel4() {
 				enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", enemyType);
 				break;
 		}
+		
 	}
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -386,6 +385,7 @@ function startLevel5() {
 				enemyCharacters[i].init(80, 73, "Pictures/enemyGuy.png", x, 200, "image", enemyType);
 				break;	
 		}
+		
 	} 
 
 	//loop for creating new clouds setting a random x coordinate for each
@@ -434,10 +434,7 @@ var gameArea = {
         //update interval
         this.interval = setInterval(updateGameArea, 20);
     },
-    /*startAudio : function()
-    {
 
-    },*/
     //function used for refreshing page
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -503,7 +500,7 @@ function component() {
 	
 	//angle
 	this.angle = 0;
-
+	
 }
 
 	//function to decide to decide what to display on screen, text, image or fill color
@@ -582,8 +579,7 @@ function component() {
 		if (this.y > rockbottom){
 			this.y = rockbottom;
 			this.hitGround = true;
-		}
-			
+		}	
 	}
 
 	this.setAlive= function(alive){
@@ -606,16 +602,17 @@ function gameOver() {
     audio = document.getElementById("bgm");
     audio.pause();
 
-    gameover = document.getElementById("gameover")
-    gameover.autoplay=true;
-	gameover.load();
+	if (!musicMuted) {
+    	gameover = document.getElementById("gameover")
+    	gameover.autoplay=true;
+		gameover.load();
+	}
 }
 /**
 *
 */
 function restartGame(){
 	gameArea.stop();
-	//interval && clearInterval(interval);
 	startGame();
 }
 /**
@@ -625,11 +622,15 @@ function gameComplete(){
     state = 'complete';
 	var modal = document.getElementById('gameCompleteModal');
     modal.style.display = "block";
-    var span = document.getElementsByClassName("close")[0];
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    };
+	gameArea.stop();
+	
+	if (!musicMuted) {
+		audio = document.getElementById("bgm");
+		audio.pause();
+    	gamewon = document.getElementById("gamewon")
+    	gamewon.autoplay=true;
+		gamewon.load();
+	}
 }
 /*
  *Adjust character to a valid position if it moves out of border
@@ -680,11 +681,19 @@ function updateGameArea() {
 	//loop for enemy collision
 	var pausemodal= document.getElementById('gamePauseModal');
 	if(gamePaused){
-    	pausemodal.style.display = "block";
+		pausemodal.style.display = "block";
+		if (!musicMuted) {
+			muteMusic();
+			musicToggled = true;
+		}
 		return;
 	}
 	else{
 		pausemodal.style.display = "none";
+		if (musicToggled) {
+			muteMusic();
+			musicToggled = false;
+		}
 	}
 
 	for (var i=0; i<enemyCharacters.length; i++){
@@ -734,11 +743,11 @@ function updateGameArea() {
 
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-    if (gameArea.score >= 3000) {
+    if (gameArea.score >= LEVEL_COMPLETION_SCORE) {
 		gameArea.stop();
 		currentLevel++;
 
-        console.log(currentLevel);
+    console.log(currentLevel);
 		switch(currentLevel){
 			case 2:
 				startLevel2();
@@ -755,6 +764,7 @@ function updateGameArea() {
 			default:
 				gameComplete();
 		}	
+
 	}
 
 	//player character update
@@ -846,7 +856,6 @@ function stopMove(){
 }
 
 function moveUp() {
-	
 	if(playerCharacter.hitGround && playerCharacter.y >= 170){
 		playerCharacter.speedY = -20;
 		playerCharacter.hitGround = false;
@@ -880,11 +889,13 @@ function moveRightMouse(){
     interval = setInterval(moveRight,1);
 }
 function moveUpMouse(){
-	jump_audio=document.getElementById("jump")
-	jump.autoplay=true;
-	jump.load();
-    	interval = setInterval(moveUp,1);
+	if (!musicMuted) {
+		jump.autoplay=true;
+		jump.load();
+	}
+    interval = setInterval(moveUp,1);
 }
+
 function onMouseUp(){
     clearInterval(interval);
      stopMove();
