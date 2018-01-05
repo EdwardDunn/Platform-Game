@@ -56,12 +56,12 @@ function KeyDown(event) {
 	if (keysPressed[RIGHT]) {
 		moveRight();
 	}
-	if (keysPressed[UP]) {
+	if (keysPressed[UP] && playerCharacter.hitGround) { //when the character is on the ground and player press Jump then play audio, not only when key is pressed
+		moveUp(); 
 		if (!musicMuted) {
 			jump.autoplay=true;
 			jump.load();
 		}
-		moveUp();
 	}
 	if (keysPressed[SPACE]) { // Add SPACE key to restart game
 		restartGame();
@@ -103,7 +103,7 @@ function KeyUp(event) {
     keysPressed[key] = false;
 	switch (key) {
 		case UP:
-			playerCharacter.speedY = 0;
+			playerCharacter.speedY += playerCharacter.gravity;
 			break;
 		case LEFT:
 			if (keysPressed[RIGHT]) {
@@ -529,13 +529,13 @@ function component() {
 	this.speedY = 0;
 	this.x = x;
 	this.y = y;
-	this.gravity = 0;
+	this.gravity = 1.5;
+	//indicates if the character is on the ground or not
+	this.hitGround = true;
 	
 	//angle
 	this.angle = 0;
 	
-	//sets speed playerCharacter falls to bottom of canvas
-	this.gravitySpeed = 4.5;
 }
 
 	//function to decide to decide what to display on screen, text, image or fill color
@@ -601,9 +601,9 @@ function component() {
 
 	//gravity property
 	this.newPos = function() {
-		this.gravitySpeed += this.gravity;
+		this.y += this.speedY; //increment y position with his speed
+		this.speedY += this.gravity; //increment the y speed with the gravity
 		this.x += this.speedX;
-		this.y += this.speedY + this.gravitySpeed;
 		this.hitBottom();
 		//console.log(`${this.x},${this.y}`);
 	};
@@ -611,8 +611,10 @@ function component() {
 	//set floor on canvas
 	this.hitBottom = function() {
 		var rockbottom = gameArea.canvas.height - this.height -150;
-		if (this.y > rockbottom)
+		if (this.y > rockbottom){
 			this.y = rockbottom;
+			this.hitGround = true;
+		}	
 	}
 
 	this.setAlive= function(alive){
@@ -932,9 +934,9 @@ function stopMove(){
 }
 
 function moveUp() {
-	if (playerCharacter.y >= 170) {
-		playerCharacter.speedY = -7;
-
+	if(playerCharacter.hitGround && playerCharacter.y >= 170){
+		playerCharacter.speedY = -20;
+		playerCharacter.hitGround = false;
 	}
 }
 
@@ -942,7 +944,7 @@ function moveUp() {
  *
  */
 function moveDown() {
-    playerCharacter.speedY = 7;
+    playerCharacter.speedY = 20;
 }
 
 /**
