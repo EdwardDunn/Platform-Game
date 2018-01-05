@@ -53,12 +53,11 @@ function KeyDown(event) {
 	if (keysPressed[RIGHT]) {
 		moveRight();
 	}
-	if (keysPressed[UP]) {
-		jump_audio=document.getElementById("jump")
-		if(playerCharacter.hitGround){  //when the character is on the ground and player press Jump then play audio, not only when key is pressed
+	if (keysPressed[UP] && playerCharacter.hitGround) { //when the character is on the ground and player press Jump then play audio, not only when key is pressed
+		moveUp(); 
+		if (!musicMuted) {
 			jump.autoplay=true;
 			jump.load();
-			moveUp();
 		}
 	}
 	if (keysPressed[SPACE]) { // Add SPACE key to restart game
