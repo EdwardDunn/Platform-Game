@@ -22,11 +22,14 @@ var z = 0;
 var state = 'instructions';
 
 var currentLevel = 1;
+var collectedCoins = 0;
 var playerCharacter;
 var background;
 var scoreBoard;
+var coinScoreBoard;
 var levelDisplay;
 var enemyCharacters = [];
+var coins = [];
 var clouds = [];
 var keysPressed = {LEFT : false, UP : false, RIGHT : false, P: false, M: false};
 var gamePaused=false;
@@ -133,6 +136,7 @@ function startGame() {
     flag= 1;
     z=0;
     currentLevel = 1;
+    collectedCoins = 0;
 	//player character
     playerCharacter = new component();
 	playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 20, "image",1);
@@ -143,7 +147,11 @@ function startGame() {
 
 	//score
     scoreBoard = new component();
-    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1);
+    scoreBoard.init("30px", "Consolas", "black", 50, 40, "text",1);
+
+    //collected Coins
+    coinScoreBoard = new component();
+    coinScoreBoard.init("30px", "Consolas", "black", 280, 40, "text",1);
 
 	//current level display
     levelDisplay = new component();
@@ -171,8 +179,18 @@ function startGame() {
 				enemyCharacters[i] = new component();
 				enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x, 200, "image", enemyType);
 				break;
-		} 
+		}
     }
+
+	//generating coins at random positions
+	for (var i=0; i<100; i++) {
+		var coinWidth = 40;
+		var x = Math.floor((Math.random() * gameArea.canvas.width) + i * gameArea.canvas.width / 2);
+		var y = Math.floor(Math.random() * gameArea.canvas.height * 0.5);
+
+		coins[i] = new component();
+		coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", 1);
+	}		
 
 	//loop for creating new clouds setting a random x coordinate for each
 	for (var i=0; i<100; i++) {
@@ -198,7 +216,11 @@ function startLevel2() {
 
 	//score
     scoreBoard = new component();
-    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1)
+    scoreBoard.init("30px", "Consolas", "black", 50, 40, "text",1);
+
+    //collected Coins
+    coinScoreBoard = new component();
+    coinScoreBoard.init("30px", "Consolas", "black", 280, 40, "text",1);
 
 	//current level display
     levelDisplay = new component();
@@ -246,9 +268,13 @@ function startLevel3() {
     background = new component();
     background.init(900, 400, "Pictures/background_3.jpg", 0, 0, "image", 1);
 
-    //score
+	//score
     scoreBoard = new component();
-    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
+    scoreBoard.init("30px", "Consolas", "black", 50, 40, "text",1);
+
+    //collected Coins
+    coinScoreBoard = new component();
+    coinScoreBoard.init("30px", "Consolas", "black", 280, 40, "text",1);
 
     //current level display
     levelDisplay = new component();
@@ -297,8 +323,12 @@ function startLevel4() {
 	background.init(900, 400, "Pictures/background_4.jpg", 0, 0, "image", 1);
 
 	//score
-	scoreBoard = new component();
-	scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
+    scoreBoard = new component();
+    scoreBoard.init("30px", "Consolas", "black", 50, 40, "text",1);
+
+    //collected Coins
+    coinScoreBoard = new component();
+    coinScoreBoard.init("30px", "Consolas", "black", 280, 40, "text",1);
 
 	//current level display
 	levelDisplay = new component();
@@ -347,8 +377,12 @@ function startLevel5() {
 	background.init(900, 400, "Pictures/background_5.jpg", 0, 0, "image", 1);
 
 	//score
-	scoreBoard = new component();
-	scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
+    scoreBoard = new component();
+    scoreBoard.init("30px", "Consolas", "black", 50, 40, "text",1);
+
+    //collected Coins
+    coinScoreBoard = new component();
+    coinScoreBoard.init("30px", "Consolas", "black", 280, 40, "text",1);
 
 	//current level display
 	levelDisplay = new component();
@@ -415,6 +449,8 @@ var gameArea = {
 		this.score = 0;
 		this.bonusActiveTime = 0;
 		this.bonusInterval = null;
+		this.coinScoreActiveTime = 0;
+		this.coinScoreInterval = null;
 
     },
 
@@ -671,6 +707,20 @@ function flashScore(){
     gameArea.bonusActiveTime += 150;
 }
 
+function flashCoinScore(){
+	if (coinScoreBoard.color === "black") {
+		coinScoreBoard.color = "white";
+	} else {
+		coinScoreBoard.color = "black";
+	};
+
+	if (gameArea.coinScoreActiveTime > 1200) {
+		coinScoreBoard.color = "black";
+		clearInterval(gameArea.coinScoreInterval);
+	};
+	gameArea.coinScoreActiveTime += 150;
+}
+
 /**
  * Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
  */
@@ -709,6 +759,21 @@ function updateGameArea() {
 		}
 	}
 
+	//loop for coin collision
+	for (var i=0; i<coins.length; i++) {
+		if (coins[i].isAlive()) {
+			if (playerCharacter.crashWith(coins[i])) {
+				//increase collected coins counter
+				collectedCoins++;
+				coins[i].setAlive(false);
+				coins[i].alpha = 0;
+				//animate coin score board
+				gameArea.coinScoreActiveTime = 0;
+				gameArea.coinScoreInterval = setInterval(flashCoinScore,150);
+			}
+		}
+	}
+
 	//clear canvas before each update
 	gameArea.clear();
 
@@ -718,6 +783,10 @@ function updateGameArea() {
 	//score update
 	scoreBoard.text = "SCORE: " + gameArea.score;
     scoreBoard.update();
+
+    //collected coins update
+    coinScoreBoard.text = "COINS: " + collectedCoins;
+    coinScoreBoard.update();
 
 	//increment frame number for score counter
 	incrementFrameNumber(2);
@@ -730,6 +799,11 @@ function updateGameArea() {
 	//enemy update
 	for (var i=0; i<100; i++) {
 	    enemyCharacters[i].update();
+	}
+
+	//coins update
+	for (var i=0; i<coins.length; i++) {
+		coins[i].update();
 	}
 
 	//cloud update
@@ -819,6 +893,11 @@ function updateGameArea() {
 			}
             enemyCharacters[i].hitBottom();
 		}
+	}
+
+	//loop to set speed of coin characters
+	for (var i=0; i<coins.length; i++) {
+		coins[i].x += -2;
 	}
 }
 
