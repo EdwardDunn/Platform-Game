@@ -13,7 +13,6 @@ const P = 80;
 const M = 77;
 const LEVEL_COMPLETION_SCORE = 3000;
 
-
 //flag to take care of y axis cordinate increase or decrease
 //z to set a interval at which flag is changed
 var flag = 1;
@@ -28,9 +27,9 @@ var scoreBoard;
 var levelDisplay;
 var enemyCharacters = [];
 var clouds = [];
-var keysPressed = {LEFT : false, UP : false, RIGHT : false, P: false, M: false};
-var gamePaused=false;
-let musicMuted=false;
+var keysPressed = { LEFT: false, UP: false, RIGHT: false, P: false, M: false };
+var gamePaused = false;
+let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 
 /**
@@ -38,411 +37,500 @@ let musicToggled = false; //this is just for muting music when game paused
  * @constructor
  */
 function KeyDown(event) {
-	//avoid auto-repeated keydown event
-	if (event.repeat) {
-		return;
-	}
+  //avoid auto-repeated keydown event
+  if (event.repeat) {
+    return;
+  }
 
-    var key;
-    key = event.which;
-    keysPressed[key] = true;
+  var key;
+  key = event.which;
+  keysPressed[key] = true;
 
-	if (keysPressed[LEFT]) {
-		moveLeft();
-	}
-	if (keysPressed[RIGHT]) {
-		moveRight();
-	}
-	if (keysPressed[UP]) {
-		if (!musicMuted) {
-			jump.autoplay=true;
-			jump.load();
-		}
-		moveUp();
-	}
-	if (keysPressed[SPACE]) { // Add SPACE key to restart game
-		restartGame();
-	}
-	if(keysPressed[P]){
-		keysPressed[P]=false;
-		pauseGame();
-	}
+  if (keysPressed[LEFT]) {
+    moveLeft();
+  }
+  if (keysPressed[RIGHT]) {
+    moveRight();
+  }
+  if (keysPressed[UP]) {
+    if (!musicMuted) {
+      jump.autoplay = true;
+      jump.load();
+    }
+    moveUp();
+  }
+  if (keysPressed[SPACE]) {
+    // Add SPACE key to restart game
+    restartGame();
+  }
+  if (keysPressed[P]) {
+    keysPressed[P] = false;
+    pauseGame();
+  }
 
-	if (keysPressed[M]) {
-	    keysPressed[M]=false;
-	    muteMusic();
-	}
+  if (keysPressed[M]) {
+    keysPressed[M] = false;
+    muteMusic();
+  }
 }
 
 // Toggle music at 'M' key press
 function muteMusic() {
-    musicMuted = !musicMuted;
-    if (musicMuted) {
-	audio.pause();
-    }
-    else {
-	audio.load();
-    }
+  musicMuted = !musicMuted;
+  if (musicMuted) {
+    audio.pause();
+  } else {
+    audio.load();
+  }
 }
 
 function pauseGame() {
-	gamePaused=!gamePaused;
+  gamePaused = !gamePaused;
 }
-
 
 /**
  * @param event
  * @constructor
  */
 function KeyUp(event) {
-    var key;
-    key = event.which;
-    keysPressed[key] = false;
-	switch (key) {
-		case UP:
-			playerCharacter.speedY = 0;
-			break;
-		case LEFT:
-			if (keysPressed[RIGHT]) {
-				moveRight();
-			} else {
-				playerCharacter.speedX = 0;
-			}
-			break;
-		case RIGHT:
-			if (keysPressed[LEFT]) {
-				moveLeft();
-			} else {
-				playerCharacter.speedX = 0;
-			}
-	}
+  var key;
+  key = event.which;
+  keysPressed[key] = false;
+  switch (key) {
+    case UP:
+      playerCharacter.speedY = 0;
+      break;
+    case LEFT:
+      if (keysPressed[RIGHT]) {
+        moveRight();
+      } else {
+        playerCharacter.speedX = 0;
+      }
+      break;
+    case RIGHT:
+      if (keysPressed[LEFT]) {
+        moveLeft();
+      } else {
+        playerCharacter.speedX = 0;
+      }
+  }
 }
 
-
 function showInstructions() {
-    gameArea.init();
+  gameArea.init();
 
-    //background
-    background = new component();
-    background.init(900, 400, "Pictures/background.jpg", 0, 0, "image", 1, true);
-    var modal = document.getElementById('instructionsModal');
-    modal.style.display = "block";
+  //background
+  background = new component();
+  background.init(900, 400, 'Pictures/background.jpg', 0, 0, 'image', 1, true);
+  var modal = document.getElementById('instructionsModal');
+  modal.style.display = 'block';
 }
 
 function startGame() {
-    flag= 1;
-    z=0;
-    currentLevel = 1;
-	//player character
-    playerCharacter = new component();
-	playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 20, "image",1);
+  flag = 1;
+  z = 0;
+  currentLevel = 1;
+  //player character
+  playerCharacter = new component();
+  playerCharacter.init(60, 70, 'Pictures/good_guy.png', 100, 20, 'image', 1);
 
-	//background
-    background = new component();
-    background.init(900, 400, "Pictures/background.jpg", 0, 0, "image",1);
+  //background
+  background = new component();
+  background.init(900, 400, 'Pictures/background.jpg', 0, 0, 'image', 1);
 
-	//score
-    scoreBoard = new component();
-    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1);
+  //score
+  scoreBoard = new component();
+  scoreBoard.init('30px', 'Consolas', 'black', 100, 40, 'text', 1);
 
-	//current level display
-    levelDisplay = new component();
-    levelDisplay.init("30px", "Consolas", "black", 600, 40, "text",1);
+  //current level display
+  levelDisplay = new component();
+  levelDisplay.init('30px', 'Consolas', 'black', 600, 40, 'text', 1);
 
-    audio = document.getElementById("bgm");
-    audio.autoplay=true;
-    audio.loop=true;
-    if (!musicMuted) {
-	audio.load();
+  audio = document.getElementById('bgm');
+  audio.autoplay = true;
+  audio.loop = true;
+  if (!musicMuted) {
+    audio.load();
+  }
+
+  //loop for creating new enemy characters setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(
+      Math.random() * (1200 + i * 300 - 900 + i * 300) + (300 * i + 900)
+    );
+
+    var enemyType = Math.floor(Math.random() * 2);
+    switch (enemyType) {
+      case 0:
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          80,
+          60,
+          'Pictures/enemy2.png',
+          x,
+          200,
+          'image',
+          enemyType
+        );
+        break;
+      case 1:
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          40,
+          50,
+          'Pictures/zombie.png',
+          x,
+          200,
+          'image',
+          enemyType
+        );
+        break;
     }
+  }
 
+  //loop for creating new clouds setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(Math.random() * (900 - i * 300) + 1);
+    clouds[i] = new component();
+    clouds[i].init(60, 34, 'Pictures/cloud.png', x, 40, 'image', 1);
+  }
 
-	//loop for creating new enemy characters setting a random x coordinate for each
-	for (var i=0; i<100; i++) {
-        var x = Math.floor((Math.random() * (1200 + i * 300 - 900 + i * 300)) + (300 * i + 900));
-		
-		var enemyType = Math.floor(Math.random() * (2));
-		switch(enemyType){
-			case 0:
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", enemyType);
-				break;
-			case 1: 
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(40, 50, "Pictures/zombie.png", x, 200, "image", enemyType);
-				break;
-		} 
-    }
-
-	//loop for creating new clouds setting a random x coordinate for each
-	for (var i=0; i<100; i++) {
-		var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
-				clouds[i] = new component();
-				clouds[i].init(60, 34, "Pictures/cloud.png", x, 40, "image", 1);
-	}
-
-    gameArea.init();
-    gameArea.start();
+  gameArea.init();
+  gameArea.start();
 }
 
 function startLevel2() {
-    flag= 1;
-    z=0;
-    //player character
-    playerCharacter = new component();
-    playerCharacter.init(60, 70, "Pictures/good_girl.png", 100, 120, "image",1);
+  flag = 1;
+  z = 0;
+  //player character
+  playerCharacter = new component();
+  playerCharacter.init(60, 70, 'Pictures/good_girl.png', 100, 120, 'image', 1);
 
-	//background
-    background = new component();
-    background.init(900, 400, "Pictures/background_2.jpg", 0, 0, "image",1);
+  //background
+  background = new component();
+  background.init(900, 400, 'Pictures/background_2.jpg', 0, 0, 'image', 1);
 
-	//score
-    scoreBoard = new component();
-    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text",1)
+  //score
+  scoreBoard = new component();
+  scoreBoard.init('30px', 'Consolas', 'black', 100, 40, 'text', 1);
 
-	//current level display
-    levelDisplay = new component();
-    levelDisplay.init("30px", "Consolas", "black", 600, 40, "text",1);
+  //current level display
+  levelDisplay = new component();
+  levelDisplay.init('30px', 'Consolas', 'black', 600, 40, 'text', 1);
 
-	//loop for creating new enemy characters setting a random x coordinate for each
-	for (var i = 0; i < 100; i++) {
-	    var x = Math.floor((Math.random() * (1400+i*500)) + (500*i+900));
-		
-		var enemyType = Math.floor(Math.random() * (2));
-		switch(enemyType){
-			case 0:
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", 0);
-				break;
-			case 1: 
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(60, 50, "Pictures/bad_guy.png", x, 200, "image", 0);
-				break;
-		}
+  //loop for creating new enemy characters setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(Math.random() * (1400 + i * 500) + (500 * i + 900));
 
+    var enemyType = Math.floor(Math.random() * 2);
+    switch (enemyType) {
+      case 0:
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          80,
+          60,
+          'Pictures/enemy2.png',
+          x,
+          200,
+          'image',
+          0
+        );
+        break;
+      case 1:
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          60,
+          50,
+          'Pictures/bad_guy.png',
+          x,
+          200,
+          'image',
+          0
+        );
+        break;
     }
+  }
 
-	//loop for creating new clouds setting a random x coordinate for each
-	for (var i=0; i<100; i++) {
-		var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
-				clouds[i] = new component();
-				clouds[i].init(65, 50, "Pictures/cloud2.png", x, 40, "image", 1);
-	}
+  //loop for creating new clouds setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(Math.random() * (900 - i * 300) + 1);
+    clouds[i] = new component();
+    clouds[i].init(65, 50, 'Pictures/cloud2.png', x, 40, 'image', 1);
+  }
 
-    //call start function
-    gameArea.init();
-    gameArea.start();
+  //call start function
+  gameArea.init();
+  gameArea.start();
 }
 
 function startLevel3() {
-    //to synchronize the start cordinate of enemy character
-    flag = 1;
-    z = 0;
-    //player character
-    playerCharacter = new component();
-    playerCharacter.init(60, 70, "Pictures/good_girl.png", 100, 120, "image", 1);
+  //to synchronize the start cordinate of enemy character
+  flag = 1;
+  z = 0;
+  //player character
+  playerCharacter = new component();
+  playerCharacter.init(60, 70, 'Pictures/good_girl.png', 100, 120, 'image', 1);
 
-    //background
-    background = new component();
-    background.init(900, 400, "Pictures/background_3.jpg", 0, 0, "image", 1);
+  //background
+  background = new component();
+  background.init(900, 400, 'Pictures/background_3.jpg', 0, 0, 'image', 1);
 
-    //score
-    scoreBoard = new component();
-    scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
+  //score
+  scoreBoard = new component();
+  scoreBoard.init('30px', 'Consolas', 'black', 100, 40, 'text', 1);
 
-    //current level display
-    levelDisplay = new component();
-    levelDisplay.init("30px", "Consolas", "black", 600, 40, "text", 1);
+  //current level display
+  levelDisplay = new component();
+  levelDisplay.init('30px', 'Consolas', 'black', 600, 40, 'text', 1);
 
-    //loop for creating new enemy characters setting a random x coordinate for each
-    for (var i = 0; i < 100; i++) {
-        var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
-		
-		var enemyType = Math.floor(Math.random() * (2));
-		switch(enemyType){
-			case 0:
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", enemyType);
-				break;
-			case 1: 
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(60, 50, "Pictures/skull_baddie.png", x, 200, "image", enemyType);
-				break;
-		}
-        
+  //loop for creating new enemy characters setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(Math.random() * (1400 + i * 500) + (500 * i + 900));
+
+    var enemyType = Math.floor(Math.random() * 2);
+    switch (enemyType) {
+      case 0:
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          80,
+          60,
+          'Pictures/enemy2.png',
+          x,
+          200,
+          'image',
+          enemyType
+        );
+        break;
+      case 1:
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          60,
+          50,
+          'Pictures/skull_baddie.png',
+          x,
+          200,
+          'image',
+          enemyType
+        );
+        break;
     }
+  }
 
-	//loop for creating new clouds setting a random x coordinate for each
-	for (var i=0; i<100; i++) {
-		var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
-				clouds[i] = new component();
-				clouds[i].init(60, 40, "Pictures/cloud3.png", x, 40, "image", 1);
-	}
+  //loop for creating new clouds setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(Math.random() * (900 - i * 300) + 1);
+    clouds[i] = new component();
+    clouds[i].init(60, 40, 'Pictures/cloud3.png', x, 40, 'image', 1);
+  }
 
-    //call start function
-    gameArea.init();
-    gameArea.start();
+  //call start function
+  gameArea.init();
+  gameArea.start();
 }
 
 function startLevel4() {
-	//to synchronize the start cordinate of enemy character
-	flag = 1;
-	z = 0;
-	//player character
-	playerCharacter = new component();
-	playerCharacter.init(60, 70, "Pictures/good_guy.png", 100, 120, "image", 1);
+  //to synchronize the start cordinate of enemy character
+  flag = 1;
+  z = 0;
+  //player character
+  playerCharacter = new component();
+  playerCharacter.init(60, 70, 'Pictures/good_guy.png', 100, 120, 'image', 1);
 
-	//background
-	background = new component();
-	background.init(900, 400, "Pictures/background_4.jpg", 0, 0, "image", 1);
+  //background
+  background = new component();
+  background.init(900, 400, 'Pictures/background_4.jpg', 0, 0, 'image', 1);
 
-	//score
-	scoreBoard = new component();
-	scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
+  //score
+  scoreBoard = new component();
+  scoreBoard.init('30px', 'Consolas', 'black', 100, 40, 'text', 1);
 
-	//current level display
-	levelDisplay = new component();
-	levelDisplay.init("30px", "Consolas", "black", 600, 40, "text", 1);
+  //current level display
+  levelDisplay = new component();
+  levelDisplay.init('30px', 'Consolas', 'black', 600, 40, 'text', 1);
 
-	//loop for creating new enemy characters setting a random x coordinate for each
-	for (var i = 0; i < 100; i++) {
-		var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
+  //loop for creating new enemy characters setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(Math.random() * (1400 + i * 500) + (500 * i + 900));
 
-		var enemyType = Math.floor(Math.random() * (2));
-		switch(enemyType){
-			case 0:
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", enemyType);
-				break;
-			case 1: 
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", enemyType);
-				break;
-		}
-		
-	}
+    var enemyType = Math.floor(Math.random() * 2);
+    switch (enemyType) {
+      case 0:
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          80,
+          60,
+          'Pictures/enemy2.png',
+          x,
+          200,
+          'image',
+          enemyType
+        );
+        break;
+      case 1:
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          120,
+          120,
+          'Pictures/newchar.png',
+          x,
+          170,
+          'image',
+          enemyType
+        );
+        break;
+    }
+  }
 
-	//loop for creating new clouds setting a random x coordinate for each
-	for (var i=0; i<100; i++) {
-		var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
-				clouds[i] = new component();
-				clouds[i].init(65, 50, "Pictures/cloud3.png", x, 40, "image", 1);
-	}
+  //loop for creating new clouds setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(Math.random() * (900 - i * 300) + 1);
+    clouds[i] = new component();
+    clouds[i].init(65, 50, 'Pictures/cloud3.png', x, 40, 'image', 1);
+  }
 
-//call start function
-gameArea.init();
-gameArea.start();
+  //call start function
+  gameArea.init();
+  gameArea.start();
 }
 
 function startLevel5() {
-	//to synchronize the start cordinate of enemy character
-	flag = 1;
-	z = 0;
-	//player character
-	playerCharacter = new component();
-	playerCharacter.init(60, 70, "Pictures/ninja.png", 450, 120, "image", 1);
+  //to synchronize the start cordinate of enemy character
+  flag = 1;
+  z = 0;
+  //player character
+  playerCharacter = new component();
+  playerCharacter.init(60, 70, 'Pictures/ninja.png', 450, 120, 'image', 1);
 
-	//background
-	background = new component();
-	background.init(900, 400, "Pictures/background_5.jpg", 0, 0, "image", 1);
+  //background
+  background = new component();
+  background.init(900, 400, 'Pictures/background_5.jpg', 0, 0, 'image', 1);
 
-	//score
-	scoreBoard = new component();
-	scoreBoard.init("30px", "Consolas", "black", 100, 40, "text", 1);
+  //score
+  scoreBoard = new component();
+  scoreBoard.init('30px', 'Consolas', 'black', 100, 40, 'text', 1);
 
-	//current level display
-	levelDisplay = new component();
-	levelDisplay.init("30px", "Consolas", "black", 600, 40, "text", 1);
+  //current level display
+  levelDisplay = new component();
+  levelDisplay.init('30px', 'Consolas', 'black', 600, 40, 'text', 1);
 
-	//loop for creating new enemy characters setting a random x coordinate for each
-	for (var i = 0; i < 100; i++) {
-		//enemyType is the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)..
-		//when you want to add a new type of enemy, increment the number inside the Math.random and
-		//insert in the correct case the enemy
-		var enemyType = Math.floor(Math.random() * (4));
-		switch(enemyType){
-			case 0:
-				var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(80, 60, "Pictures/enemy2.png", x, 200, "image", enemyType);
-				break;
-			case 1: 
-				var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 200, "image", enemyType);
-				console.log("la x nemico è "+ x);
-				break;
-			case 2:
-				var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(80, 14, "Pictures/sword.png", x, 170, "image", enemyType);
-				break;
-			case 3:
-				//in this case the x value is calculate as the clouds
-				var x = Math.floor((Math.random() * (900 - i * 300) + 1));
-				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(80, 73, "Pictures/enemyGuy.png", x, 200, "image", enemyType);
-				break;	
-		}
-		
-	} 
+  //loop for creating new enemy characters setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    //enemyType is the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)..
+    //when you want to add a new type of enemy, increment the number inside the Math.random and
+    //insert in the correct case the enemy
+    var enemyType = Math.floor(Math.random() * 4);
+    switch (enemyType) {
+      case 0:
+        var x = Math.floor(Math.random() * (1400 + i * 500) + (500 * i + 900));
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          80,
+          60,
+          'Pictures/enemy2.png',
+          x,
+          200,
+          'image',
+          enemyType
+        );
+        break;
+      case 1:
+        var x = Math.floor(Math.random() * (1400 + i * 500) + (500 * i + 900));
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          120,
+          120,
+          'Pictures/newchar.png',
+          x,
+          200,
+          'image',
+          enemyType
+        );
+        console.log('la x nemico è ' + x);
+        break;
+      case 2:
+        var x = Math.floor(Math.random() * (1400 + i * 500) + (500 * i + 900));
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          80,
+          14,
+          'Pictures/sword.png',
+          x,
+          170,
+          'image',
+          enemyType
+        );
+        break;
+      case 3:
+        //in this case the x value is calculate as the clouds
+        var x = Math.floor(Math.random() * (900 - i * 300) + 1);
+        enemyCharacters[i] = new component();
+        enemyCharacters[i].init(
+          80,
+          73,
+          'Pictures/enemyGuy.png',
+          x,
+          200,
+          'image',
+          enemyType
+        );
+        break;
+    }
+  }
 
-	//loop for creating new clouds setting a random x coordinate for each
-	for (var i=0; i<100; i++) {
-		var x = Math.floor((Math.random() * (900 - i * 300) + 1));;
-		console.log("la x nuvola è "+ x);
-				clouds[i] = new component();
-				clouds[i].init(65, 50, "Pictures/cloud3.png", x, 40, "image", 1);
-	} 
+  //loop for creating new clouds setting a random x coordinate for each
+  for (var i = 0; i < 100; i++) {
+    var x = Math.floor(Math.random() * (900 - i * 300) + 1);
+    console.log('la x nuvola è ' + x);
+    clouds[i] = new component();
+    clouds[i].init(65, 50, 'Pictures/cloud3.png', x, 40, 'image', 1);
+  }
 
-//call start function
-gameArea.init();
-gameArea.start();
+  //call start function
+  gameArea.init();
+  gameArea.start();
 }
 
 /**
  * @type {{canvas: Element, start: gameArea.start, clear: gameArea.clear, stop: gameArea.stop}}
  */
 var gameArea = {
-    init : function() {
-        this.canvas = document.getElementById("canvas");
+  init: function() {
+    this.canvas = document.getElementById('canvas');
 
-        this.canvas.width = 900;
-        this.canvas.height = 400;
-        this.context = this.canvas.getContext("2d");
+    this.canvas.width = 900;
+    this.canvas.height = 400;
+    this.context = this.canvas.getContext('2d');
 
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-		this.score = 0;
-		this.bonusActiveTime = 0;
-		this.bonusInterval = null;
+    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    this.score = 0;
+    this.bonusActiveTime = 0;
+    this.bonusInterval = null;
+  },
 
-    },
+  start: function() {
+    this.frameNo = 0;
+    this.score = 0;
+    // hide modals
+    var modals = document.getElementsByClassName('modal');
+    for (var i = 0; i < modals.length; i++) {
+      var modal = modals[i];
 
-    start : function() {
-        this.frameNo = 0;
-        this.score = 0;
-        // hide modals
-        var modals = document.getElementsByClassName('modal');
-        for(var i = 0; i < modals.length; i++)
-        {
-            var modal = modals[i];
-
-            modal.style.display = "none";
-        }
-
-        //update interval
-        this.interval = setInterval(updateGameArea, 20);
-    },
-
-    //function used for refreshing page
-    clear : function() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    },
-
-	//function used for stopping the game
-    stop : function() {
-        clearInterval(this.interval);
+      modal.style.display = 'none';
     }
+
+    //update interval
+    this.interval = setInterval(updateGameArea, 20);
+  },
+
+  //function used for refreshing page
+  clear: function() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  },
+
+  //function used for stopping the game
+  stop: function() {
+    clearInterval(this.interval);
+  }
 };
 
 /**
@@ -454,446 +542,449 @@ var gameArea = {
  * @param type
  */
 function component() {
-    this.init = function(width, height, color, x, y, type, h, initialShow = false) {
-	//h to test if it is enemy 1 or 2
-	this.h=h;
-	this.alive = true;
-	this.alive = true;
+  this.init = function(
+    width,
+    height,
+    color,
+    x,
+    y,
+    type,
+    h,
+    initialShow = false
+  ) {
+    //h to test if it is enemy 1 or 2
+    this.h = h;
+    this.alive = true;
+    this.alive = true;
 
-	this.color = color;
-	//test if component is image
-	this.type = type;
+    this.color = color;
+    //test if component is image
+    this.type = type;
 
-	this.ctx = gameArea.context;
+    this.ctx = gameArea.context;
 
-	if (type === "image") {
-		this.image = new Image();
-		this.image.src = color;
-		this.image.src = this.color;
-		this.image.width = width;
-		this.image.height = height;
+    if (type === 'image') {
+      this.image = new Image();
+      this.image.src = color;
+      this.image.src = this.color;
+      this.image.width = width;
+      this.image.height = height;
 
-		if(initialShow)
-		{
-			var imgCopy = this.image;
-			var ctxCopy = this.ctx;
-			this.image.onload = function() {
-				ctxCopy.drawImage(imgCopy, this.x, this.y, this.width, this.height);
-			}
-		}
-	}
+      if (initialShow) {
+        var imgCopy = this.image;
+        var ctxCopy = this.ctx;
+        this.image.onload = function() {
+          ctxCopy.drawImage(imgCopy, this.x, this.y, this.width, this.height);
+        };
+      }
+    }
 
-	this.width = width;
-	this.initHeight = height; // to get squeezed height later
-	this.alpha = 1;
-	this.height = height;
+    this.width = width;
+    this.initHeight = height; // to get squeezed height later
+    this.alpha = 1;
+    this.height = height;
 
-	//change components position
-	this.speedX = 0
-	this.speedY = 0;
-	this.x = x;
-	this.y = y;
-	this.gravity = 0;
-	
-	//angle
-	this.angle = 0;
-	
-	//sets speed playerCharacter falls to bottom of canvas
-	this.gravitySpeed = 4.5;
-}
+    //change components position
+    this.speedX = 0;
+    this.speedY = 0;
+    this.x = x;
+    this.y = y;
+    this.gravity = 0;
 
-	//function to decide to decide what to display on screen, text, image or fill color
-	this.update = function(callback) {
-		if (this.type === "image") {
-			this.ctx.globalAlpha = this.alpha;
-			if(this.angle != 0){
-				this.ctx.save();
-				this.ctx.translate( this.x + this.width/2, this.y + this.height/2 );
-				this.ctx.rotate(this.angle);
-				this.ctx.translate( -this.x - this.width/2, -this.y - this.height/2 );
-				this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-				this.ctx.restore();
-			  } else {
-				this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-			  }
-		} else if (this.type === "text") {
-			this.ctx.font = this.width + " " + this.height;
-			this.ctx.fillStyle = this.color;
-			this.ctx.fillText(this.text, this.x, this.y);
-		} else {
-			this.ctx.fillStyle = color;
-			this.ctx.fillRect(this.x, this.y, this.width, this.height);
-		}
-	};
+    //angle
+    this.angle = 0;
 
-	//enemy character collision function
-	this.crashWith = function(otherobj) {
-		var left = this.x;
-		var right = this.x + (this.width);
-		var top = this.y;
-		var bottom = this.y + (this.height);
-		var otherleft = otherobj.x;
-		var otherright = otherobj.x + (otherobj.width);
-		var othertop = otherobj.y;
-		var otherbottom = otherobj.y + (otherobj.height);
-		var crash = true;
-		if ((bottom < othertop + 10) ||
-			   (top > otherbottom - 20) ||
-			   (right < otherleft + 15) ||
-			   (left > otherright - 15)) {
-		   crash = false;
-		}
-		return crash;
-	};
+    //sets speed playerCharacter falls to bottom of canvas
+    this.gravitySpeed = 4.5;
+  };
 
-	this.jumpsOn = function(otherobj) {
-		var bottomY = this.y + (this.height);
-		var middleX = this.x+ (this.width/2);
-		var otherleft = otherobj.x;
-		var otherright = otherobj.x + (otherobj.width);
-		var othertop = otherobj.y;
-		var otherbottom = otherobj.y + (otherobj.height);
-		var smoosh = false;
-		if ((bottomY > othertop - 15) &&
-			   (bottomY < otherbottom -(otherobj.height- 10)) &&
-			   (middleX > otherleft) &&
-			   (middleX < otherright)) {
-		   smoosh = true;
-		}
-		return smoosh;
-	};
+  //function to decide to decide what to display on screen, text, image or fill color
+  this.update = function(callback) {
+    if (this.type === 'image') {
+      this.ctx.globalAlpha = this.alpha;
+      if (this.angle != 0) {
+        this.ctx.save();
+        this.ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+        this.ctx.rotate(this.angle);
+        this.ctx.translate(-this.x - this.width / 2, -this.y - this.height / 2);
+        this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        this.ctx.restore();
+      } else {
+        this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      }
+    } else if (this.type === 'text') {
+      this.ctx.font = this.width + ' ' + this.height;
+      this.ctx.fillStyle = this.color;
+      this.ctx.fillText(this.text, this.x, this.y);
+    } else {
+      this.ctx.fillStyle = color;
+      this.ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+  };
 
-	//gravity property
-	this.newPos = function() {
-		this.gravitySpeed += this.gravity;
-		this.x += this.speedX;
-		this.y += this.speedY + this.gravitySpeed;
-		this.hitBottom();
-		//console.log(`${this.x},${this.y}`);
-	};
+  //enemy character collision function
+  this.crashWith = function(otherobj) {
+    var left = this.x;
+    var right = this.x + this.width;
+    var top = this.y;
+    var bottom = this.y + this.height;
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + otherobj.width;
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + otherobj.height;
+    var crash = true;
+    if (
+      bottom < othertop + 10 ||
+      top > otherbottom - 20 ||
+      right < otherleft + 15 ||
+      left > otherright - 15
+    ) {
+      crash = false;
+    }
+    return crash;
+  };
 
-	//set floor on canvas
-	this.hitBottom = function() {
-		var rockbottom = gameArea.canvas.height - this.height -150;
-		if (this.y > rockbottom)
-			this.y = rockbottom;
-	}
+  this.jumpsOn = function(otherobj) {
+    var bottomY = this.y + this.height;
+    var middleX = this.x + this.width / 2;
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + otherobj.width;
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + otherobj.height;
+    var smoosh = false;
+    if (
+      bottomY > othertop - 15 &&
+      bottomY < otherbottom - (otherobj.height - 10) &&
+      middleX > otherleft &&
+      middleX < otherright
+    ) {
+      smoosh = true;
+      kill.autoplay = true;
+      kill.load();
+    }
+    return smoosh;
+  };
 
-	this.setAlive= function(alive){
-		this.alive = alive;
-	}
-	this.isAlive = function(){
-		return this.alive;
-	}
+  //gravity property
+  this.newPos = function() {
+    this.gravitySpeed += this.gravity;
+    this.x += this.speedX;
+    this.y += this.speedY + this.gravitySpeed;
+    this.hitBottom();
+    //console.log(`${this.x},${this.y}`);
+  };
+
+  //set floor on canvas
+  this.hitBottom = function() {
+    var rockbottom = gameArea.canvas.height - this.height - 150;
+    if (this.y > rockbottom) this.y = rockbottom;
+  };
+
+  this.setAlive = function(alive) {
+    this.alive = alive;
+  };
+  this.isAlive = function() {
+    return this.alive;
+  };
 }
 
 /**
  *
  */
 function gameOver() {
-    interval && clearInterval(interval);
-    state = 'game-over';
-    var modal = document.getElementById('gameOverModal');
-    modal.style.display = "block";
+  interval && clearInterval(interval);
+  state = 'game-over';
+  var modal = document.getElementById('gameOverModal');
+  modal.style.display = 'block';
 
-    audio = document.getElementById("bgm");
-    audio.pause();
+  audio = document.getElementById('bgm');
+  audio.pause();
 
-	if (!musicMuted) {
-    	gameover = document.getElementById("gameover")
-    	gameover.autoplay=true;
-		gameover.load();
-	}
-}
-/**
-*
-*/
-function restartGame(){
-	gameArea.stop();
-	startGame();
+  if (!musicMuted) {
+    gameover = document.getElementById('gameover');
+    gameover.autoplay = true;
+    gameover.load();
+  }
 }
 /**
  *
  */
-function gameComplete(){
-    state = 'complete';
-	var modal = document.getElementById('gameCompleteModal');
-    modal.style.display = "block";
-	gameArea.stop();
-	
-	if (!musicMuted) {
-		audio = document.getElementById("bgm");
-		audio.pause();
-    	gamewon = document.getElementById("gamewon")
-    	gamewon.autoplay=true;
-		gamewon.load();
-	}
+function restartGame() {
+  gameArea.stop();
+  startGame();
+}
+/**
+ *
+ */
+function gameComplete() {
+  state = 'complete';
+  var modal = document.getElementById('gameCompleteModal');
+  modal.style.display = 'block';
+  gameArea.stop();
+
+  if (!musicMuted) {
+    audio = document.getElementById('bgm');
+    audio.pause();
+    gamewon = document.getElementById('gamewon');
+    gamewon.autoplay = true;
+    gamewon.load();
+  }
 }
 /*
  *Adjust character to a valid position if it moves out of border
  * */
 function correctCharacterPos() {
-	if (playerCharacter.y < 0) {
-           playerCharacter.speedY = 0;
-           playerCharacter.y = 0;
-    }
-    if (playerCharacter.x < 0){
-         playerCharacter.speedX = 0;
-         playerCharacter.x = 0;
-    }
-    if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
-        playerCharacter.speedX = 0;
-        playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
-    }
-    if (playerCharacter.y > gameArea.canvas.height-playerCharacter.height) {
-        playerCharacter.speedY = 0;
-        playerCharacter.y = gameArea.canvas.height-playerCharacter.height;
-    }
+  if (playerCharacter.y < 0) {
+    playerCharacter.speedY = 0;
+    playerCharacter.y = 0;
+  }
+  if (playerCharacter.x < 0) {
+    playerCharacter.speedX = 0;
+    playerCharacter.x = 0;
+  }
+  if (playerCharacter.x > gameArea.canvas.width - playerCharacter.width) {
+    playerCharacter.speedX = 0;
+    playerCharacter.x = gameArea.canvas.width - playerCharacter.width;
+  }
+  if (playerCharacter.y > gameArea.canvas.height - playerCharacter.height) {
+    playerCharacter.speedY = 0;
+    playerCharacter.y = gameArea.canvas.height - playerCharacter.height;
+  }
 }
 
-function startGameElements()
-{
-    background.update();
+function startGameElements() {
+  background.update();
 }
 
+function flashScore() {
+  if (scoreBoard.color == 'black') {
+    scoreBoard.color = 'white';
+  } else {
+    scoreBoard.color = 'black';
+  }
 
-function flashScore(){
-    if(scoreBoard.color == "black"){
-        scoreBoard.color = "white";
-    }else{
-        scoreBoard.color = "black";
-   }
- 
-   if(gameArea.bonusActiveTime > 1200){
-        scoreBoard.color = "black";
-       clearInterval(gameArea.bonusInterval);
-   }  
-    gameArea.bonusActiveTime += 150;
+  if (gameArea.bonusActiveTime > 1200) {
+    scoreBoard.color = 'black';
+    clearInterval(gameArea.bonusInterval);
+  }
+  gameArea.bonusActiveTime += 150;
 }
 
 /**
  * Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
  */
 function updateGameArea() {
-	//loop for enemy collision
-	var pausemodal= document.getElementById('gamePauseModal');
-	if(gamePaused){
-		pausemodal.style.display = "block";
-		if (!musicMuted) {
-			muteMusic();
-			musicToggled = true;
-		}
-		return;
-	}
-	else{
-		pausemodal.style.display = "none";
-		if (musicToggled) {
-			muteMusic();
-			musicToggled = false;
-		}
-	}
+  //loop for enemy collision
+  var pausemodal = document.getElementById('gamePauseModal');
+  if (gamePaused) {
+    pausemodal.style.display = 'block';
+    if (!musicMuted) {
+      muteMusic();
+      musicToggled = true;
+    }
+    return;
+  } else {
+    pausemodal.style.display = 'none';
+    if (musicToggled) {
+      muteMusic();
+      musicToggled = false;
+    }
+  }
 
-	for (var i=0; i<enemyCharacters.length; i++){
-		if(enemyCharacters[i].isAlive()){
-			if (playerCharacter.jumpsOn(enemyCharacters[i])) {
-				enemyCharacters[i].setAlive(false);
-				incrementScore(100);
-				gameArea.bonusActiveTime = 0;
-				gameArea.bonusInterval = setInterval(flashScore,150);
-				
-			}
-			else if (playerCharacter.crashWith(enemyCharacters[i])) {
-                gameArea.stop();
-				gameOver();
-			}
-		}
-	}
+  for (var i = 0; i < enemyCharacters.length; i++) {
+    if (enemyCharacters[i].isAlive()) {
+      if (playerCharacter.jumpsOn(enemyCharacters[i])) {
+        enemyCharacters[i].setAlive(false);
+        incrementScore(100);
+        gameArea.bonusActiveTime = 0;
+        gameArea.bonusInterval = setInterval(flashScore, 150);
+      } else if (playerCharacter.crashWith(enemyCharacters[i])) {
+        gameArea.stop();
+        gameOver();
+      }
+    }
+  }
 
-	//clear canvas before each update
-	gameArea.clear();
+  //clear canvas before each update
+  gameArea.clear();
 
-	//update background
-    background.update();
+  //update background
+  background.update();
 
-	//score update
-	scoreBoard.text = "SCORE: " + gameArea.score;
-    scoreBoard.update();
+  //score update
+  scoreBoard.text = 'SCORE: ' + gameArea.score;
+  scoreBoard.update();
 
-	//increment frame number for score counter
-	incrementFrameNumber(2);
-	incrementScore(2);
+  //increment frame number for score counter
+  incrementFrameNumber(2);
+  incrementScore(2);
 
-	//LevelDisplay update
-	levelDisplay.text = "Level " + currentLevel;
-	levelDisplay.update();
+  //LevelDisplay update
+  levelDisplay.text = 'Level ' + currentLevel;
+  levelDisplay.update();
 
-	//enemy update
-	for (var i=0; i<100; i++) {
-	    enemyCharacters[i].update();
-	}
+  //enemy update
+  for (var i = 0; i < 100; i++) {
+    enemyCharacters[i].update();
+  }
 
-	//cloud update
-	for (var i=0; i<100; i++) {
-			clouds[i].x += 0.5;
-			clouds[i].update();
-	}
+  //cloud update
+  for (var i = 0; i < 100; i++) {
+    clouds[i].x += 0.5;
+    clouds[i].update();
+  }
 
-	//when frame number reaches 3000 (point at which obstacles end) end game
-	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-    if (gameArea.score >= LEVEL_COMPLETION_SCORE) {
-		gameArea.stop();
-		currentLevel++;
+  //when frame number reaches 3000 (point at which obstacles end) end game
+  //check current level, if more than 2 (because there is two levels currently), show game complete modal
+  if (gameArea.score >= LEVEL_COMPLETION_SCORE) {
+    gameArea.stop();
+    currentLevel++;
 
     console.log(currentLevel);
-		switch(currentLevel){
-			case 2:
-				startLevel2();
-				break;
-			case 3:
-				startLevel3();
-				break;
-			case 4:
-				startLevel4();
-				break;
-			case 5:
-				startLevel5();
-				break;
-			default:
-				gameComplete();
-		}	
+    switch (currentLevel) {
+      case 2:
+        startLevel2();
+        break;
+      case 3:
+        startLevel3();
+        break;
+      case 4:
+        startLevel4();
+        break;
+      case 5:
+        startLevel5();
+        break;
+      default:
+        gameComplete();
+    }
+  }
 
-	}
+  //player character update
+  playerCharacter.newPos();
+  correctCharacterPos();
+  playerCharacter.update();
 
-	//player character update
-	playerCharacter.newPos();
-	correctCharacterPos();
-    playerCharacter.update();
+  //if statement to reverse the flag so that the y cordinate of birds would be changed
+  //z keeps the track and change flag after every 35 iteration
+  if (z == 35) {
+    flag = !flag;
+    z = 0;
+  }
+  //z increased in every iteration
+  z++;
+  //loop to set speed of enemy characters
+  for (var i = 0; i < enemyCharacters.length; i++) {
+    if (enemyCharacters[i].isAlive()) {
+      //check if level is 3 or greater
+      //vary the speed of enemy characters if level is 3 or greater
+      if (currentLevel >= 3 && enemyCharacters[i].h) {
+        if (currentLevel === 5 && enemyCharacters[i].h === 3) {
+          enemyCharacters[i].x -= -4; //it enter from the left
+        } else {
+          enemyCharacters[i].x += -4;
+        }
+      } else {
+        enemyCharacters[i].x += -2;
+      }
 
-	//if statement to reverse the flag so that the y cordinate of birds would be changed
-	//z keeps the track and change flag after every 35 iteration
-	if(z==35) {
-           flag = !flag;
-           z=0;
-         }
-	//z increased in every iteration
-        z++;
-	//loop to set speed of enemy characters
-    for (var i = 0; i < enemyCharacters.length; i++){
-		if(enemyCharacters[i].isAlive()){
-			//check if level is 3 or greater
-            //vary the speed of enemy characters if level is 3 or greater
-		    if(currentLevel >= 3 && enemyCharacters[i].h ){
-				if(currentLevel === 5 &&enemyCharacters[i].h ===3){
-					enemyCharacters[i].x -= -4; //it enter from the left
-				}else{
-					enemyCharacters[i].x += -4;
-				}
-				
-			}else{
-				enemyCharacters[i].x += -2;
-			}
+      //if statement to check if y cordinate has to increase or decrease
+      //should birds go up or down
+      if (!enemyCharacters[i].h) {
+        if (flag == 1) {
+          enemyCharacters[i].y += -3;
+        } else {
+          enemyCharacters[i].y += +3;
+        }
+      }
 
-			//if statement to check if y cordinate has to increase or decrease
-			//should birds go up or down
-			if(!enemyCharacters[i].h) {
-				if (flag == 1) {
-					enemyCharacters[i].y += -3;
-				}
-				else {
-					enemyCharacters[i].y += +3;
-				}
-			}
-			
-			//if h===2 the enemy must rotate
-			if(enemyCharacters[i].h === 2){
-				enemyCharacters[i].angle += 10 * Math.PI / 180;
-			}
-			
-		}
-        else{ // if dead; enemy will be 'squeezed', fall to the ground and fade away. Feel free to improve by adding further animation.
-            enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
-            enemyCharacters[i].y += 10;
-			enemyCharacters[i].alpha += -0.01;
-			if(enemyCharacters[i].alpha < 0){
-				enemyCharacters[i].alpha = 0;
-			}
-            enemyCharacters[i].hitBottom();
-		}
-	}
+      //if h===2 the enemy must rotate
+      if (enemyCharacters[i].h === 2) {
+        enemyCharacters[i].angle += 10 * Math.PI / 180;
+      }
+    } else {
+      // if dead; enemy will be 'squeezed', fall to the ground and fade away. Feel free to improve by adding further animation.
+      enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
+      enemyCharacters[i].y += 10;
+      enemyCharacters[i].alpha += -0.01;
+      if (enemyCharacters[i].alpha < 0) {
+        enemyCharacters[i].alpha = 0;
+      }
+      // kill.autoplay = true;
+      // kill.load();
+      enemyCharacters[i].hitBottom();
+    }
+  }
 }
 
-
-function incrementFrameNumber(value){
-	gameArea.frameNo += value;
+function incrementFrameNumber(value) {
+  gameArea.frameNo += value;
 }
 
-function incrementScore(value){
-	gameArea.score += value;
+function incrementScore(value) {
+  gameArea.score += value;
 }
-
 
 /**
  * Stops player character from constantly moving after button move pressed
  */
-function stopMove(){
-    playerCharacter.speedX = 0;
+function stopMove() {
+  playerCharacter.speedX = 0;
+  playerCharacter.speedY = 0;
+  if (playerCharacter.y < 0) {
     playerCharacter.speedY = 0;
-    if (playerCharacter.y < 0) {
-        playerCharacter.speedY = 0;
-        playerCharacter.y = 0;
-    }
-    if (playerCharacter.x < 0){
-        playerCharacter.speedX = 0;
-        playerCharacter.x = 0;
-    }
-    if (playerCharacter.x > gameArea.canvas.width-playerCharacter.width) {
-        playerCharacter.speedX = 0;
-        playerCharacter.x = gameArea.canvas.width-playerCharacter.width;
-    }
+    playerCharacter.y = 0;
+  }
+  if (playerCharacter.x < 0) {
+    playerCharacter.speedX = 0;
+    playerCharacter.x = 0;
+  }
+  if (playerCharacter.x > gameArea.canvas.width - playerCharacter.width) {
+    playerCharacter.speedX = 0;
+    playerCharacter.x = gameArea.canvas.width - playerCharacter.width;
+  }
 }
 
 function moveUp() {
-	if (playerCharacter.y >= 170) {
-		playerCharacter.speedY = -7;
-
-	}
+  if (playerCharacter.y >= 170) {
+    playerCharacter.speedY = -7;
+  }
 }
 
 /**
  *
  */
 function moveDown() {
-    playerCharacter.speedY = 7;
+  playerCharacter.speedY = 7;
 }
 
 /**
  *
  */
 function moveLeft() {
-    playerCharacter.speedX = -5;
+  playerCharacter.speedX = -5;
 }
 function moveRight() {
-    playerCharacter.speedX = 5;
+  playerCharacter.speedX = 5;
 }
 
 var interval;
 
-function moveLeftMouse(){
-    interval = setInterval(moveLeft,1);
+function moveLeftMouse() {
+  interval = setInterval(moveLeft, 1);
 }
 
-function moveRightMouse(){
-    interval = setInterval(moveRight,1);
+function moveRightMouse() {
+  interval = setInterval(moveRight, 1);
 }
-function moveUpMouse(){
-	if (!musicMuted) {
-		jump.autoplay=true;
-		jump.load();
-	}
-    interval = setInterval(moveUp,1);
+function moveUpMouse() {
+  if (!musicMuted) {
+    jump.autoplay = true;
+    jump.load();
+  }
+  interval = setInterval(moveUp, 1);
 }
 
-function onMouseUp(){
-    clearInterval(interval);
-     stopMove();
+function onMouseUp() {
+  clearInterval(interval);
+  stopMove();
 }

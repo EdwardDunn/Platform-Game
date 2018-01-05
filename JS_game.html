@@ -24,18 +24,23 @@ Author: Open Source - Contributor list can be seen in GitHub
 
 <!--On page load call showInstructions method-->
 <body onload="showInstructions()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
-	
+
 	<!--Audio elements-->
 	<audio id="bgm" style="display: none" controls>
 		<source src="Audio/bgnd_mus.flac" type="audio/flac">
 		Your browser does not support the audio element.
 	</audio>
-	
+
 	<audio id="jump" style="display: none" controls>
 		<source src="Audio/jump_04.wav" type="audio/wav">
 			Your browser does not support the audio element.
 	</audio>
-	
+
+	<audio id="kill" style="display: none" controls>
+		<source src="Audio/kill_enemy.wav" type="audio/wav">
+			Your browser does not support the audio element.
+	</audio>
+
 	<audio id="gameover" style="display: none" controls>
 		<source src="Audio/gameover.wav" type="audio/wav">
 			Your browser does not support the audio element.
@@ -46,12 +51,12 @@ Author: Open Source - Contributor list can be seen in GitHub
 			Your browser does not support the audio element.
 	</audio>
 
-	
+
 	<!--Restart button on game page-->
 	<canvas id="canvas" width=300 height=300></canvas>
 	<button id="restartButtonNearScore" class="button" onClick="restartGame()">
 		<img class="buttonImages" src="Pictures/restart.png" alt="RestartButton" />
-	</button>	
+	</button>
 
 	<div id="instructionsModal" class="modal">
 
@@ -79,7 +84,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 			<div class="startButton">
 				<img class="buttonImages" src="Pictures/play.png" width="100%" onClick="startGame()" alt="PlayButton" />
 			</div>
-			
+
 		</div>
 	</div>
 
@@ -109,7 +114,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<p class="gamePause">You paused the game!</p>
 		<p class="gamePlayPause">Press p to play</p>
 	</div>
-	
+
 	<!--Game play buttons-->
 	<div id="buttonWrapper">
 		<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
@@ -120,7 +125,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 		</button>
 		<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
 			<img class="buttonImages" src="Pictures/right.png" alt="RIGHT">
-		</button>		
+		</button>
 	</div>
 
 </body>
