@@ -399,7 +399,7 @@ function startLevel5() {
 			case 1:
 				var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
 				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 200, "image", enemyType);
+				enemyCharacters[i].init(120, 120, "Pictures/newchar.png", x, 170, "image", enemyType);
 				console.log("la x nemico è "+ x);
 				break;
 			case 2:
@@ -411,8 +411,8 @@ function startLevel5() {
 				//in this case the x value is calculate as the clouds
 				var x = Math.floor((Math.random() * (900 - i * 300) + 1));
 				enemyCharacters[i] = new component();
-				enemyCharacters[i].init(80, 73, "Pictures/enemyGuy.png", x, 200, "image", enemyType);
-				break;
+				enemyCharacters[i].init(80, 73, "Pictures/enemyGuy.png", x, 190, "image", enemyType);
+				break; 
 		}
 
 	}
