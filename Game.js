@@ -166,7 +166,7 @@ function showInstructions() {
 
 	//background
 	background = new component();
-	background.init(900, 400, "Pictures/background.jpg", 0, 0, "image", 1, true);
+	background.init(900, 400, "Pictures/background_1.jpg", 0, 0, "image", 1, true);
 	var modal = document.getElementById('instructionsModal');
 	modal.style.display = "block";
 }
@@ -178,6 +178,7 @@ function initialize_game() {
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
 	audio.loop = true;
+	
 	if (!musicMuted) {
 		audio.load();
 	}
