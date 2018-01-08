@@ -6,5 +6,7 @@ The goal is to evade all the bad guys!
 ### Help Wanted
 New contributors are welcome to work on this game, as it's only in the early stages and needs a lot of additional features. Please read the [CONTRIBUTING](https://github.com/EdwardDunn/Platform-Game/blob/master/CONTRIBUTING.md) document if you'd like to contribute.
 
+## [Play Game](https://edwarddunn.github.io/Platform-Game/index.html)
+
 ### Licenses
 This project is filed under the MIT license.
