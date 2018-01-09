@@ -123,13 +123,16 @@ function KeyDown(event) {
 
 // Toggle music at 'M' key press
 function muteMusic() {
-	musicMuted = !musicMuted;
-	if (musicMuted) {
+    musicMuted = !musicMuted;
+	var imgButton = document.getElementById("audioButton");
+    if (musicMuted) {
+		imgButton.src = "Pictures/audioOff.png";
 		audio.pause();
-	}
-	else {
+    }
+    else {
+		imgButton.src = "Pictures/audioOn.png";
 		audio.load();
-	}
+    }
 }
 
 function pauseGame() {

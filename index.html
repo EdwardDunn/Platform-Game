@@ -108,6 +108,9 @@ Author: Open Source - Contributor list can be seen in GitHub
 	<div id="gamePauseModal" class="modal">
 		<p class="gamePause">You paused the game!</p>
 		<p class="gamePlayPause">Press p to play</p>
+		<div class="resumeButton">
+			<img class="button" src="Pictures/resume.png" width="100%" onClick="pauseGame()" alt="ResumeGame" />
+		</div>
 	</div>
 	
 	<!--Game play buttons-->
@@ -120,6 +123,12 @@ Author: Open Source - Contributor list can be seen in GitHub
 		</button>
 		<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
 			<img class="buttonImages" src="Pictures/right.png" alt="RIGHT">
+		</button>
+		<button id="buttonAudio" class="button">
+			<img class="buttonImages" id="audioButton" src="Pictures/audioOn.png" onClick="muteMusic()" alt="MuteMusic">
+		</button>
+		<button id="buttonPause" class="button">
+			<img class="buttonImages" src="Pictures/pause.png" onClick="pauseGame()" alt="PauseGame">
 		</button>		
 	</div>
 
