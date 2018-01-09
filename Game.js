@@ -569,6 +569,7 @@ function updateGameArea() {
 			if (playerCharacter.crashWith(coins[i])) {
 				//increase collected coins counter
 				collectedCoins++;
+                gameArea.score += 100;
 				coins[i].setAlive(false);
 				coins[i].alpha = 0;
 				//animate coin score board
