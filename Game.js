@@ -101,10 +101,6 @@ function KeyDown(event) {
 	//when the character is on the ground and player press Jump then play audio, not only when key is pressed
 	if (keysPressed[UP] && playerCharacter.hitGround) {
 		moveUp();
-		if (!musicMuted) {
-			jump.autoplay = true;
-			jump.load();
-		}
 	}
 	// Add SPACE key to restart game
 	if (keysPressed[SPACE]) {
@@ -725,6 +721,11 @@ function moveUp() {
 	if(playerCharacter.hitGround && playerCharacter.y >= 170){
 		playerCharacter.speedY = -20;
 		playerCharacter.hitGround = false;
+		
+		if (!musicMuted) {
+		  jump.autoplay = true;
+		  jump.load();
+		}
 	}
 }
 
@@ -748,14 +749,15 @@ function moveLeftMouse() {
 function moveRightMouse() {
 	interval = setInterval(moveRight, 1);
 }
-function moveUpMouse() {
+
+/* function moveUpMouse() {
 	if (!musicMuted) {
 		jump.autoplay = true;
 		jump.load();
 	}
 	interval = setInterval(moveUp, 1);
 }
-
+ */
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
