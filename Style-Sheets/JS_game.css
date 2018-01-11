@@ -90,17 +90,17 @@ canvas {
 }
 
 #buttonPause{
-    /* width:13.3%; */
-    right: 7%;
     margin-bottom: 7%;   
-    position: absolute;
+	overflow: auto;
+	float: right;
+	margin-right: 0px;
 }
 
 #buttonAudio{
-    /* width:13.3%; */
-    right: 12%;
+	margin-right: 90px;
     margin-bottom: 7%;   
-    position: absolute;
+    overflow: auto;
+	float: right;
 }
 
 #restartButtonNearScore{
