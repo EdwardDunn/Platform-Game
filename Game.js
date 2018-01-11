@@ -186,7 +186,7 @@ function initialize_game() {
 	for (var i = 0; i < 100; i++) {
 		var coinWidth = 40;
 		var x = Math.floor((Math.random() * gameArea.canvas.width) + i * gameArea.canvas.width / 2);
-		var y = Math.floor(Math.random() * gameArea.canvas.height * 0.5);
+		var y = Math.floor(Math.random() * 150 + 30); //150 is canvas height - baseline(150) - char height - 30 (space on top)
 
 		coins[i] = new component();
 		coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", 1);
@@ -568,6 +568,7 @@ function updateGameArea() {
 			if (playerCharacter.crashWith(coins[i])) {
 				//increase collected coins counter
 				collectedCoins++;
+                gameArea.score += 100;
 				coins[i].setAlive(false);
 				coins[i].alpha = 0;
 				//animate coin score board
