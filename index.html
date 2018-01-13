@@ -1,5 +1,5 @@
 <!---
-Description: Home page for game. Calls startGame() function in JS_Game.js file on page load and
+Description: Home page for game. Calls initialize_game() function in JS_Game.js file on page load and
 contains code for game over and game complete modals.
 Author: Open Source - Contributor list can be seen in GitHub
 -->
@@ -73,11 +73,12 @@ Author: Open Source - Contributor list can be seen in GitHub
 				<li>Keyboard arrows</li>
 				<li>Press 'p' to pause game</li>
 				<li>Press 'm' to toggle music</li>
+                <li>Press Space bar to restart the game</li>
 			</ul>
 
 			<!--Play button-->
 			<div class="startButton">
-				<img class="buttonImages" src="Pictures/play.png" width="100%" onClick="startGame()" alt="PlayButton" />
+				<img class="buttonImages" src="Pictures/play.png" width="100%" onClick="initialize_game()" alt="PlayButton" />
 			</div>
 			
 		</div>
@@ -90,7 +91,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 			<p class="gameOverDesc">Press RESTART button or Space to restart the game.</p>
 
 			<div class="restartButton">
-				<img class="buttonImages" src="Pictures/restart.png" width="100%" onClick="startGame()" alt="RestartButton" />
+				<img class="buttonImages" src="Pictures/restart.png" width="100%" onClick="initialize_game()" alt="RestartButton" />
 			</div>
 		</div>
 	</div>
@@ -100,7 +101,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 			<img class="gameOverLabel" src="Pictures/victory.png" alt="VICTORY">
 			<p class="gameOverDesc">You completed the game! Awesome Work!</p>
 			<div class="restartButton">
-				<img src="Pictures/restart.png" width="100%" onClick="startGame()" alt="RestartButton" />
+				<img src="Pictures/restart.png" width="100%" onClick="initialize_game()" alt="RestartButton" />
 			</div>
 		</div>
 	</div>
