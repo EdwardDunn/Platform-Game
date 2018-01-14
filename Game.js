@@ -326,8 +326,8 @@ function component() {
 			if (charName) {
 				this.imageMirror = new Image();
 				this.imageMirror.src = `Pictures/${charName}_left.png`
-				this.image.width = width;
-				this.image.height = height;
+				this.imageMirror.width = width;
+				this.imageMirror.height = height;
 			}
 
 			if (initialShow) {
