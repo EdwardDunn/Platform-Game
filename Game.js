@@ -552,12 +552,8 @@ function updateGameArea() {
 
 			}
 			else if (playerCharacter.crashWith(enemyCharacters[i])) {
-				let lives = 1000000000;
-				lives --
-				if (lives < -100000000) {
-					gameArea.stop();
+				gameArea.stop();
 				gameOver();
-				}
 			}
 		}
 	}
