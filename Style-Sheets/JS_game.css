@@ -23,6 +23,19 @@ canvas {
   filter: saturate(1.6);
 }
 
+.resumeButton{
+  margin: auto;
+  width: 150px;
+  margin-top: 40px;
+  cursor: pointer;
+}
+
+.resumeButton:hover{
+  /* IE 11 and lower don't support filter */
+  -webkit-filter: saturate(1.6);
+  filter: saturate(1.6);
+}
+
 .startButton{
   margin: auto;
   width: 150px;
@@ -73,12 +86,53 @@ canvas {
 
 #buttonWrapper{
   margin-top: 20px;
-  text-align:center; 
+  text-align: center; 
+  max-width: 99%;
 }
+
+#buttonController
+{
+    display: inline-block;
+	text-align: center;
+    vertical-align: middle;
+    margin: auto;
+    white-space: normal;
+}
+
+#buttonPauseAudio
+{
+    display: inline-block;
+	max-width: 45%;
+	text-align: center;
+    vertical-align: middle;
+    margin-right: 4%;
+	float: right;
+}
+
+#buttonPause{
+	float: right;
+	margin-bottom: 7%;   
+	overflow: auto;
+}
+
+#buttonAudio{
+	float: right;
+    margin-bottom: 7%;   
+    overflow: auto;
+}
+
 #restartButtonNearScore{
     width:13.3%;
     right: 7%;
     margin-bottom: 7%;   
     position: absolute;
 }
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+    #buttonController, #buttonPauseAudio {
+        display: block;
+        width: 65%;
+        margin: 0 auto;
+    }
 
