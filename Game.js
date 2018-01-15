@@ -81,6 +81,7 @@ var keysPressed = { LEFT: false, UP: false, RIGHT: false, P: false, M: false };
 var gamePaused = false;
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
+let dir; // which way character faces. 1 is right, -1 is left
 
 function KeyDown(event) {
 	//avoid auto-repeated keydown event
@@ -200,10 +201,12 @@ function startLevel(levelNumber) {
 	//to synchronize the start cordinate of enemy character
 	flag = 1;
 	z = 0;
+	dir = 1; //face in right direction
+
 	//player character
 	playerCharacter = new component();
 	let char = LEVEL_PLAYER_CHARACTERS[levelNumber - 1];
-	playerCharacter.init(60, 70, `Pictures/${char.name}.png`, char.x2, char.y2, "image", 1);
+	playerCharacter.init(60, 70, `Pictures/${char.name}.png`, char.x2, char.y2, "image", 1, undefined, char.name);
 
 	//background
 	background = new component();
@@ -302,7 +305,7 @@ var gameArea = {
 };
 
 function component() {
-	this.init = function (width, height, color, x, y, type, h, initialShow = false) {
+	this.init = function (width, height, color, x, y, type, h, initialShow = false, charName = undefined) {
 		//h to test if it is enemy 1 or 2
 		this.h = h;
 		this.alive = true;
@@ -316,10 +319,16 @@ function component() {
 
 		if (type === "image") {
 			this.image = new Image();
-			this.image.src = color;
 			this.image.src = this.color;
 			this.image.width = width;
 			this.image.height = height;
+
+			if (charName) {
+				this.imageMirror = new Image();
+				this.imageMirror.src = `Pictures/${charName}_left.png`
+				this.imageMirror.width = width;
+				this.imageMirror.height = height;
+			}
 
 			if (initialShow) {
 				var imgCopy = this.image;
@@ -432,6 +441,15 @@ function component() {
 	}
 	this.isAlive = function () {
 		return this.alive;
+	}
+
+	//check if there was a change in direction character is facing
+	// newDir takes either -1 (left move) or 1 (right move)
+	this.changeDir = function (newDir) {
+		if (dir !== newDir) {
+			[playerCharacter.image, playerCharacter.imageMirror] = [playerCharacter.imageMirror, playerCharacter.image];
+			dir = newDir;
+		}
 	}
 }
 
@@ -727,9 +745,11 @@ function moveDown() {
 }
 
 function moveLeft() {
+	playerCharacter.changeDir(-1);
 	playerCharacter.speedX = -5;
 }
 function moveRight() {
+	playerCharacter.changeDir(1);
 	playerCharacter.speedX = 5;
 }
 
