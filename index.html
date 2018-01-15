@@ -116,6 +116,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 	
 	<!--Game play buttons-->
 	<div id="buttonWrapper">
+		<div id="buttonController">
 		<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
 			<img class="buttonImages" src="Pictures/left.png" alt="LEFT">
 		</button>
@@ -125,12 +126,15 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
 			<img class="buttonImages" src="Pictures/right.png" alt="RIGHT">
 		</button>
-		<button id="buttonAudio" class="button" onClick="muteMusic()" >
+		</div>
+		<div id="buttonPauseAudio">
+		<button class="button" id="buttonAudio" onClick="muteMusic()" >
 			<img class="buttonImages" id="audioButton" src="Pictures/audioOn.png" alt="MuteMusic">
 		</button>
-		<button id="buttonPause" class="button" onClick="pauseGame()">
+		<button class="button" id="buttonPause" onClick="pauseGame()">
 			<img class="buttonImages" src="Pictures/pause.png" alt="PauseGame">
-		</button>		
+		</button>
+		</div>
 	</div>
 
 </body>
