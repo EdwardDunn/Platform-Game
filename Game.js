@@ -124,11 +124,19 @@ function muteMusic() {
 	var imgButton = document.getElementById("audioButton");
     if (musicMuted) {
 		imgButton.src = "Pictures/audioOff.png";
-		audio.pause();
+                if(!gamePaused){ //If the game is running, just turn the audio off
+                    audio.pause();
+            }else{ //Otherwise, we need to change our musicToggled variable, so that the audio resumes properly with the game
+                musicToggled = false;
+            }
     }
     else {
 		imgButton.src = "Pictures/audioOn.png";
+                if(!gamePaused){
 		audio.load();
+            }else{
+                musicToggled = true;
+            }
     }
 }
 
@@ -546,16 +554,16 @@ function updateGameArea() {
 	var pausemodal = document.getElementById('gamePauseModal');
 	if (gamePaused) {
 		pausemodal.style.display = "block";
-		if (!musicMuted) {
-			muteMusic();
+		if (!musicMuted) { //Then mute music, and keep musicToggled on so that we know it's not muted for real
+			audio.pause();
 			musicToggled = true;
 		}
 		return;
 	}
 	else {
 		pausemodal.style.display = "none";
-		if (musicToggled) {
-			muteMusic();
+		if (musicToggled) { //Then unmute the music, and cancel musicToggled so that this won't re-trigger
+			audio.load();
 			musicToggled = false;
 		}
 	}
