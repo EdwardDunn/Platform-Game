@@ -16,7 +16,7 @@ const RIGHT = 39;
 const SPACE = 32;
 const P = 80;
 const M = 77;
-const LEVEL_COMPLETION_SCORE = 3000;
+const LEVEL_COMPLETION_TIME = 3000;
 
 const LEVEL_ENEMIES = [
 	[
@@ -69,6 +69,7 @@ var state = 'instructions';
 
 var currentLevel = 1;
 var collectedCoins = 0;
+var score = 0;
 var playerCharacter;
 var background;
 var scoreBoard;
@@ -182,6 +183,7 @@ function showInstructions() {
 function initialize_game() {
 	currentLevel = 1;
 	collectedCoins = 0;
+        score = 0;
 
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
@@ -277,7 +279,7 @@ var gameArea = {
 		this.context = this.canvas.getContext("2d");
 
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-		this.score = 0;
+                this.time = 0;
 		this.bonusActiveTime = 0;
 		this.bonusInterval = null;
 		this.coinScoreActiveTime = 0;
@@ -287,7 +289,7 @@ var gameArea = {
 
 	start: function () {
 		this.frameNo = 0;
-		this.score = 0;
+                this.time = 0;
 		// hide modals
 		var modals = document.getElementsByClassName('modal');
 		for (var i = 0; i < modals.length; i++) {
@@ -590,7 +592,7 @@ function updateGameArea() {
 			if (playerCharacter.crashWith(coins[i])) {
 				//increase collected coins counter
 				collectedCoins++;
-                gameArea.score += 100;
+                score += 100;
 				coins[i].setAlive(false);
 				coins[i].alpha = 0;
 				//animate coin score board
@@ -607,7 +609,7 @@ function updateGameArea() {
 	background.update();
 
 	//score update
-	scoreBoard.text = "SCORE: " + gameArea.score;
+	scoreBoard.text = "SCORE: " + score;
 	scoreBoard.update();
 
 	//collected coins update
@@ -617,6 +619,7 @@ function updateGameArea() {
 	//increment frame number for score counter
 	incrementFrameNumber(2);
 	incrementScore(2);
+        incrementTime(2);
 
 	//LevelDisplay update
 	levelDisplay.text = "Level " + currentLevel;
@@ -640,7 +643,7 @@ function updateGameArea() {
 
 	//when frame number reaches 3000 (point at which obstacles end) end game
 	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-	if (gameArea.score >= LEVEL_COMPLETION_SCORE) {
+	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
 		gameArea.stop();
 		currentLevel++;
 
@@ -719,7 +722,11 @@ function incrementFrameNumber(value) {
 }
 
 function incrementScore(value) {
-	gameArea.score += value;
+	score += value;
+}
+
+function incrementTime(value) {
+	gameArea.time += value;
 }
 
  //Stops player character from constantly moving after button move pressed
