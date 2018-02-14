@@ -458,6 +458,14 @@ function component() {
 			dir = newDir;
 		}
 	}
+
+	this.coinDisappear = function(){
+		this.y += -2;
+		this.alpha -= 0.03;
+		if(this.alpha < 0){
+			this.alpha = 0;
+		}
+	}
 }
 
 function gameOver() {
@@ -592,7 +600,6 @@ function updateGameArea() {
 				collectedCoins++;
                 gameArea.score += 100;
 				coins[i].setAlive(false);
-				coins[i].alpha = 0;
 				//animate coin score board
 				gameArea.coinScoreActiveTime = 0;
 				gameArea.coinScoreInterval = setInterval(flashCoinScore, 150);
@@ -708,8 +715,14 @@ function updateGameArea() {
 	}
 
 	//loop to set speed of coin characters
+	//if the coin is not alive and taken by player, make the coin disappear
 	for (var i = 0; i < coins.length; i++) {
-		coins[i].x += -2;
+		if(coins[i].isAlive()){
+			coins[i].x += -2;
+		}
+		else{
+			coins[i].coinDisappear();
+		}
 	}
 }
 
