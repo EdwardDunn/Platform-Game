@@ -19,7 +19,7 @@ const W = 87;
 const A = 65;
 const D = 68;
 const M = 77;
-const LEVEL_COMPLETION_SCORE = 3000;
+const LEVEL_COMPLETION_TIME = 3000;
 
 const LEVEL_ENEMIES = [
 	[{
@@ -109,7 +109,7 @@ const LEVEL_PLAYER_CHARACTERS = [{
 	name: "ninja",
 	x2: 450,
 	y2: 120
-}, ]
+}]
 
 const LEVEL_CLOUDS = [{
 	name: "cloud",
@@ -143,10 +143,13 @@ var state = 'instructions';
 
 var currentLevel = 1;
 var collectedCoins = 0;
+var timeLeft = 30;
+var score = 0;
 var playerCharacter;
 var background;
 var scoreBoard;
 var coinScoreBoard;
+var timeBoard;
 var levelDisplay;
 var enemyCharacters = [];
 var coins = [];
@@ -238,7 +241,7 @@ function KeyUp(event) {
 			break;
 		case LEFT:
 		case A:
-			if (keysPressed[RIGHT]) {
+			if (keysPressed[RIGHT]||keysPressed[D]) {
 				moveRight();
 			} else {
 				playerCharacter.speedX = 0;
@@ -246,7 +249,7 @@ function KeyUp(event) {
 			break;
 		case RIGHT:
 		case D:
-			if (keysPressed[LEFT]) {
+			if (keysPressed[LEFT]||keysPressed[A]) {
 				moveLeft();
 			} else {
 				playerCharacter.speedX = 0;
@@ -268,6 +271,7 @@ function showInstructions() {
 function initialize_game() {
 	currentLevel = 1;
 	collectedCoins = 0;
+        score = 0;
 
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
@@ -291,7 +295,7 @@ function initialize_game() {
 }
 
 function startLevel(levelNumber) {
-	//to synchronize the start cordinate of enemy character
+	//to synchronize the start coordinates of enemy characters
 	flag = 1;
 	z = 0;
 	dir = 1; //face in right direction
@@ -307,15 +311,19 @@ function startLevel(levelNumber) {
 
 	//score
 	scoreBoard = new component();
-	scoreBoard.init("30px", "Consolas", "black", 50, 40, "text", 1);
+	scoreBoard.init("30px", "Consolas", "black", 20, 40, "text", 1);
 
 	//collected Coins
 	coinScoreBoard = new component();
-	coinScoreBoard.init("30px", "Consolas", "black", 280, 40, "text", 1);
+	coinScoreBoard.init("30px", "Consolas", "black", 240, 40, "text", 1);
+        
+        //current time left in the given level
+        timeBoard = new component ();
+        timeBoard.init("30px", "Consolas", "black", 410, 40, "text", 1);
 
 	//current level display
 	levelDisplay = new component();
-	levelDisplay.init("30px", "Consolas", "black", 600, 40, "text", 1);
+	levelDisplay.init("30px", "Consolas", "black", 620, 40, "text", 1);
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
@@ -363,9 +371,8 @@ var gameArea = {
 		this.context = this.canvas.getContext("2d");
 
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-		this.score = 0;
+		this.time = 0;
 		this.bonusActiveTime = 0;
-		this.bonusInterval = null;
 		this.coinScoreActiveTime = 0;
 		this.coinScoreInterval = null;
 
@@ -373,7 +380,7 @@ var gameArea = {
 
 	start: function() {
 		this.frameNo = 0;
-		this.score = 0;
+		this.time = 0;
 		// hide modals
 		var modals = document.getElementsByClassName('modal');
 		for (var i = 0; i < modals.length; i++) {
@@ -418,7 +425,7 @@ function component() {
 
 			if (charName) {
 				this.imageMirror = new Image();
-				this.imageMirror.src = `Pictures/${charName}_left.png`
+				this.imageMirror.src = `Pictures/${charName}_left.png`;
 				this.imageMirror.width = width;
 				this.imageMirror.height = height;
 			}
@@ -438,7 +445,7 @@ function component() {
 		this.height = height;
 
 		//change components position
-		this.speedX = 0
+		this.speedX = 0;
 		this.speedY = 0;
 		this.x = x;
 		this.y = y;
@@ -661,11 +668,21 @@ function updateGameArea() {
 		}
 	}
 
+	//when frame number reaches 3000 (point at which obstacles end) end level
+	//check current level, if more than 5 (because there are five levels currently), show game complete modal
+	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
+		gameArea.stop();
+		currentLevel++;
+		console.log(currentLevel);
+		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
+		else startLevel(currentLevel);
+	}
+
 	for (var i = 0; i < enemyCharacters.length; i++) {
 		if (enemyCharacters[i].isAlive()) {
 			if (playerCharacter.jumpsOn(enemyCharacters[i])) {
 				enemyCharacters[i].setAlive(false);
-				incrementScore(100);
+				incrementScore(100*currentLevel);
 				gameArea.bonusActiveTime = 0;
 				gameArea.bonusInterval = setInterval(flashScore, 150);
 
@@ -682,7 +699,7 @@ function updateGameArea() {
 			if (playerCharacter.crashWith(coins[i])) {
 				//increase collected coins counter
 				collectedCoins++;
-				gameArea.score += 100;
+				incrementScore(50*currentLevel);
 				coins[i].setAlive(false);
 				//animate coin score board
 				gameArea.coinScoreActiveTime = 0;
@@ -698,16 +715,20 @@ function updateGameArea() {
 	background.update();
 
 	//score update
-	scoreBoard.text = "SCORE: " + gameArea.score;
+	scoreBoard.text = "SCORE: " + score;
 	scoreBoard.update();
 
 	//collected coins update
 	coinScoreBoard.text = "COINS: " + collectedCoins;
 	coinScoreBoard.update();
-
-	//increment frame number for score counter
+        
+        //Timer update
+        timeBoard.text = "TIME: " + timeLeft;
+        timeBoard.update();
+        
+	//increment frame number for timer
 	incrementFrameNumber(2);
-	incrementScore(2);
+        incrementTime(2);
 
 	//LevelDisplay update
 	levelDisplay.text = "Level " + currentLevel;
@@ -727,18 +748,6 @@ function updateGameArea() {
 	for (var i = 0; i < 100; i++) {
 		clouds[i].x += 0.5;
 		clouds[i].update();
-	}
-
-	//when frame number reaches 3000 (point at which obstacles end) end game
-	//check current level, if more than 2 (because there is two levels currently), show game complete modal
-	if (gameArea.score >= LEVEL_COMPLETION_SCORE) {
-		gameArea.stop();
-		currentLevel++;
-
-		console.log(currentLevel);
-		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
-		else startLevel(currentLevel);
-
 	}
 
 	//player character update
@@ -814,7 +823,12 @@ function incrementFrameNumber(value) {
 }
 
 function incrementScore(value) {
-	gameArea.score += value;
+	score += value;
+}
+
+function incrementTime(value) {//Both increments time and updates onscreen timer value
+	gameArea.time += value;
+        timeLeft = (LEVEL_COMPLETION_TIME - gameArea.time) / 100;
 }
 
 //Stops player character from constantly moving after button move pressed
