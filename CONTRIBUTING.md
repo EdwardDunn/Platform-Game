@@ -33,8 +33,8 @@ Play the game, and if you have any suggestions, **create a new issue outlining w
 
     `git checkout -b [local branch name]`
 
-5. Use an editor of your choice to make changes.
-6. Stages your changes frequently!
+6. Use an editor of your choice to make changes.
+7. Stages your changes frequently!
 
     `git add .`
     
