@@ -25,12 +25,16 @@ Play the game, and if you have any suggestions, **create a new issue outlining w
 
     `git clone [your forked repository URL]`
  
-4. Create a new local branch
+4. Move into your new Platform-Game folder
+
+    `cd Platform-Game`
+    
+5. Create a new local branch
 
     `git checkout -b [local branch name]`
-    
-5. Use an editor of your choice to make changes.
-6. Stages your changes frequently!
+
+6. Use an editor of your choice to make changes.
+7. Stages your changes frequently!
 
     `git add .`
     
