@@ -164,6 +164,7 @@ var keysPressed = {
 	A: false,
 	D: false
 };
+
 var gamePaused = false;
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
@@ -244,14 +245,16 @@ function KeyUp(event) {
 			if (keysPressed[RIGHT]||keysPressed[D]) {
 				moveRight();
 			} else {
+				playerCharacter.image.src = "Pictures/good_guy.png";
 				playerCharacter.speedX = 0;
 			}
 			break;
 		case RIGHT:
 		case D:
 			if (keysPressed[LEFT]||keysPressed[A]) {
-				moveLeft();
+				moveLeft();				
 			} else {
+				playerCharacter.image.src = "Pictures/good_guy.png";
 				playerCharacter.speedX = 0;
 			}
 	}
@@ -299,13 +302,14 @@ function startLevel(levelNumber) {
 	flag = 1;
 	z = 0;
 	dir = 1; //face in right direction
-
+	
 	//player character
 	playerCharacter = new component();
 	let char = LEVEL_PLAYER_CHARACTERS[levelNumber - 1];
+	//playerCharacter.src = "Pictures/good_guy.gif";
 	playerCharacter.init(60, 70, `Pictures/${char.name}.png`, char.x2, char.y2, "image", 1, undefined, char.name);
 
-	//background
+	//background 
 	background = new component();
 	background.init(900, 400, `Pictures/background_${levelNumber}.jpg`, 0, 0, "image", 1);
 
@@ -810,14 +814,18 @@ function updateGameArea() {
 
 	//loop to set speed of coin characters
 	//if the coin is not alive and taken by player, make the coin disappear
+	
 	for (var i = 0; i < coins.length; i++) {
 		if(coins[i].isAlive()){
 			coins[i].x += -2;
 		}
 		else{
 			coins[i].coinDisappear();
+
+			}
 		}
-	}
+
+
 }
 
 
@@ -861,22 +869,56 @@ function moveUp() {
 			jump.autoplay = true;
 			jump.load();
 		}
+		
 	}
 }
 
 function moveDown() {
 	playerCharacter.speedY = 20;
 }
+//create setInterval
+var loopCharLEFT;
+var loopCharRIGHT;
 
 function moveLeft() {
+	//loop through the PNG pictures to give the effect of running. HTML5 canvas does not allow .gif file to tun
+	var loopTimes=0;
+	var playerCharacterImg = ["Pictures/good_guy1.png", "Pictures/good_guy2.png", "Pictures/good_guy1.png", "Pictures/good_guy2.png"];
+	
+		loopCharLEFT = setInterval(function(){
+					for(var i=0; i < playerCharacterImg.length; i++){
+						
+					loopTimes++;
+					if (loopTimes == playerCharacterImg.length - 1 ){
+						loopTimes=0;
+					}
+				playerCharacter.image.src = (playerCharacterImg[loopTimes]);
+				}	
+			
+		}, 100);
 	playerCharacter.changeDir(-1);
 	playerCharacter.speedX = -5;
+	
 }
 
 function moveRight() {
+	var loopTimes=0;
+	var playerCharacterImg = ["Pictures/good_guy1.png", "Pictures/good_guy2.png", "Pictures/good_guy1.png", "Pictures/good_guy2.png"];
+			loopCharRIGHT =	setInterval(function(){
+						for(var i=0; i < playerCharacterImg.length; i++){
+						loopTimes++;
+						if (loopTimes == playerCharacterImg.length - 1){
+							loopTimes=0;
+						}
+					playerCharacter.image.src = (playerCharacterImg[loopTimes]);
+					}	
+				
+			}, 100);		
 	playerCharacter.changeDir(1);
 	playerCharacter.speedX = 5;
+
 }
+
 
 var interval;
 
@@ -896,7 +938,10 @@ function moveRightMouse() {
 	interval = setInterval(moveUp, 1);
 }
  */
+ 
 function onMouseUp() {
 	clearInterval(interval);
+	clearInterval(loopCharRIGHT);
+	clearInterval(loopCharLEFT);
 	stopMove();
 }
