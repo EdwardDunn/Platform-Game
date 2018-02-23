@@ -704,6 +704,9 @@ function updateGameArea() {
 				//animate coin score board
 				gameArea.coinScoreActiveTime = 0;
 				gameArea.coinScoreInterval = setInterval(flashCoinScore, 150);
+				coinpickup_audio=document.getElementById("coinpickup")
+				coinpickup.autoplay = true;
+				coinpickup.load();
 			}
 		}
 	}
