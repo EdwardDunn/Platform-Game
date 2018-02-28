@@ -155,8 +155,6 @@ var enemyCharacters = [];
 var coins = [];
 var clouds = [];
 var rotationCmp = 0;
-var frequency = 0;
-var towardsLeft = false;
 var keysPressed = {
 	LEFT: false,
 	UP: false,
@@ -735,7 +733,6 @@ function updateGameArea() {
 			}
 		}
 	}
-	walk();
 	//clear canvas before each update
 	gameArea.clear();
 
@@ -876,47 +873,6 @@ function stopMove() {
 		playerCharacter.x = gameArea.canvas.width - playerCharacter.width;
 	}
 }
-function moveAction(name,orientation){
-	frequency++;
-	if(frequency == 5){
-		frequency = 0;
-		switch(orientation){
-			case "left":
-				playerCharacter.setSrc("Pictures/"+name+"_leftWalk1.png");break;
-			case "leftWalk1":
-				playerCharacter.setSrc("Pictures/"+name+"_leftWalk2.png");break;
-			case "leftWalk2":
-				playerCharacter.setSrc("Pictures/"+name+"_leftWalk1.png");break;
-			case "rightWalk1":
-				playerCharacter.setSrc("Pictures/"+name+"_rightWalk2.png");break;
-			case "rightWalk2":
-				playerCharacter.setSrc("Pictures/"+name+"_rightWalk1.png");break;
-			default:
-				if(towardsLeft){
-					playerCharacter.setSrc("Pictures/"+name+"_left.png");
-				}else{
-					playerCharacter.setSrc("Pictures/"+name+"_rightWalk1.png");
-				}
-		}
-	}
-}
-function walk(){
-	var url = playerCharacter.getImgSrc();
-	var src = url.substring(url.lastIndexOf('/')+1);
-	var name =src.substring(0,src.length-4);
-	var array = name.split("_");
-	var name =(1 < array.length && !array[1].includes("left") && !array[1].includes("right"))?array[0]+"_"+array[1]:array[0];
-	var playerCharacterOrientation = array[array.length-1];
-
-	if(keysPressed[LEFT] || keysPressed[RIGHT]){
-		moveAction(name,playerCharacterOrientation);
-	}else if(towardsLeft){
-		playerCharacter.setSrc("Pictures/"+name+"_left.png");
-	}else{
-		playerCharacter.setSrc("Pictures/"+name+".png");
-	}
-}
-
 function moveUp() {
 	if (playerCharacter.hitGround && playerCharacter.y >= 170) {
 		playerCharacter.speedY = -20;
@@ -933,13 +889,11 @@ function moveDown() {
 	playerCharacter.speedY = 20;
 }
 function moveLeft() {
-	towardsLeft = true;
 	playerCharacter.changeDir(-1);
 	playerCharacter.speedX = -5;
 }
 
 function moveRight(){
-	towardsLeft = false;
 	playerCharacter.changeDir(1);
 	playerCharacter.speedX = 5;
 }
