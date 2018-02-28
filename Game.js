@@ -453,7 +453,7 @@ function component() {
 		this.gravity = 1.5;
 		//indicates if the character is on the ground or not
 		this.hitGround = true;
-
+		this.doubleJumpAllowed = true;
 		//angle
 		this.angle = 0;
 	}
@@ -515,6 +515,8 @@ function component() {
 			(middleX > otherleft) &&
 			(middleX < otherright)) {
 			smoosh = true;
+			//When the player smooshes an enemy, we send them up
+			moveUp("hit");
 		}
 		return smoosh;
 	};
@@ -534,6 +536,7 @@ function component() {
 		if (this.y > rockbottom) {
 			this.y = rockbottom;
 			this.hitGround = true;
+			this.doubleJumpAllowed = true;
 		}
 	}
 
@@ -873,15 +876,22 @@ function stopMove() {
 		playerCharacter.x = gameArea.canvas.width - playerCharacter.width;
 	}
 }
-function moveUp() {
-	if (playerCharacter.hitGround && playerCharacter.y >= 170) {
+function moveUp(state) {	
+	if(state == "hit"){
+		playerCharacter.speedY = -5;
+		playerCharacter.hitGround = false;
+	}
+	else if (playerCharacter.hitGround && playerCharacter.y >= 170){
 		playerCharacter.speedY = -20;
 		playerCharacter.hitGround = false;
-
 		if (!musicMuted) {
 			jump.autoplay = true;
 			jump.load();
 		}
+	}
+	else if(playerCharacter.doubleJumpAllowed == true){
+		playerCharacter.speedY = -7;
+		playerCharacter.doubleJumpAllowed = false;
 	}
 }
 
