@@ -9,16 +9,18 @@ Author: Open Source - Contributor list can be seen in GitHub
 */
 
 
-//CONFIG
-const LEFT = 37;
-const UP = 38;
-const RIGHT = 39;
-const SPACE = 32;
-const P = 80;
-const W = 87;
-const A = 65;
-const D = 68;
-const M = 77;
+const userKeys = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    W: 87,
+    A: 65,
+    D: 68,
+    SPACE: 32,
+    P: 80,
+    M: 77
+};
+
 const LEVEL_COMPLETION_TIME = 3000;
 
 const LEVEL_ENEMIES = [
@@ -180,27 +182,27 @@ function KeyDown(event) {
 	console.log("key: " + key);
 	keysPressed[key] = true;
 
-	if (keysPressed[LEFT] || keysPressed[A]) {
+	if (keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
 		moveLeft();
 	}
-	if (keysPressed[RIGHT] || keysPressed[D]) {
+	if (keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
 		moveRight();
 	}
 	//when the character is on the ground and player press Jump then play audio, not only when key is pressed
-	if (keysPressed[UP] || keysPressed[W] && playerCharacter.hitGround) {
+	if (keysPressed[userKeys.UP] || keysPressed[userKeys.W] && playerCharacter.hitGround) {
 		moveUp();
 	}
 	// Add SPACE key to restart game
-	if (keysPressed[SPACE]) {
+	if (keysPressed[userKeys.SPACE]) {
 		restartGame();
 	}
-	if (keysPressed[P]) {
-		keysPressed[P] = false;
+	if (keysPressed[userKeys.P]) {
+		keysPressed[userKeys.P] = false;
 		pauseGame();
 	}
 
-	if (keysPressed[M]) {
-		keysPressed[M] = false;
+	if (keysPressed[userKeys.M]) {
+		keysPressed[userKeys.M] = false;
 		muteMusic();
 	}
 }
@@ -235,21 +237,21 @@ function KeyUp(event) {
 	key = event.which;
 	keysPressed[key] = false;
 	switch (key) {
-		case UP:
-		case W:
+		case userKeys.UP:
+		case userKeys.W:
 			playerCharacter.speedY += playerCharacter.gravity;
 			break;
-		case LEFT:
-		case A:
-			if (keysPressed[RIGHT]||keysPressed[D]) {
+		case userKeys.LEFT:
+		case userKeys.A:
+			if (keysPressed[userKeys.RIGHT]||keysPressed[userKeys.D]) {
 				moveRight();
 			} else {
 				playerCharacter.speedX = 0;
 			}
 			break;
-		case RIGHT:
-		case D:
-			if (keysPressed[LEFT]||keysPressed[A]) {
+		case userKeys.RIGHT:
+		case userKeys.D:
+			if (keysPressed[userKeys.LEFT]||keysPressed[userKeys.A]) {
 				moveLeft();
 			} else {
 				playerCharacter.speedX = 0;
@@ -898,14 +900,6 @@ function moveRightMouse() {
 	interval = setInterval(moveRight, 1);
 }
 
-/* function moveUpMouse() {
-	if (!musicMuted) {
-		jump.autoplay = true;
-		jump.load();
-	}
-	interval = setInterval(moveUp, 1);
-}
- */
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
