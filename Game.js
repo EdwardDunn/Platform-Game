@@ -154,6 +154,7 @@ var levelDisplay;
 var enemyCharacters = [];
 var coins = [];
 var clouds = [];
+var rotationCmp = 0;
 var keysPressed = {
 	LEFT: false,
 	UP: false,
@@ -316,7 +317,7 @@ function startLevel(levelNumber) {
 	//collected Coins
 	coinScoreBoard = new component();
 	coinScoreBoard.init("30px", "Consolas", "black", 240, 40, "text", 1);
-        
+
         //current time left in the given level
         timeBoard = new component ();
         timeBoard.init("30px", "Consolas", "black", 410, 40, "text", 1);
@@ -545,6 +546,25 @@ function component() {
 	this.isAlive = function() {
 		return this.alive;
 	}
+	this.getImgSrc = function(){
+		return this.image.src;
+	}
+	this.setSrc = function(src){
+		this.image.src = src;
+	}
+	this.rotation = function(){
+		rotationCmp++;
+		if(rotationCmp < 1000){
+			this.image.src = "Pictures/coin.png";
+		}else if(rotationCmp < 2000){
+			this.image.src = "Pictures/coin2.png";
+		}else if(rotationCmp < 3000){
+			this.image.src = "Pictures/coin4.png";
+		}else if(rotationCmp < 4000){
+			this.image.src = "Pictures/coin3.png";
+			rotationCmp = 0;
+		}
+	}
 
 	//check if there was a change in direction character is facing
 	// newDir takes either -1 (left move) or 1 (right move)
@@ -698,8 +718,9 @@ function updateGameArea() {
 
 	//loop for coin collision
 	for (var i = 0; i < coins.length; i++) {
-		if (coins[i].isAlive()) {
-			if (playerCharacter.crashWith(coins[i])) {
+		if (coins[i].isAlive()){
+			if (playerCharacter.crashWith(coins[i])){
+				coins[i].setSrc("Pictures/stars.png");
 				//increase collected coins counter
 				collectedCoins++;
 				incrementScore(50*currentLevel);
@@ -710,10 +731,11 @@ function updateGameArea() {
 				coinpickup_audio=document.getElementById("coinpickup")
 				coinpickup.autoplay = true;
 				coinpickup.load();
+			}else{
+				coins[i].rotation();
 			}
 		}
 	}
-
 	//clear canvas before each update
 	gameArea.clear();
 
@@ -727,11 +749,11 @@ function updateGameArea() {
 	//collected coins update
 	coinScoreBoard.text = "COINS: " + collectedCoins;
 	coinScoreBoard.update();
-        
+
         //Timer update
         timeBoard.text = "TIME: " + timeLeft;
         timeBoard.update();
-        
+
 	//increment frame number for timer
 	incrementFrameNumber(2);
         incrementTime(2);
@@ -854,7 +876,6 @@ function stopMove() {
 		playerCharacter.x = gameArea.canvas.width - playerCharacter.width;
 	}
 }
-
 function moveUp(state) {	
 	if(state == "hit"){
 		playerCharacter.speedY = -5;
@@ -877,13 +898,12 @@ function moveUp(state) {
 function moveDown() {
 	playerCharacter.speedY = 20;
 }
-
 function moveLeft() {
 	playerCharacter.changeDir(-1);
 	playerCharacter.speedX = -5;
 }
 
-function moveRight() {
+function moveRight(){
 	playerCharacter.changeDir(1);
 	playerCharacter.speedX = 5;
 }
