@@ -190,8 +190,10 @@ function KeyDown(event) {
 		moveRight();
 	}
 	//when the character is on the ground and player press Jump then play audio, not only when key is pressed
-	if (keysPressed[userKeys.UP] || keysPressed[userKeys.W] && playerCharacter.hitGround) {
-		moveUp();
+	if ((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround) {
+            if(playerCharacter.jumpCooldown == false){
+                    moveUp();
+            }
 	}
 	// Add SPACE key to restart game
 	if (keysPressed[userKeys.SPACE]) {
@@ -241,6 +243,7 @@ function KeyUp(event) {
 		case userKeys.UP:
 		case userKeys.W:
 			playerCharacter.speedY += playerCharacter.gravity;
+                        playerCharacter.jumpCooldown = false;
 			break;
 		case userKeys.LEFT:
 		case userKeys.A:
@@ -307,7 +310,7 @@ function startLevel(levelNumber) {
 	playerCharacter = new component();
 	let char = LEVEL_PLAYER_CHARACTERS[levelNumber - 1];
 	playerCharacter.init(60, 70, `Pictures/${char.name}.png`, char.x2, char.y2, "image", 1, undefined, char.name);
-
+        playerCharacter.jumpCooldown = false;
 	//background
 	background = new component();
 	background.init(900, 400, `Pictures/background_${levelNumber}.jpg`, 0, 0, "image", 1);
@@ -886,12 +889,14 @@ function moveUp(state) {
 	else if (playerCharacter.hitGround && playerCharacter.y >= 170){
 		playerCharacter.speedY = -20;
 		playerCharacter.hitGround = false;
+                playerCharacter.jumpCooldown = true;
 		if (!musicMuted) {
 			jump.autoplay = true;
 			jump.load();
 		}
 	}
-	else if(playerCharacter.doubleJumpAllowed == true){
+	else if(playerCharacter.doubleJumpAllowed == true){ /* Currently doesn't do anything, since the initial UP/W 
+     *      key logic won't allow for the moveUP function to be called. */
 		playerCharacter.speedY = -7;
 		playerCharacter.doubleJumpAllowed = false;
 	}
