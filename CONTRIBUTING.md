@@ -57,7 +57,7 @@ Play the game, and if you have any suggestions, **create a new issue outlining w
 12. Submit a pull request!
 
 ## How to Update your fork
-If the main branch has been updated since you made your fork, you'll need to sync your fork in order to make further contributions. Fortunately, this is fairly straightforward.
+If the main branch has been updated since you made your fork, you'll need to [sync your fork](https://help.github.com/articles/syncing-a-fork/) in order to make further contributions. Fortunately, this is fairly straightforward.
 
 1. Open your Command Prompt, Git Bash, or other editing tool of choice.
 
