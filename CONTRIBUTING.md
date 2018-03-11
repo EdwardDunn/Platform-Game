@@ -56,6 +56,31 @@ Play the game, and if you have any suggestions, **create a new issue outlining w
 
 12. Submit a pull request!
 
+## How to Update your fork
+If the main branch has been updated since you made your fork, you'll need to [sync your fork](https://help.github.com/articles/syncing-a-fork/) in order to make further contributions. Fortunately, this is fairly straightforward.
+
+1. Open your Command Prompt, Git Bash, or other editing tool of choice.
+
+2. cd into your Platform-Game folder as seen above.
+
+    `cd Platform-Game`
+
+3. Fetch the upstream data--the data that has been updated, but is not in your fork yet. This will get stored in a local branch called upstream/master.
+
+    `git fetch upstream`
+
+4. Check out your local master branch. You may be on this branch already, but it's good to make sure.
+
+    `git checkout master`
+
+5. Now we merge the upstream data into your local master branch. This should preserve your local changes, but you may have to resolve conflicts if you've made any changes that contradict the new upstream data.
+
+    `git merge upstream/master`
+    
+6. Now just push your changes to your Github! Once you've done this, you should be able to visit your fork and have it say that it is even with EdwardDunn:master.
+
+    `git push origin master`
+
 ## Tips 
 * If you're working on an open issue, place a comment on it so others know it's in progress.
 * Use the issue description you're working on for your commit message, e.g. "Issue #10 Updated README.md".

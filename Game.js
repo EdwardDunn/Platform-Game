@@ -192,19 +192,19 @@ function KeyDown(event) {
 	console.log("key: " + key);
 	keysPressed[key] = true;
 
-	if (keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
+	if ((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown == false) {
 		moveLeft();
+                playerCharacter.leftCooldown = true;
 	}
-	if (keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
+	if ((keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) && playerCharacter.rightCooldown == false) {
 		moveRight();
+                playerCharacter.rightCooldown = true;
 	}
-	//when the character is on the ground and player press Jump then play audio, not only when key is pressed
 	if ((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround) {
             if(playerCharacter.jumpCooldown == false){
                     moveUp();
             }
 	}
-	// Add SPACE key to restart game
 	if (keysPressed[userKeys.SPACE]) {
 		restartGame();
 	}
@@ -261,6 +261,7 @@ function KeyUp(event) {
 			} else {
 				playerCharacter.speedX = 0;
 			}
+                        playerCharacter.leftCooldown = false;
 			break;
 		case userKeys.RIGHT:
 		case userKeys.D:
@@ -269,6 +270,7 @@ function KeyUp(event) {
 			} else {
 				playerCharacter.speedX = 0;
 			}
+                        playerCharacter.rightCooldown = false;
 	}
   backgroundDx = 0;
 }
@@ -320,7 +322,11 @@ function startLevel(levelNumber) {
 	playerCharacter = new component();
 	let char = LEVEL_PLAYER_CHARACTERS[levelNumber - 1];
 	playerCharacter.init(60, 70, `Pictures/${char.name}.png`, char.x2, char.y2, "image", 1, undefined, char.name);
-        playerCharacter.jumpCooldown = false;
+
+        playerCharacter.jumpCooldown = false; //These cooldowns let our system know whether a certain key has recently been
+        playerCharacter.leftCooldown = false; //pressed--"false" means that the key is not on cooldown and should be
+        playerCharacter.rightCooldown = false;//acknowledged normally.
+  
 	//background
 	background = new component();
   background2 = new component();
@@ -971,13 +977,13 @@ function moveUp(state) {
 	else if (playerCharacter.hitGround && playerCharacter.y >= 170){
 		playerCharacter.speedY = -20;
 		playerCharacter.hitGround = false;
-    playerCharacter.jumpCooldown = true;
+                playerCharacter.jumpCooldown = true;
 		if (!musicMuted) {
 			jump.autoplay = true;
 			jump.load();
 		}
 	}
-	else if(playerCharacter.doubleJumpAllowed == true){ /* Currently doesn't do anything, since the initial UP/W
+	else if(playerCharacter.doubleJumpAllowed == true){ /* Currently doesn't do anything, since the initial UP/W 
      *      key logic won't allow for the moveUP function to be called. */
 		playerCharacter.speedY = -7;
 		playerCharacter.doubleJumpAllowed = false;
@@ -1021,7 +1027,6 @@ function moveRightMouse() {
   backgroundDx = 5;
 
 }
-
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
