@@ -73,3 +73,52 @@ Date:23/12/2017
 
 	Description : game_won_sound
 		Source: https://freesound.org/people/Mativve/sounds/391539/
+
+
+Added by: DesseKande
+Date:23/02/2018
+
+	Description : stars
+		Source: by DesseKande with Photoshop
+
+Added by: DesseKande
+Date:08/03/2018
+
+	Description : background_1_reverse
+		Source: Background_1 with Photoshop
+
+Added by: DesseKande
+Date:08/03/2018
+
+	Description : background_2_reverse
+		Source: Background_2 with Photoshop
+
+Added by: DesseKande
+Date:08/03/2018
+
+	Description : background_3_reverse
+		Source: Background_3 with Photoshop
+
+Added by: DesseKande
+Date:08/03/2018
+
+	Description : background_4_reverse
+  	Source: Background_4 with Photoshop
+
+Added by: DesseKande
+Date:08/03/2018
+
+	Description : background_5_reverse
+		Source: Background_5 with Photoshop
+
+Added by: DesseKande
+Date:08/03/2018
+
+	Description : blackArrow
+		Source: https://www.iconfinder.com/search/?q=arrow
+
+Added by: DesseKande
+Date:08/03/2018
+
+	Description : goldArrow
+		Source: blackArrow with Photoshop
