@@ -148,8 +148,17 @@ var timeLeft; //Says how much time is left in the level--will be calculated base
 var score = 0;
 var playerCharacter;
 var background;
+var background2;
+var backgroundDx = 0;
+var xPos = -5;
 var scoreBoard;
 var coinScoreBoard;
+
+var startArrow1;
+var startArrow2;
+var startArrow3;
+var switchArrow = 0;
+
 var timeBoard;
 var levelDisplay;
 var enemyCharacters = [];
@@ -268,12 +277,12 @@ function KeyUp(event) {
 			}
                         playerCharacter.rightCooldown = false;
 	}
+  backgroundDx = 0;
 }
 
 
-function showInstructions() {
+function showInstructions(){
 	gameArea.init();
-
 	//background
 	background = new component();
 	background.init(canvas.width, canvas.height, "Pictures/background_1.jpg", 0, 0, "image", WALKING, true);
@@ -302,6 +311,7 @@ function startLevel(levelNumber) {
 	flag = 1;
 	z = 0;
 	dir = 1; //face in right direction
+  xPos = -5;
 
 	//player character
 	playerCharacter = new component();
@@ -310,9 +320,12 @@ function startLevel(levelNumber) {
         playerCharacter.jumpCooldown = false; //These cooldowns let our system know whether a certain key has recently been
         playerCharacter.leftCooldown = false; //pressed--"false" means that the key is not on cooldown and should be
         playerCharacter.rightCooldown = false;//acknowledged normally.
+  
 	//background
 	background = new component();
-	background.init(canvas.width, canvas.height, `Pictures/background_${levelNumber}.jpg`, 0, 0, "image", WALKING);
+        background2 = new component();
+	background.init(canvas.width, canvas.height, `Pictures/background_${levelNumber}.jpg`, -50, 0, "image", WALKING);
+        background2.init(canvas.width, canvas.height, `Pictures/background_${levelNumber}_reverse.jpg`,850, 0, "image", WALKING);
 
 	//score
 	scoreBoard = new component();
@@ -322,9 +335,18 @@ function startLevel(levelNumber) {
 	coinScoreBoard = new component();
 	coinScoreBoard.init("30px", "Consolas", "black", 240, 40, "text", WALKING);
 
-        //current time left in the given level
-        timeBoard = new component ();
-        timeBoard.init("30px", "Consolas", "black", 410, 40, "text", WALKING);
+  //startArrow
+  startArrow1 = new component();
+  startArrow2 = new component();
+  startArrow3 = new component();
+
+  startArrow1.init(90,70,"Pictures/blackArrow.png",60,125,"image",1);
+  startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
+  startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
+
+  //current time left in the given level
+  timeBoard = new component ();
+  timeBoard.init("30px", "Consolas", "black", 410, 40, "text", WALKING);
 
 	//current level display
 	levelDisplay = new component();
@@ -462,6 +484,7 @@ function component() {
 		this.speedY = 0;
 		this.x = x;
 		this.y = y;
+    this.orignX = x;
 		this.gravity = 1.5;
 		//indicates if the character is on the ground or not
 		this.hitGround = true;
@@ -493,7 +516,26 @@ function component() {
 			this.ctx.fillRect(this.x, this.y, this.width, this.height);
 		}
 	};
-
+  this.moveBackgrounds = function(background2){
+    if(0 <= xPos){
+        xPos += backgroundDx;
+        this.x -= backgroundDx;
+        background2.x -= backgroundDx;
+    }else{
+      backgroundDx = 0;
+    }
+		if(this.x <= -900){this.x = 900;}
+    else if(background2.x <= -900){background2.x = 900;}
+		else if(900 <= this.x){this.x = -900;}
+    else if(900 <= background2.x){background2.x = -900;}
+    else if(900 < Math.abs(this.x)+Math.abs(background2.x)){
+      if(Math.abs(background2.x) < Math.abs(this.x)){
+        this.x += (0 < this.x)?-5:5;
+      }else{
+        background2.x += (0 < background2.x)?-5:5;
+      }
+    }
+	}
 	//enemy character collision function
 	this.crashWith = function(otherobj) {
 		var left = this.x;
@@ -558,6 +600,15 @@ function component() {
 	this.isAlive = function() {
 		return this.alive;
 	}
+  this.setX = function(x){
+    this.x = x;
+  }
+  this.getX = function(){
+    return this.x;
+  }
+  this.getOrignX = function(){
+    return this.orignX;
+  }
 	this.getImgSrc = function(){
 		return this.image.src;
 	}
@@ -685,6 +736,27 @@ function flashCoinScore() {
 	gameArea.coinScoreActiveTime += 150;
 }
 
+
+function flashStartArrow(){
+  switchArrow++;
+  if(switchArrow < 30){
+    startArrow3.setSrc("Pictures/goldArrow.png");
+    startArrow2.setSrc("Pictures/blackArrow.png");
+    startArrow1.setSrc("Pictures/blackArrow.png");
+  }else if(switchArrow < 60){
+    startArrow3.setSrc("Pictures/blackArrow.png");
+    startArrow2.setSrc("Pictures/goldArrow.png");
+  }else if(switchArrow < 90){
+    startArrow2.setSrc("Pictures/blackArrow.png");
+    startArrow1.setSrc("Pictures/goldArrow.png");
+  }else{
+    switchArrow = 0;
+  }
+  startArrow1.setX(startArrow1.getOrignX()-xPos);
+  startArrow2.setX(startArrow2.getOrignX()-xPos);
+  startArrow3.setX(startArrow3.getOrignX()-xPos);
+}
+
 //Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
 function updateGameArea() {
 	//loop for enemy collision
@@ -723,7 +795,8 @@ function updateGameArea() {
 				gameArea.bonusInterval = setInterval(flashScore, 150);
 
 			} else if (playerCharacter.crashWith(enemyCharacters[i])) {
-				gameArea.stop();
+        backgroundDx = 0;
+        gameArea.stop();
 				gameOver();
 			}
 		}
@@ -753,7 +826,9 @@ function updateGameArea() {
 	gameArea.clear();
 
 	//update background
+  background.moveBackgrounds(background2);
 	background.update();
+  background2.update();
 
 	//score update
 	scoreBoard.text = "SCORE: " + score;
@@ -763,13 +838,20 @@ function updateGameArea() {
 	coinScoreBoard.text = "COINS: " + collectedCoins;
 	coinScoreBoard.update();
 
-        //Timer update
-        timeBoard.text = "TIME: " + timeLeft;
-        timeBoard.update();
+  //startArrow
+  flashStartArrow();
+  startArrow1.update();
+  startArrow2.update();
+  startArrow3.update();
+
+
+  //Timer update
+  timeBoard.text = "TIME: " + timeLeft;
+  timeBoard.update();
 
 	//increment frame number for timer
 	incrementFrameNumber(2);
-        incrementTime(2);
+  incrementTime(2);
 
 	//LevelDisplay update
 	levelDisplay.text = "Level " + currentLevel;
@@ -787,7 +869,7 @@ function updateGameArea() {
 
 	//cloud update
 	for (var i = 0; i < clouds.length; i++) {
-		clouds[i].x += 0.5;
+		clouds[i].x += 0.5 - backgroundDx;
 		clouds[i].update();
 	}
 
@@ -811,13 +893,12 @@ function updateGameArea() {
 			//vary the speed of enemy characters if level is 3 or greater
 			if (currentLevel >= 3 && enemyCharacters[i].moveType != FLYING) { //The flying enemies are fast enough, thank you
 				if (currentLevel === 5 && enemyCharacters[i].moveType === REVERSED) {
-					enemyCharacters[i].x -= -4; //These enemies enter from the left
+					enemyCharacters[i].x -= (-4 + backgroundDx); //These enemies enter from the left
 				} else {
-					enemyCharacters[i].x += -4;
+					enemyCharacters[i].x += (-4 - backgroundDx);
 				}
-
 			} else {
-				enemyCharacters[i].x += -2;
+				enemyCharacters[i].x += (-2 - backgroundDx);
 			}
 
 			//This tells bird enemies whether to go up or down
@@ -836,7 +917,8 @@ function updateGameArea() {
 
 		} else { // if dead; enemy will be 'squeezed', fall to the ground and fade away. Feel free to improve by adding further animation.
 			enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
-			enemyCharacters[i].y += 10;
+      enemyCharacters[i].x -= backgroundDx;
+      enemyCharacters[i].y += 10;
 			enemyCharacters[i].alpha += -0.01;
 			if (enemyCharacters[i].alpha < 0) {
 				enemyCharacters[i].alpha = 0;
@@ -849,7 +931,7 @@ function updateGameArea() {
 	//if the coin is not alive and taken by player, make the coin disappear
 	for (var i = 0; i < coins.length; i++) {
 		if(coins[i].isAlive()){
-			coins[i].x += -2;
+			coins[i].x += -2-backgroundDx;
 		}
 		else{
 			coins[i].coinDisappear();
@@ -888,7 +970,7 @@ function stopMove() {
 		playerCharacter.x = gameArea.canvas.width - playerCharacter.width;
 	}
 }
-function moveUp(state) {	
+function moveUp(state) {
 	if(state == "hit"){
 		playerCharacter.speedY = -5;
 		playerCharacter.hitGround = false;
@@ -914,25 +996,40 @@ function moveDown() {
 }
 function moveLeft() {
 	playerCharacter.changeDir(-1);
-	playerCharacter.speedX = -5;
+	//playerCharacter.speedX = -5;
+  backgroundDx = -5;
 }
 
 function moveRight(){
 	playerCharacter.changeDir(1);
-	playerCharacter.speedX = 5;
+	//playerCharacter.speedX = 5;
+  if(xPos <= -5){
+    xPos = 0;
+    background.setX(-50);
+    background2.setX(850);
+  }
+  backgroundDx = 5;
 }
 
 var interval;
 
 function moveLeftMouse() {
 	interval = setInterval(moveLeft, 1);
+  backgroundDx = -5;
 }
 
 function moveRightMouse() {
 	interval = setInterval(moveRight, 1);
-}
+  if(xPos <= -5){
+    xPos = 0;
+    background.setX(-50);
+    background2.setX(850);
+  }
+  backgroundDx = 5;
 
+}
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
+  backgroundDx = 0;
 }
