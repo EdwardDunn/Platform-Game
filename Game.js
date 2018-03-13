@@ -244,6 +244,17 @@ function pauseGame() {
 	gamePaused = !gamePaused;
 }
 
+
+function updateBackgroundDx(){
+  if(keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
+    backgroundDx = -5;
+	}else if(keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
+    backgroundDx = 5;
+	}else{
+      backgroundDx = 0;
+  }
+}
+
 function KeyUp(event) {
 	var key;
 	key = event.which;
@@ -270,7 +281,7 @@ function KeyUp(event) {
 				playerCharacter.speedX = 0;
 			}
 	}
-  backgroundDx = 0;
+  updateBackgroundDx();
 }
 
 
@@ -766,7 +777,6 @@ function updateGameArea() {
 			musicToggled = false;
 		}
 	}
-
 	//when frame number reaches 3000 (point at which obstacles end) end level
 	//check current level, if more than 5 (because there are five levels currently), show game complete modal
 	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
@@ -777,15 +787,15 @@ function updateGameArea() {
 		else startLevel(currentLevel);
 	}
 
-	for (var i = 0; i < enemyCharacters.length; i++) {
-		if (enemyCharacters[i].isAlive()) {
-			if (playerCharacter.jumpsOn(enemyCharacters[i])) {
+	for (var i = 0; i < enemyCharacters.length; i++){
+		if(enemyCharacters[i].isAlive()) {
+			if(playerCharacter.jumpsOn(enemyCharacters[i])){
 				enemyCharacters[i].setAlive(false);
 				incrementScore(100*currentLevel);
 				gameArea.bonusActiveTime = 0;
 				gameArea.bonusInterval = setInterval(flashScore, 150);
 
-			} else if (playerCharacter.crashWith(enemyCharacters[i])) {
+			} else if (playerCharacter.crashWith(enemyCharacters[i])){
         backgroundDx = 0;
         gameArea.stop();
 				gameOver();
@@ -963,7 +973,7 @@ function stopMove() {
 		playerCharacter.x = gameArea.canvas.width - playerCharacter.width;
 	}
 }
-function moveUp(state) {
+function moveUp(state){
 	if(state == "hit"){
 		playerCharacter.speedY = -5;
 		playerCharacter.hitGround = false;
