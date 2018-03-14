@@ -154,6 +154,7 @@ var backgroundDx = 0;
 var xPos = -5;
 var scoreBoard;
 var coinScoreBoard;
+var highscoreBoard;
 
 var startArrow1;
 var startArrow2;
@@ -180,6 +181,7 @@ var gamePaused = false;
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
+var highscore = [0];
 
 function KeyDown(event) {
 	//avoid auto-repeated keydown event
@@ -310,6 +312,9 @@ function initialize_game() {
 
 	startLevel(1);
 }
+var sethighscore=()=>{
+  highscoreBoard.text = "HIGHSCORE:" + Math.max(...highscore);
+};
 
 function startLevel(levelNumber) {
 	//to synchronize the start coordinates of enemy characters
@@ -326,7 +331,7 @@ function startLevel(levelNumber) {
         playerCharacter.jumpCooldown = false; //These cooldowns let our system know whether a certain key has recently been
         playerCharacter.leftCooldown = false; //pressed--"false" means that the key is not on cooldown and should be
         playerCharacter.rightCooldown = false;//acknowledged normally.
-  
+
 	//background
 	background = new component();
   background2 = new component();
@@ -335,11 +340,15 @@ function startLevel(levelNumber) {
 
 	//score
 	scoreBoard = new component();
-	scoreBoard.init("30px", "Consolas", "black", 20, 40, "text", 1);
+	scoreBoard.init("20px", "Consolas", "black", 230, 40, "text", 1);
 
 	//collected Coins
 	coinScoreBoard = new component();
-	coinScoreBoard.init("30px", "Consolas", "black", 240, 40, "text", 1);
+	coinScoreBoard.init("20px", "Consolas", "black", 380, 40, "text", 1);
+
+  //highscore board
+  highscoreBoard = new component();
+  highscoreBoard.init("20px", "Consolas", "black", 20, 40, "text", 1);
 
   //startArrow
   startArrow1 = new component();
@@ -352,11 +361,11 @@ function startLevel(levelNumber) {
 
   //current time left in the given level
   timeBoard = new component ();
-  timeBoard.init("30px", "Consolas", "black", 410, 40, "text", 1);
+  timeBoard.init("20px", "Consolas", "black", 520, 40, "text", 1);
 
 	//current level display
 	levelDisplay = new component();
-	levelDisplay.init("30px", "Consolas", "black", 620, 40, "text", 1);
+	levelDisplay.init("20px", "Consolas", "black", 670, 40, "text", 1);
 
 	//loop for creating new enemy characters setting a random x coordinate for each
 	for (var i = 0; i < 100; i++) {
@@ -645,9 +654,17 @@ function component() {
 	}
 }
 
+
+
 function gameOver() {
 	interval && clearInterval(interval);
 	state = 'game-over';
+
+  //adding score to list of highscores;
+  if(Math.max(...highscore)<score)
+  {
+    highscore.push(score);
+  }
 	var modal = document.getElementById('gameOverModal');
 	modal.style.display = "block";
 
@@ -834,6 +851,8 @@ function updateGameArea() {
 	//collected coins update
 	coinScoreBoard.text = "COINS: " + collectedCoins;
 	coinScoreBoard.update();
+  sethighscore();
+  highscoreBoard.update();
 
   //startArrow
   flashStartArrow();
@@ -983,7 +1002,7 @@ function moveUp(state) {
 			jump.load();
 		}
 	}
-	else if(playerCharacter.doubleJumpAllowed == true){ /* Currently doesn't do anything, since the initial UP/W 
+	else if(playerCharacter.doubleJumpAllowed == true){ /* Currently doesn't do anything, since the initial UP/W
      *      key logic won't allow for the moveUP function to be called. */
 		playerCharacter.speedY = -7;
 		playerCharacter.doubleJumpAllowed = false;
