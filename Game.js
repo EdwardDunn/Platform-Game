@@ -13,7 +13,9 @@ const userKeys = {
     LEFT: 37,
     UP: 38,
     RIGHT: 39,
+    DOWN: 40,
     W: 87,
+    S: 83,
     A: 65,
     D: 68,
     SPACE: 32,
@@ -170,9 +172,11 @@ var keysPressed = {
 	LEFT: false,
 	UP: false,
 	RIGHT: false,
+	DOWN: false,
 	P: false,
 	M: false,
 	W: false,
+	S: false,
 	A: false,
 	D: false
 };
@@ -192,6 +196,10 @@ function KeyDown(event) {
 	console.log("key: " + key);
 	keysPressed[key] = true;
 
+	if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown == false && playerCharacter.hitGround) {
+		duck();
+			playerCharacter.duckCooldown = true;
+	}
 	if ((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown == false) {
 		moveLeft();
                 playerCharacter.leftCooldown = true;
@@ -200,7 +208,7 @@ function KeyDown(event) {
 		moveRight();
                 playerCharacter.rightCooldown = true;
 	}
-	if ((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround) {
+	if ((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround && playerCharacter.duckCooldown == false) {
             if(playerCharacter.jumpCooldown == false){
                     moveUp();
             }
@@ -271,6 +279,13 @@ function KeyUp(event) {
 				playerCharacter.speedX = 0;
 			}
                         playerCharacter.rightCooldown = false;
+        	break;
+        case userKeys.DOWN:
+        case userKeys.S:
+        	if(playerCharacter.hitGround && playerCharacter.duckCooldown == true){//this if statement is used so that the playercharacter doesnt increase in size when DOWN or S is pressed while character is in the air
+        		playerCharacter.height = playerCharacter.height * 2;	
+        		playerCharacter.duckCooldown = false;
+        	}
 	}
   backgroundDx = 0;
 }
@@ -326,7 +341,8 @@ function startLevel(levelNumber) {
         playerCharacter.jumpCooldown = false; //These cooldowns let our system know whether a certain key has recently been
         playerCharacter.leftCooldown = false; //pressed--"false" means that the key is not on cooldown and should be
         playerCharacter.rightCooldown = false;//acknowledged normally.
-  
+  		playerCharacter.duckCooldown = false;
+
 	//background
 	background = new component();
   background2 = new component();
@@ -1008,6 +1024,10 @@ function moveRight(){
     background2.setX(850);
   }
   backgroundDx = 5;
+}
+
+function duck(){
+	playerCharacter.height = playerCharacter.height / 2;
 }
 
 var interval;
