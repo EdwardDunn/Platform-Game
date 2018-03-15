@@ -688,6 +688,7 @@ function gameComplete() {
 	var modal = document.getElementById('gameCompleteModal');
 	modal.style.display = "block";
 	gameArea.stop();
+  highscore.push(score);
 
 	if (!musicMuted) {
 		audio = document.getElementById("bgm");
