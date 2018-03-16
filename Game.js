@@ -153,6 +153,7 @@ var backgroundDx = 0;
 var xPos = -5;
 var scoreBoard;
 var coinScoreBoard;
+var highscoreBoard;
 
 var startArrow1;
 var startArrow2;
@@ -178,6 +179,9 @@ var gamePaused = false;
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
+
+var highscore = [0];
+
 const coinWidth = 40;
 const LEVEL_COMPLETION_TIME = 3000;
 const MAX_VARIABLES = Math.floor(LEVEL_COMPLETION_TIME / 50); //Each of our arrays should be able to contain a maximum of 2 objects/second.
@@ -185,6 +189,7 @@ const FLYING = 0; //This movement type goes up and down as it travels, going fro
 const WALKING = 1; //This movement type goes in a straight line from right to left--or, in some cases, doesn't move.
 const ROTATING = 2; //This movement type rotates in two dimensions, traveling from right to left.
 const REVERSED = 3; //This movement type travels from left to right.
+
 
 function KeyDown(event) {
 	//avoid auto-repeated keydown event
@@ -316,6 +321,9 @@ function initialize_game() {
 
 	startLevel(1);
 }
+var sethighscore=()=>{
+  highscoreBoard.text = "HIGHSCORE:" + Math.max(...highscore);
+};
 
 function startLevel(levelNumber) {
 	//to synchronize the start coordinates of enemy characters
@@ -340,11 +348,15 @@ function startLevel(levelNumber) {
 
 	//score
 	scoreBoard = new component();
-	scoreBoard.init("30px", "Consolas", "black", 20, 40, "text", WALKING);
+	scoreBoard.init("20px", "Consolas", "black", 230, 40, "text", WALKING);
 
 	//collected Coins
 	coinScoreBoard = new component();
-	coinScoreBoard.init("30px", "Consolas", "black", 240, 40, "text", WALKING);
+	coinScoreBoard.init("20px", "Consolas", "black", 380, 40, "text", WALKING);
+
+  //highscore board
+  highscoreBoard = new component();
+  highscoreBoard.init("20px", "Consolas", "black", 20, 40, "text", WALKING);
 
   //startArrow
   startArrow1 = new component();
@@ -357,11 +369,11 @@ function startLevel(levelNumber) {
 
   //current time left in the given level
   timeBoard = new component ();
-  timeBoard.init("30px", "Consolas", "black", 410, 40, "text", WALKING);
+  timeBoard.init("20px", "Consolas", "black", 520, 40, "text", WALKING);
 
 	//current level display
 	levelDisplay = new component();
-	levelDisplay.init("30px", "Consolas", "black", 620, 40, "text", WALKING);
+	levelDisplay.init("20px", "Consolas", "black", 670, 40, "text", WALKING);
 
 	//Loop for creating new enemy characters setting a random x coordinate for each. Creates a maximum of 2 enemies/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
@@ -391,7 +403,7 @@ function startLevel(levelNumber) {
 		let cloud = LEVEL_CLOUDS[levelNumber - 1];
 		clouds[i].init(cloud.x, cloud.y, `Pictures/${cloud.name}.png`, x, 40, "image", WALKING);
 	}
-        
+
         //Generates new coins at random positions. Creates a maximum of 2/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
 		var x = Math.floor(((Math.random() + 1) * gameArea.canvas.width) + (i * gameArea.canvas.width / 2));
@@ -659,9 +671,17 @@ function component() {
 	}
 }
 
+
+
 function gameOver() {
 	interval && clearInterval(interval);
 	state = 'game-over';
+
+  //adding score to list of highscores;
+  if(Math.max(...highscore)<score)
+  {
+    highscore.push(score);
+  }
 	var modal = document.getElementById('gameOverModal');
 	modal.style.display = "block";
 
@@ -685,6 +705,7 @@ function gameComplete() {
 	var modal = document.getElementById('gameCompleteModal');
 	modal.style.display = "block";
 	gameArea.stop();
+  highscore.push(score);
 
 	if (!musicMuted) {
 		audio = document.getElementById("bgm");
@@ -847,6 +868,8 @@ function updateGameArea() {
 	//collected coins update
 	coinScoreBoard.text = "COINS: " + collectedCoins;
 	coinScoreBoard.update();
+  sethighscore();
+  highscoreBoard.update();
 
   //startArrow
   flashStartArrow();
