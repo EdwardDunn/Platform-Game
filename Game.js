@@ -23,72 +23,71 @@ const userKeys = {
     M: 77
 };
 
-const LEVEL_ENEMIES = [
+const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
 	[{
 		name: "enemy2",
-		x: 80,
-		y: 60,
+                width: 44,
+		height: 36,
 		y2: 200
 	}, {
-		name: "zombie"
-,
-		x: 40,
-		y: 50,
-		y2: 200
+		name: "zombie",
+                width: 40,
+		height: 45,
+		y2: 205
 	}],
 	[{
 		name: "enemy2",
-		x: 80,
-		y: 60,
+                width: 44,
+		height: 36,
 		y2: 200
 	}, {
 		name: "bad_guy",
-		x: 60,
-		y: 50,
-		y2: 200
+                width: 60,
+		height: 53,
+		y2: 197
 	}],
 	[{
 		name: "enemy2",
-		x: 80,
-		y: 60,
+                width: 44,
+		height: 36,
 		y2: 200
 	}, {
 		name: "skull_baddie",
-		x: 60,
-		y: 50,
+                width: 60,
+		height: 50,
 		y2: 200
 	}],
 	[{
 		name: "enemy2",
-		x: 80,
-		y: 60,
+                width: 44,
+		height: 36,
 		y2: 200
 	}, {
 		name: "newchar",
-		x: 120,
-		y: 120,
-		y2: 170
+                width: 60,
+		height: 37,
+		y2: 220
 	}],
 	[{
 		name: "enemy2",
-		x: 80,
-		y: 60,
+                width: 44,
+		height: 36,
 		y2: 200
 	}, {
 		name: "newchar",
-		x: 120,
-		y: 120,
-		y2: 170
+                width: 60,
+		height: 37,
+		y2: 220
 	}, {
 		name: "sword",
-		x: 80,
-		y: 14,
+                width: 80,
+		height: 14,
 		y2: 170
 	}, {
 		name: "enemyGuy",
-		x: 80,
-		y: 73,
-		y2: 190
+                width: 70,
+		height: 60,
+		y2: 185
 	}]
 ];
 
@@ -110,39 +109,37 @@ const LEVEL_PLAYER_CHARACTERS = [{
 	y2: 120
 }, {
 	name: "ninja",
-	x2: 450,
+	x2: 390, //Ideally this should call on the canvas width to place the character in the center--however, canvas.width is only created later.
 	y2: 120
 }]
 
 const LEVEL_CLOUDS = [{
 	name: "cloud",
-	x: 60,
-	y: 34
+        width: 60,
+	height: 34
 }, {
 	name: "cloud2",
-	x: 65,
-	y: 50
+        width: 65,
+	height: 50
 }, {
 	name: "cloud3",
-	x: 60,
-	y: 40
+        width: 60,
+	height: 40
 }, {
 	name: "cloud3",
-	x: 60,
-	y: 40
+        width: 60,
+	height: 40
 }, {
 	name: "cloud3",
-	x: 60,
-	y: 40
+        width: 60,
+	height: 40
 }]
 //END CONFIG
 
-//flag to take care of y axis cordinate increase or decrease
-//z to set a interval at which flag is changed
-var flag = 1;
+//flyUp says whether FLYING enemies are flying up or down--up if true, down if false.
+//z sets the interval at which flyUp changes.
+var flyUp = false;
 var z = 0;
-// Add state to check if user is playing, complete or game-over
-var state = 'instructions';
 
 var currentLevel = 1;
 var collectedCoins = 0;
@@ -341,11 +338,11 @@ var sethighscore=()=>{
 };
 
 function startLevel(levelNumber) {
-	//to synchronize the start coordinates of enemy characters
-	flag = 1;
+	//Synchronizes the start coordinates of enemy characters
+	flyUp = false;
 	z = 0;
-	dir = 1; //face in right direction
-  xPos = -5;
+	dir = 1; //face to the right
+        xPos = -5;
 
 	//player character
 	playerCharacter = new component();
@@ -354,7 +351,7 @@ function startLevel(levelNumber) {
         playerCharacter.jumpCooldown = false; //These cooldowns let our system know whether a certain key has recently been
         playerCharacter.leftCooldown = false; //pressed--"false" means that the key is not on cooldown and should be
         playerCharacter.rightCooldown = false;//acknowledged normally.
-  		  playerCharacter.duckCooldown = false;
+  	playerCharacter.duckCooldown = false;
 
 	//background
 	background = new component();
@@ -370,22 +367,22 @@ function startLevel(levelNumber) {
 	coinScoreBoard = new component();
 	coinScoreBoard.init("20px", "Consolas", "black", 380, 40, "text", WALKING);
 
-  //highscore board
-  highscoreBoard = new component();
-  highscoreBoard.init("20px", "Consolas", "black", 20, 40, "text", WALKING);
+        //highscore board
+        highscoreBoard = new component();
+        highscoreBoard.init("20px", "Consolas", "black", 20, 40, "text", WALKING);
 
-  //startArrow
-  startArrow1 = new component();
-  startArrow2 = new component();
-  startArrow3 = new component();
+        //startArrow
+        startArrow1 = new component();
+        startArrow2 = new component();
+        startArrow3 = new component();
 
-  startArrow1.init(90,70,"Pictures/blackArrow.png",60,125,"image",1);
-  startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
-  startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
+        startArrow1.init(90,70,"Pictures/blackArrow.png",60,125,"image",1);
+        startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
+        startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
 
-  //current time left in the given level
-  timeBoard = new component ();
-  timeBoard.init("20px", "Consolas", "black", 520, 40, "text", WALKING);
+        //current time left in the given level
+        timeBoard = new component ();
+        timeBoard.init("20px", "Consolas", "black", 520, 40, "text", WALKING);
 
 	//current level display
 	levelDisplay = new component();
@@ -393,40 +390,40 @@ function startLevel(levelNumber) {
 
 	//Loop for creating new enemy characters setting a random x coordinate for each. Creates a maximum of 2 enemies/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
-		enemyCharacters[i] = new component();
+            enemyCharacters[i] = new component();
 
-		var x = Math.floor((Math.random() * (i * (canvas.width / 2))) + ((canvas.width / 2) * i + (canvas.width * 1.25)));
+            var x = Math.floor((Math.random() * (i * (canvas.width / 2))) + ((canvas.width / 2) * i + (canvas.width * 1.25)));
 
-		//moveType describes the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)...
-		//when you want to add a new type of enemy, increment the number inside the Math.random and
-		//insert in the correct case the enemy
-		var moveType = Math.floor(Math.random() * (LEVEL_ENEMIES[levelNumber - 1].length));
+            //moveType describes the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)...
+            //when you want to add a new type of enemy, increment the number inside the Math.random and
+            //insert in the correct case the enemy
+            var moveType = Math.floor(Math.random() * (LEVEL_ENEMIES[levelNumber - 1].length));
 
-		let enemy = LEVEL_ENEMIES[levelNumber - 1][moveType];
-		if (moveType === REVERSED) {
-			//These enemies enter offscreen from the left, and have roughly the reverse of the normal formula.
-			x = Math.floor(Math.random() * (-i * (canvas.width / 2)));
-		}
-		enemyCharacters[i].init(enemy.x, enemy.y, `Pictures/${enemy.name}.png`, x, enemy.y2, "image", moveType);
-
+            let enemy = LEVEL_ENEMIES[levelNumber - 1][moveType];
+            if (moveType === REVERSED) {
+		//These enemies enter offscreen from the left, and have roughly the reverse of the normal formula.
+		x = Math.floor(Math.random() * (-i * (canvas.width / 2)));
+            }
+            
+            enemyCharacters[i].init(enemy.width, enemy.height, `Pictures/${enemy.name}.png`, x, enemy.y2, "image", moveType);
 	}
 
 	//Loop for creating new clouds setting a random x coordinate for each. Creates a maximum of 2 clouds/second.
         for (var i = 0; i < MAX_VARIABLES; i++) {
-		var x = Math.floor((Math.random() * (900 - i * 300) + 1));
-		clouds[i] = new component();
+            var x = Math.floor((Math.random() * (900 - i * 300) + 1));
+            clouds[i] = new component();
 
-		let cloud = LEVEL_CLOUDS[levelNumber - 1];
-		clouds[i].init(cloud.x, cloud.y, `Pictures/${cloud.name}.png`, x, 40, "image", WALKING);
+            let cloud = LEVEL_CLOUDS[levelNumber - 1];
+            clouds[i].init(cloud.width, cloud.height, `Pictures/${cloud.name}.png`, x, 40, "image", WALKING);
 	}
 
         //Generates new coins at random positions. Creates a maximum of 2/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
-		var x = Math.floor(((Math.random() + 1) * gameArea.canvas.width) + (i * gameArea.canvas.width / 2));
-		var y = Math.floor(Math.random() * 150 + 30); //150 is canvas height - baseline(150) - char height - 30 (space on top)
+            var x = Math.floor(((Math.random() + 1) * gameArea.canvas.width) + (i * gameArea.canvas.width / 2));
+            var y = Math.floor(Math.random() * 150 + 30); //150 is canvas height - baseline(150) - char height - 30 (space on top)
 
-		coins[i] = new component();
-		coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", WALKING);
+            coins[i] = new component();
+            coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", WALKING);
 	}
 
 	//call start function
@@ -450,7 +447,6 @@ var gameArea = {
 		this.bonusActiveTime = 0;
 		this.coinScoreActiveTime = 0;
 		this.coinScoreInterval = null;
-
 	},
 
 	start: function() {
@@ -460,7 +456,6 @@ var gameArea = {
 		var modals = document.getElementsByClassName('modal');
 		for (var i = 0; i < modals.length; i++) {
 			var modal = modals[i];
-
 			modal.style.display = "none";
 		}
 
@@ -523,7 +518,7 @@ function component() {
 		this.speedY = 0;
 		this.x = x;
 		this.y = y;
-    this.orignX = x;
+                this.orignX = x;
 		this.gravity = 1.5;
 		//indicates if the character is on the ground or not
 		this.hitGround = true;
@@ -597,16 +592,15 @@ function component() {
 
 	this.jumpsOn = function(otherobj) {
 		var bottomY = this.y + (this.height);
-		var middleX = this.x + (this.width / 2);
+		var farX = this.x + this.width;
 		var otherleft = otherobj.x;
 		var otherright = otherobj.x + (otherobj.width);
 		var othertop = otherobj.y;
-		var otherbottom = otherobj.y + (otherobj.height);
 		var smoosh = false;
-		if ((bottomY > othertop - 15) &&
-			(bottomY < otherbottom - (otherobj.height - 10)) &&
-			(middleX > otherleft) &&
-			(middleX < otherright)) {
+		if ((bottomY > othertop - 5) &&
+			(bottomY < (othertop + 20)) &&
+			(farX > otherleft) &&
+			(this.x < otherright)) {
 			smoosh = true;
 			//When the player smooshes an enemy, we send them up
 			moveUp("hit");
@@ -620,7 +614,6 @@ function component() {
 		this.speedY += this.gravity; //increment the y speed with the gravity
 		this.x += this.speedX;
 		this.hitBottom();
-		//console.log(`${this.x},${this.y}`);
 	};
 
 	//set floor on canvas
@@ -691,9 +684,8 @@ function component() {
 
 function gameOver() {
 	interval && clearInterval(interval);
-	state = 'game-over';
 
-  //adding score to list of highscores;
+  //adding score to list of highscores
   if(Math.max(...highscore)<score)
   {
     highscore.push(score);
@@ -717,7 +709,6 @@ function restartGame() {
 }
 
 function gameComplete() {
-	state = 'complete';
 	var modal = document.getElementById('gameCompleteModal');
 	modal.style.display = "block";
 	gameArea.stop();
@@ -927,13 +918,12 @@ function updateGameArea() {
 	correctCharacterPos();
 	playerCharacter.update();
 
-	//if statement to reverse the flag so that the y cordinate of birds would be changed
-	//z keeps the track and change flag after every 35 iteration
+	//After every 35 iterations, flyUp flips, so that FLYING enemies start moving in the opposite direction.
 	if (z == 35) {
-		flag = !flag;
+		flyUp = !flyUp;
 		z = 0;
 	}
-	//z increased in every iteration
+	//z increases in every iteration
 	z++;
 	//loop to set speed of enemy characters
 	for (var i = 0; i < enemyCharacters.length; i++) {
@@ -952,10 +942,10 @@ function updateGameArea() {
 
 			//This tells bird enemies whether to go up or down
 			if (enemyCharacters[i].moveType === FLYING) {
-				if (flag == 1) {
-					enemyCharacters[i].y += -3;
+				if (flyUp == true) {
+					enemyCharacters[i].y += 3;
 				} else {
-					enemyCharacters[i].y += +3;
+					enemyCharacters[i].y += -3;
 				}
 			}
 
@@ -966,8 +956,8 @@ function updateGameArea() {
 
 		} else { // if dead; enemy will be 'squeezed', fall to the ground and fade away. Feel free to improve by adding further animation.
 			enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
-      enemyCharacters[i].x -= backgroundDx;
-      enemyCharacters[i].y += 10;
+                        enemyCharacters[i].x -= backgroundDx;
+                        enemyCharacters[i].y += 10;
 			enemyCharacters[i].alpha += -0.01;
 			if (enemyCharacters[i].alpha < 0) {
 				enemyCharacters[i].alpha = 0;
