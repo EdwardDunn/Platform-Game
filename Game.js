@@ -5,6 +5,7 @@ New levels can be added by:
 - Adding an extra object to the array LEVEL_PLAYER_CHARACTERS
 - Adding an extra object to the array LEVEL_CLOUDS
 - Making a new background or copying an existing one and incrementing the number by 1
+- Increasing totalLevels variable by 1
 Author: Open Source - Contributor list can be seen in GitHub
 */
 
@@ -25,66 +26,66 @@ const userKeys = {
 
 const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
 	[{
-		name: "enemy2",
+		name: "FloatingFish",
                 width: 44,
 		height: 36,
 		y2: 200
 	}, {
-		name: "zombie",
+		name: "Zombie",
                 width: 40,
 		height: 45,
 		y2: 205
 	}],
 	[{
-		name: "enemy2",
+		name: "FloatingFish",
                 width: 44,
 		height: 36,
 		y2: 200
 	}, {
-		name: "bad_guy",
+		name: "BlackBlob",
                 width: 60,
 		height: 53,
 		y2: 197
 	}],
 	[{
-		name: "enemy2",
+		name: "FloatingFish",
                 width: 44,
 		height: 36,
 		y2: 200
 	}, {
-		name: "skull_baddie",
+		name: "SlidingSkull",
                 width: 60,
 		height: 50,
 		y2: 200
 	}],
 	[{
-		name: "enemy2",
+		name: "FloatingFish",
                 width: 44,
 		height: 36,
 		y2: 200
 	}, {
-		name: "newchar",
+		name: "CyclopsCrab",
                 width: 60,
 		height: 37,
 		y2: 220
 	}],
 	[{
-		name: "enemy2",
+		name: "FloatingFish",
                 width: 44,
 		height: 36,
 		y2: 200
 	}, {
-		name: "newchar",
+		name: "CyclopsCrab",
                 width: 60,
 		height: 37,
 		y2: 220
 	}, {
-		name: "sword",
+		name: "SpinningSword",
                 width: 80,
 		height: 14,
 		y2: 170
 	}, {
-		name: "enemyGuy",
+		name: "ScarletStabber",
                 width: 70,
 		height: 60,
 		y2: 185
@@ -136,12 +137,21 @@ const LEVEL_CLOUDS = [{
 }]
 //END CONFIG
 
+const totalLevels = 5; //This constant is very important--it tells the game how many levels it has.
+const coinWidth = 40;
+const LEVEL_COMPLETION_TIME = 3000;
+const MAX_VARIABLES = Math.floor(LEVEL_COMPLETION_TIME / 50); //Each of our arrays should be able to contain a maximum of 2 objects/second.
+const FLYING = 0; //This movement type goes up and down as it travels, going from right to left.
+const WALKING = 1; //This movement type goes in a straight line from right to left--or, in some cases, doesn't move.
+const ROTATING = 2; //This movement type rotates in two dimensions, traveling from right to left.
+const REVERSED = 3; //This movement type travels from left to right.
+
 //flyUp says whether FLYING enemies are flying up or down--up if true, down if false.
 //z sets the interval at which flyUp changes.
 var flyUp = false;
 var z = 0;
 
-var currentLevel = 1;
+var currentLevel;
 var collectedCoins = 0;
 var timeLeft; //Says how much time is left in the level--will be calculated based off of LEVEL_COMPLETION_TIME later.
 var score = 0;
@@ -181,15 +191,7 @@ let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
 
-var highscore = [0];
-
-const coinWidth = 40;
-const LEVEL_COMPLETION_TIME = 3000;
-const MAX_VARIABLES = Math.floor(LEVEL_COMPLETION_TIME / 50); //Each of our arrays should be able to contain a maximum of 2 objects/second.
-const FLYING = 0; //This movement type goes up and down as it travels, going from right to left.
-const WALKING = 1; //This movement type goes in a straight line from right to left--or, in some cases, doesn't move.
-const ROTATING = 2; //This movement type rotates in two dimensions, traveling from right to left.
-const REVERSED = 3; //This movement type travels from left to right.
+var highscore = 0;
 
 
 function KeyDown(event) {
@@ -319,7 +321,8 @@ function showInstructions(){
 }
 
 function initialize_game() {
-	currentLevel = 1;
+	//currentLevel = 1;
+        currentLevel = 5;
 	collectedCoins = 0;
         score = 0;
 
@@ -331,13 +334,10 @@ function initialize_game() {
 		audio.load();
 	}
 
-	startLevel(1);
+	startLevel();
 }
-var sethighscore=()=>{
-  highscoreBoard.text = "HIGHSCORE:" + Math.max(...highscore);
-};
 
-function startLevel(levelNumber) {
+function startLevel() {
 	//Synchronizes the start coordinates of enemy characters
 	flyUp = false;
 	z = 0;
@@ -346,7 +346,7 @@ function startLevel(levelNumber) {
 
 	//player character
 	playerCharacter = new component();
-	let char = LEVEL_PLAYER_CHARACTERS[levelNumber - 1];
+	let char = LEVEL_PLAYER_CHARACTERS[currentLevel - 1];
 	playerCharacter.init(60, 70, `Pictures/${char.name}.png`, char.x2, char.y2, "image", WALKING, undefined, char.name);
         playerCharacter.jumpCooldown = false; //These cooldowns let our system know whether a certain key has recently been
         playerCharacter.leftCooldown = false; //pressed--"false" means that the key is not on cooldown and should be
@@ -356,8 +356,8 @@ function startLevel(levelNumber) {
 	//background
 	background = new component();
         background2 = new component();
-	background.init(canvas.width, canvas.height, `Pictures/background_${levelNumber}.jpg`, -50, 0, "image", WALKING);
-        background2.init(canvas.width, canvas.height, `Pictures/background_${levelNumber}_reverse.jpg`,850, 0, "image", WALKING);
+	background.init(canvas.width, canvas.height, `Pictures/background_${currentLevel}.jpg`, -50, 0, "image", WALKING);
+        background2.init(canvas.width, canvas.height, `Pictures/background_${currentLevel}_reverse.jpg`,850, 0, "image", WALKING);
 
 	//score
 	scoreBoard = new component();
@@ -370,6 +370,7 @@ function startLevel(levelNumber) {
         //highscore board
         highscoreBoard = new component();
         highscoreBoard.init("20px", "Consolas", "black", 20, 40, "text", WALKING);
+        highscoreBoard.text = "HIGHSCORE:" + highscore;
 
         //startArrow
         startArrow1 = new component();
@@ -397,9 +398,9 @@ function startLevel(levelNumber) {
             //moveType describes the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)...
             //when you want to add a new type of enemy, increment the number inside the Math.random and
             //insert in the correct case the enemy
-            var moveType = Math.floor(Math.random() * (LEVEL_ENEMIES[levelNumber - 1].length));
+            var moveType = Math.floor(Math.random() * (LEVEL_ENEMIES[currentLevel - 1].length));
 
-            let enemy = LEVEL_ENEMIES[levelNumber - 1][moveType];
+            let enemy = LEVEL_ENEMIES[currentLevel - 1][moveType];
             if (moveType === REVERSED) {
 		//These enemies enter offscreen from the left, and have roughly the reverse of the normal formula.
 		x = Math.floor(Math.random() * (-i * (canvas.width / 2)));
@@ -410,10 +411,9 @@ function startLevel(levelNumber) {
 
 	//Loop for creating new clouds setting a random x coordinate for each. Creates a maximum of 2 clouds/second.
         for (var i = 0; i < MAX_VARIABLES; i++) {
-            var x = Math.floor((Math.random() * (900 - i * 300) + 1));
+            var x = Math.floor((Math.random() * (-600 + i * 450) + 1));
             clouds[i] = new component();
-
-            let cloud = LEVEL_CLOUDS[levelNumber - 1];
+            let cloud = LEVEL_CLOUDS[currentLevel - 1];
             clouds[i].init(cloud.width, cloud.height, `Pictures/${cloud.name}.png`, x, 40, "image", WALKING);
 	}
 
@@ -510,7 +510,7 @@ function component() {
 
 		this.width = width;
 		this.initHeight = height; // to get squeezed height later
-		this.alpha = 1;
+		this.alpha = 1; //This variable decrees how much an object is "faded"--1 is fully displayed, 0 is gone.
 		this.height = height;
 
 		//change components position
@@ -550,6 +550,8 @@ function component() {
 			this.ctx.fillRect(this.x, this.y, this.width, this.height);
 		}
 	};
+        
+        //This function manages the scrolling backgrounds
   this.moveBackgrounds = function(background2){
     if(0 <= xPos){
         xPos += backgroundDx;
@@ -570,6 +572,7 @@ function component() {
       }
     }
 	}
+        
 	//enemy character collision function
 	this.crashWith = function(otherobj) {
 		var left = this.x;
@@ -590,6 +593,7 @@ function component() {
 		return crash;
 	};
 
+//This function tells us whether the player character (or any other object) has jumped on another object
 	this.jumpsOn = function(otherobj) {
 		var bottomY = this.y + (this.height);
 		var farX = this.x + this.width;
@@ -632,21 +636,28 @@ function component() {
 	this.isAlive = function() {
 		return this.alive;
 	}
+        
   this.setX = function(x){
     this.x = x;
   }
+  
   this.getX = function(){
     return this.x;
   }
+  
   this.getOrignX = function(){
     return this.orignX;
   }
+  
 	this.getImgSrc = function(){
 		return this.image.src;
 	}
+        
 	this.setSrc = function(src){
 		this.image.src = src;
 	}
+        
+        //This is a rotation function for coins only, allowing them to rotate in 3 dimensions
 	this.rotation = function(){
 		if(this.rotationCmp == 0){
 			this.setSrc("Pictures/coin.png");
@@ -686,9 +697,8 @@ function gameOver() {
 	interval && clearInterval(interval);
 
   //adding score to list of highscores
-  if(Math.max(...highscore)<score)
-  {
-    highscore.push(score);
+  if(highscore < score){
+    highscore = score;
   }
 	var modal = document.getElementById('gameOverModal');
 	modal.style.display = "block";
@@ -712,7 +722,9 @@ function gameComplete() {
 	var modal = document.getElementById('gameCompleteModal');
 	modal.style.display = "block";
 	gameArea.stop();
-  highscore.push(score);
+        if(highscore < score){
+            highscore = score;
+        }
 
 	if (!musicMuted) {
 		audio = document.getElementById("bgm");
@@ -818,24 +830,26 @@ function updateGameArea() {
 	//check current level, if more than 5 (because there are five levels currently), show game complete modal
 	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
 		gameArea.stop();
-		currentLevel++;
 		console.log(currentLevel);
-		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
-		else startLevel(currentLevel);
+		if (currentLevel = totalLevels) gameComplete();
+		else{
+                    currentLevel++;
+                    startLevel();
+                }
 	}
 
 	for (var i = 0; i < enemyCharacters.length; i++){
 		if(enemyCharacters[i].isAlive()) {
 			if(playerCharacter.jumpsOn(enemyCharacters[i])){
-				enemyCharacters[i].setAlive(false);
-				incrementScore(100*currentLevel);
-				gameArea.bonusActiveTime = 0;
-				gameArea.bonusInterval = setInterval(flashScore, 150);
+                            enemyCharacters[i].setAlive(false);
+                            incrementScore(100*currentLevel);
+                            gameArea.bonusActiveTime = 0;
+                            gameArea.bonusInterval = setInterval(flashScore, 150);
 
 			} else if (playerCharacter.crashWith(enemyCharacters[i])){
-        backgroundDx = 0;
-        gameArea.stop();
-				gameOver();
+                            backgroundDx = 0;
+                            gameArea.stop();
+                            gameOver();
 			}
 		}
 	}
@@ -864,9 +878,9 @@ function updateGameArea() {
 	gameArea.clear();
 
 	//update background
-  background.moveBackgrounds(background2);
+        background.moveBackgrounds(background2);
 	background.update();
-  background2.update();
+        background2.update();
 
 	//score update
 	scoreBoard.text = "SCORE: " + score;
@@ -875,23 +889,22 @@ function updateGameArea() {
 	//collected coins update
 	coinScoreBoard.text = "COINS: " + collectedCoins;
 	coinScoreBoard.update();
-  sethighscore();
-  highscoreBoard.update();
+        highscoreBoard.update();
 
-  //startArrow
-  flashStartArrow();
-  startArrow1.update();
-  startArrow2.update();
-  startArrow3.update();
+        //startArrow
+        flashStartArrow();
+        startArrow1.update();
+        startArrow2.update();
+        startArrow3.update();
 
 
-  //Timer update
-  timeBoard.text = "TIME: " + timeLeft;
-  timeBoard.update();
+        //Timer update
+        timeBoard.text = "TIME: " + timeLeft;
+        timeBoard.update();
 
 	//increment frame number for timer
-	incrementFrameNumber(2);
-  incrementTime(2);
+        incrementFrameNumber(2);
+        incrementTime(2);
 
 	//LevelDisplay update
 	levelDisplay.text = "Level " + currentLevel;
@@ -907,11 +920,13 @@ function updateGameArea() {
 		coins[i].update();
 	}
 
-	//cloud update
-	for (var i = 0; i < clouds.length; i++) {
-		clouds[i].x += 0.5 - backgroundDx;
-		clouds[i].update();
-	}
+	//Cloud update--doesn't display on level 5, which is indoors
+        if(currentLevel != 5){
+            for (var i = 0; i < clouds.length; i++) {
+                    clouds[i].x += 0.5 - backgroundDx;
+                    clouds[i].update();
+            }
+        }
 
 	//player character update
 	playerCharacter.newPos();
