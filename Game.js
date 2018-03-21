@@ -134,9 +134,11 @@ const LEVEL_CLOUDS = [{
 	name: "cloud3",
         width: 60,
 	height: 40
-}]
+}];
+
 //END CONFIG
 
+const font = "Share Tech Mono";
 const font = "Share Tech Mono";
 const totalLevels = 5; //This constant is very important--it tells the game how many levels it has.
 const coinWidth = 40;
