@@ -191,7 +191,7 @@ let dir; // which way character faces. 1 is right, -1 is left
 var highscore = [0];
 
 const coinWidth = 40;
-const LEVEL_COMPLETION_TIME = 3000;
+const LEVEL_COMPLETION_TIME = 300;
 const MAX_VARIABLES = Math.floor(LEVEL_COMPLETION_TIME / 50); //Each of our arrays should be able to contain a maximum of 2 objects/second.
 const FLYING = 0; //This movement type goes up and down as it travels, going from right to left.
 const WALKING = 1; //This movement type goes in a straight line from right to left--or, in some cases, doesn't move.
@@ -207,7 +207,7 @@ function KeyDown(event) {
 
 	var key;
 	key = event.which;
-	
+
 	keysPressed[key] = true;
 
 	if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown == false && playerCharacter.hitGround) {
@@ -308,7 +308,7 @@ function KeyUp(event) {
         case userKeys.DOWN:
         case userKeys.S:
         	if(playerCharacter.hitGround && playerCharacter.duckCooldown == true){//this if statement is used so that the playercharacter doesnt increase in size when DOWN or S is pressed while character is in the air
-        		playerCharacter.height = playerCharacter.height * 2;	
+        		playerCharacter.height = playerCharacter.height * 2;
         		playerCharacter.duckCooldown = false;
         	}
 	}
@@ -843,7 +843,12 @@ function updateGameArea() {
 		gameArea.stop();
 		currentLevel++;
 		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
-		else startLevel(currentLevel);
+		else {
+      // var modal = document.getElementById('levelTransitionModal');
+    	// modal.style.display = "block";
+      console.log('waiting');
+      window.setTimeout(resumeGame, 3000);
+    }
 	}
 
 	for (var i = 0; i < enemyCharacters.length; i++){
@@ -1103,4 +1108,8 @@ function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
   backgroundDx = 0;
+}
+function resumeGame() {
+  console.log('done waiting!');
+  startLevel(currentLevel);
 }
