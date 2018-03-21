@@ -148,8 +148,10 @@ var state = 'instructions';
 
 var currentLevel = 1;
 var collectedCoins = 0;
+var currentCoins = 0;
 var timeLeft; //Says how much time is left in the level--will be calculated based off of LEVEL_COMPLETION_TIME later.
 var score = 0;
+var currentScore = 0;
 var playerCharacter;
 var background;
 var background2;
@@ -192,7 +194,7 @@ let dir; // which way character faces. 1 is right, -1 is left
 var highscore = [0];
 
 const coinWidth = 40;
-const LEVEL_COMPLETION_TIME = 300;
+const LEVEL_COMPLETION_TIME = 1000;
 const MAX_VARIABLES = Math.floor(LEVEL_COMPLETION_TIME / 50); //Each of our arrays should be able to contain a maximum of 2 objects/second.
 const FLYING = 0; //This movement type goes up and down as it travels, going from right to left.
 const WALKING = 1; //This movement type goes in a straight line from right to left--or, in some cases, doesn't move.
@@ -334,7 +336,15 @@ function showInstructions(){
 function initialize_game() {
 	currentLevel = 1;
 	collectedCoins = 0;
-        score = 0;
+  currentCoins = 0;
+  score = 0;
+  currentScore = 0;
+
+  var coinMessage = document.getElementById('coinMessage');
+  if (coinMessage) {
+    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+    levelTransitionModalContent.removeChild(coinMessage);
+  }
 
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
@@ -852,6 +862,8 @@ function updateGameArea() {
 		else {
       var levelTransitionModal = document.getElementById('levelTransitionModal');
     	levelTransitionModal.style.display = "block";
+      var levelTransitionModalContent = document.getElementById('levelTransitionModalContent')
+      levelTransitionModalContent.innerHTML += `<p id="coinMessage" class="levelTransitionMessage">Coins earned: ${currentCoins}</p>`;
     }
 	}
 
@@ -878,6 +890,7 @@ function updateGameArea() {
 				coins[i].setSrc("Pictures/stars.png");
 				//increase collected coins counter
 				collectedCoins++;
+        currentCoins++;
 				incrementScore(50*currentLevel);
 				coins[i].setAlive(false);
 				//animate coin score board
@@ -1116,8 +1129,12 @@ function onMouseUp() {
 
 function resumeGame(levelTransitionModal) {
   var levelTransitionModal = document.getElementById('levelTransitionModal');
+  var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
   if (levelTransitionModal.style.display == "block") {
+    var coinMessage = document.getElementById('coinMessage');
+    levelTransitionModalContent.removeChild(coinMessage);
     levelTransitionModal.style.display = "none";
+    currentCoins = 0;
     startLevel(currentLevel);
   }
 }
