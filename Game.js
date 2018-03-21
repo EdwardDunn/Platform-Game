@@ -207,7 +207,7 @@ function KeyDown(event) {
 
 	var key;
 	key = event.which;
-	console.log("key: " + key);
+	
 	keysPressed[key] = true;
 
 	if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown == false && playerCharacter.hitGround) {
@@ -631,7 +631,6 @@ function component() {
 		this.speedY += this.gravity; //increment the y speed with the gravity
 		this.x += this.speedX;
 		this.hitBottom();
-		//console.log(`${this.x},${this.y}`);
 	};
 
 	//set floor on canvas
@@ -843,7 +842,6 @@ function updateGameArea() {
 	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
 		gameArea.stop();
 		currentLevel++;
-		console.log(currentLevel);
 		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
 		else startLevel(currentLevel);
 	}
