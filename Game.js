@@ -194,7 +194,7 @@ let dir; // which way character faces. 1 is right, -1 is left
 var highscore = [0];
 
 const coinWidth = 40;
-const LEVEL_COMPLETION_TIME = 1000;
+const LEVEL_COMPLETION_TIME = 3000;
 const MAX_VARIABLES = Math.floor(LEVEL_COMPLETION_TIME / 50); //Each of our arrays should be able to contain a maximum of 2 objects/second.
 const FLYING = 0; //This movement type goes up and down as it travels, going from right to left.
 const WALKING = 1; //This movement type goes in a straight line from right to left--or, in some cases, doesn't move.
@@ -341,9 +341,11 @@ function initialize_game() {
   currentScore = 0;
 
   var coinMessage = document.getElementById('coinMessage');
+  var pointsMessage = document.getElementById('pointsMessage');
   if (coinMessage) {
     var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
     levelTransitionModalContent.removeChild(coinMessage);
+    levelTransitionModalContent.removeChild(pointsMessage);
   }
 
 	audio = document.getElementById("bgm");
@@ -864,6 +866,7 @@ function updateGameArea() {
     	levelTransitionModal.style.display = "block";
       var levelTransitionModalContent = document.getElementById('levelTransitionModalContent')
       levelTransitionModalContent.innerHTML += `<p id="coinMessage" class="levelTransitionMessage">Coins earned: ${currentCoins}</p>`;
+      levelTransitionModalContent.innerHTML += `<p id="pointsMessage" class="levelTransitionMessage">Points earned: ${currentScore}</p>`;
     }
 	}
 
@@ -1035,6 +1038,7 @@ function incrementFrameNumber(value) {
 
 function incrementScore(value) {
 	score += value;
+  currentScore += value;
 }
 
 function incrementTime(value) {//Both increments time and updates onscreen timer value
@@ -1132,9 +1136,12 @@ function resumeGame(levelTransitionModal) {
   var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
   if (levelTransitionModal.style.display == "block") {
     var coinMessage = document.getElementById('coinMessage');
+    var pointsMessage = document.getElementById('pointsMessage');
     levelTransitionModalContent.removeChild(coinMessage);
+    levelTransitionModalContent.removeChild(pointsMessage);
     levelTransitionModal.style.display = "none";
     currentCoins = 0;
+    currentScore = 0;
     startLevel(currentLevel);
   }
 }
