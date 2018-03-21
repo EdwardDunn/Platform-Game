@@ -112,7 +112,7 @@ const LEVEL_PLAYER_CHARACTERS = [{
 	name: "ninja",
 	x2: 390, //Ideally this should call on the canvas width to place the character in the center--however, canvas.width is only created later.
 	y2: 120
-}]
+}];
 
 const LEVEL_CLOUDS = [{
 	name: "cloud",
@@ -137,6 +137,7 @@ const LEVEL_CLOUDS = [{
 }]
 //END CONFIG
 
+const font = "Share Tech Mono";
 const totalLevels = 5; //This constant is very important--it tells the game how many levels it has.
 const coinWidth = 40;
 const LEVEL_COMPLETION_TIME = 3000;
@@ -162,6 +163,8 @@ var backgroundDx = 0;
 var xPos = -5;
 var scoreBoard;
 var coinScoreBoard;
+var coinScoreBoardImg;
+var coinScoreBoardSupImg;
 var highscoreBoard;
 
 var startArrow1;
@@ -170,6 +173,7 @@ var startArrow3;
 var switchArrow = 0;
 
 var timeBoard;
+var timeBoardImg;
 var levelDisplay;
 var enemyCharacters = [];
 var coins = [];
@@ -190,7 +194,6 @@ var gamePaused = false;
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
-
 var highscore = 0;
 
 
@@ -202,7 +205,7 @@ function KeyDown(event) {
 
 	var key;
 	key = event.which;
-	console.log("key: " + key);
+	
 	keysPressed[key] = true;
 
 	if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown == false && playerCharacter.hitGround) {
@@ -321,8 +324,7 @@ function showInstructions(){
 }
 
 function initialize_game() {
-	//currentLevel = 1;
-        currentLevel = 5;
+	currentLevel = 1;
 	collectedCoins = 0;
         score = 0;
 
@@ -361,13 +363,16 @@ function startLevel() {
 
 	//score
 	scoreBoard = new component();
-	scoreBoard.init("20px", "Consolas", "black", 230, 40, "text", WALKING);
+	scoreBoard.init("20px", font, "black", 250, 40, "text", WALKING);
 
 	//collected Coins
 	coinScoreBoard = new component();
-	coinScoreBoard.init("20px", "Consolas", "black", 380, 40, "text", WALKING);
+	coinScoreBoard.init("20px", font, "black", 450, 40, "text", WALKING);
+        coinScoreBoardImg = new component();
+        coinScoreBoardImg.init(22, 22, "Pictures/coin.png", 420, 21, "image", WALKING);
+        coinScoreBoardSupImg = new component();
+        coinScoreBoardSupImg.init(40, 40, "Pictures/stars.png", 412, 10, "image", WALKING);
 
-        //highscore board
         highscoreBoard = new component();
         highscoreBoard.init("20px", "Consolas", "black", 20, 40, "text", WALKING);
         highscoreBoard.text = "HIGHSCORE:" + highscore;
@@ -381,13 +386,15 @@ function startLevel() {
         startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
         startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
 
-        //current time left in the given level
+  //current time left in the given level
         timeBoard = new component ();
-        timeBoard.init("20px", "Consolas", "black", 520, 40, "text", WALKING);
+        timeBoard.init("20px", font, "black", 830, 40, "text", WALKING);
+        timeBoardImg = new component();
+        timeBoardImg.init(22, 22, "Pictures/clock.png", 800, 21, "image", WALKING);
 
 	//current level display
 	levelDisplay = new component();
-	levelDisplay.init("20px", "Consolas", "black", 670, 40, "text", WALKING);
+	levelDisplay.init("20px", font, "black", 670, 40, "text", WALKING);
 
 	//Loop for creating new enemy characters setting a random x coordinate for each. Creates a maximum of 2 enemies/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
@@ -774,15 +781,19 @@ function flashScore() {
 }
 
 function flashCoinScore() {
-	if (coinScoreBoard.color === "black") {
+    coinScoreBoardSupImg.update();
+    if (coinScoreBoard.color === "black") {
 		coinScoreBoard.color = "white";
-	} else {
+        coinScoreBoardSupImg.alpha = 1;
+    } else {
 		coinScoreBoard.color = "black";
-	};
+        coinScoreBoardSupImg.alpha = 0;
+    };
 
 	if (gameArea.coinScoreActiveTime > 1200) {
 		coinScoreBoard.color = "black";
-		clearInterval(gameArea.coinScoreInterval);
+        coinScoreBoardSupImg.alpha = 0;
+        clearInterval(gameArea.coinScoreInterval);
 	};
 	gameArea.coinScoreActiveTime += 150;
 }
@@ -830,8 +841,7 @@ function updateGameArea() {
 	//check current level, if more than 5 (because there are five levels currently), show game complete modal
 	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
 		gameArea.stop();
-		console.log(currentLevel);
-		if (currentLevel = totalLevels) gameComplete();
+		if (currentLevel == totalLevels) gameComplete();
 		else{
                     currentLevel++;
                     startLevel();
@@ -866,9 +876,11 @@ function updateGameArea() {
 				//animate coin score board
 				gameArea.coinScoreActiveTime = 0;
 				gameArea.coinScoreInterval = setInterval(flashCoinScore, 150);
-				coinpickup_audio=document.getElementById("coinpickup")
-				coinpickup.autoplay = true;
-				coinpickup.load();
+				if(!musicMuted){
+					coinpickup_audio=document.getElementById("coinpickup")
+					coinpickup.autoplay = true;
+					coinpickup.load();
+				}
 			}else{
 				coins[i].rotation();
 			}
@@ -887,8 +899,9 @@ function updateGameArea() {
 	scoreBoard.update();
 
 	//collected coins update
-	coinScoreBoard.text = "COINS: " + collectedCoins;
-	coinScoreBoard.update();
+        coinScoreBoard.text = collectedCoins;
+        coinScoreBoard.update();
+        coinScoreBoardImg.update();
         highscoreBoard.update();
 
         //startArrow
@@ -899,11 +912,12 @@ function updateGameArea() {
 
 
         //Timer update
-        timeBoard.text = "TIME: " + timeLeft;
+        timeBoard.text = parseInt(timeLeft);
         timeBoard.update();
+        timeBoardImg.update();
 
-	//increment frame number for timer
-        incrementFrameNumber(2);
+        //increment frame number for timer
+	incrementFrameNumber(2);
         incrementTime(2);
 
 	//LevelDisplay update
@@ -1073,21 +1087,21 @@ var interval;
 
 function moveLeftMouse() {
 	interval = setInterval(moveLeft, 1);
-  backgroundDx = -5;
+        backgroundDx = -5;
 }
 
 function moveRightMouse() {
 	interval = setInterval(moveRight, 1);
-  if(xPos <= -5){
-    xPos = 0;
-    background.setX(-50);
-    background2.setX(850);
-  }
+        if(xPos <= -5){
+        xPos = 0;
+        background.setX(-50);
+        background2.setX(850);
+}
   backgroundDx = 5;
 
 }
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
-  backgroundDx = 0;
+        backgroundDx = 0;
 }
