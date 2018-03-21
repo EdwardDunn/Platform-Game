@@ -15,6 +15,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/InstructionsModal.css">
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/GameOverModal.css">
 	<link rel="stylesheet" type="text/css" href="Style-Sheets/GameCompleteModal.css">
+	<link rel="stylesheet" type="text/css" href="Style-Sheets/LevelTransitionModal.css">
 	<link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
 
 	<!--Main game script-->
@@ -24,13 +25,13 @@ Author: Open Source - Contributor list can be seen in GitHub
 
 <!--On page load call showInstructions method-->
 <body onload="showInstructions()" onkeydown="KeyDown(event)" onkeyup="KeyUp(event)" ondragend="onMouseUp()">
-	
+
 	<!--Audio elements-->
 	<audio id="bgm" style="display: none" controls>
 		<source src="Audio/bgnd_mus.flac" type="audio/flac">
 		Your browser does not support the audio element.
 	</audio>
-	
+
 	<audio id="jump" style="display: none" controls>
 		<source src="Audio/jump_04.wav" type="audio/wav">
 			Your browser does not support the audio element.
@@ -40,7 +41,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<source src="Audio/coin_pickup.wav" type="audio/wav">
 			Your browser does not support the audio element.
 	</audio>
-	
+
 	<audio id="gameover" style="display: none" controls>
 		<source src="Audio/gameover.wav" type="audio/wav">
 			Your browser does not support the audio element.
@@ -51,7 +52,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 			Your browser does not support the audio element.
 	</audio>
 
-	
+
 	<!--Restart button on game page-->
 	<canvas id="canvas" width=300 height=300></canvas>
 
@@ -83,7 +84,7 @@ Author: Open Source - Contributor list can be seen in GitHub
 			<div class="startButton">
 				<img class="buttonImages" src="Pictures/play.png" width="100%" onClick="initialize_game()" alt="PlayButton" />
 			</div>
-			
+
 		</div>
 	</div>
 
@@ -116,7 +117,14 @@ Author: Open Source - Contributor list can be seen in GitHub
 			<img class="button" src="Pictures/resume.png" width="100%" onClick="pauseGame()" alt="ResumeGame" />
 		</div>
 	</div>
-	
+
+	<div id="levelTransitionModal" class="modal">
+		<div class="modal-content">
+			<img class="gameOverLabel" src="Pictures/victory.png" alt="VICTORY">
+			<p class="levelTransitionMessage">Level complete!</p>
+		</div>
+	</div>
+
 	<!--Game play buttons-->
 	<div id="buttonWrapper">
 		<div id="buttonRestart">

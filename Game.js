@@ -844,10 +844,11 @@ function updateGameArea() {
 		currentLevel++;
 		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
 		else {
-      // var modal = document.getElementById('levelTransitionModal');
-    	// modal.style.display = "block";
-      console.log('waiting');
-      window.setTimeout(resumeGame, 3000);
+      var levelTransitionModal = document.getElementById('levelTransitionModal');
+    	levelTransitionModal.style.display = "block";
+      window.setTimeout(function() {
+        resumeGame(levelTransitionModal);
+      }, 3000);
     }
 	}
 
@@ -1109,7 +1110,7 @@ function onMouseUp() {
 	stopMove();
   backgroundDx = 0;
 }
-function resumeGame() {
-  console.log('done waiting!');
+function resumeGame(levelTransitionModal) {
+  levelTransitionModal.style.display = "none";
   startLevel(currentLevel);
 }
