@@ -20,7 +20,8 @@ const userKeys = {
     D: 68,
     SPACE: 32,
     P: 80,
-    M: 77
+    M: 77,
+    C: 67
 };
 
 const LEVEL_ENEMIES = [
@@ -239,6 +240,11 @@ function KeyDown(event) {
 		keysPressed[userKeys.M] = false;
 		muteMusic();
 	}
+
+  if (keysPressed[userKeys.C]) {
+    keysPressed[userKeys.C] = false;
+    resumeGame()
+  }
 }
 
 // Toggle music at 'M' key press
@@ -846,9 +852,6 @@ function updateGameArea() {
 		else {
       var levelTransitionModal = document.getElementById('levelTransitionModal');
     	levelTransitionModal.style.display = "block";
-      window.setTimeout(function() {
-        resumeGame(levelTransitionModal);
-      }, 3000);
     }
 	}
 
@@ -1110,7 +1113,11 @@ function onMouseUp() {
 	stopMove();
   backgroundDx = 0;
 }
+
 function resumeGame(levelTransitionModal) {
-  levelTransitionModal.style.display = "none";
-  startLevel(currentLevel);
+  var levelTransitionModal = document.getElementById('levelTransitionModal');
+  if (levelTransitionModal.style.display == "block") {
+    levelTransitionModal.style.display = "none";
+    startLevel(currentLevel);
+  }
 }
