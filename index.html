@@ -54,9 +54,6 @@ Author: Open Source - Contributor list can be seen in GitHub
 	
 	<!--Restart button on game page-->
 	<canvas id="canvas" width=300 height=300></canvas>
-	<button id="restartButtonNearScore" class="button" onClick="restartGame()">
-		<img class="buttonImages" src="Pictures/restart.png" alt="RestartButton" />
-	</button>	
 
 	<div id="instructionsModal" class="modal">
 
@@ -122,6 +119,11 @@ Author: Open Source - Contributor list can be seen in GitHub
 	
 	<!--Game play buttons-->
 	<div id="buttonWrapper">
+		<div id="buttonRestart">
+			<button id="restartButtonLeft" class="button" onClick="restartGame()">
+				<img class="buttonImages" src="Pictures/restart.png" alt="RestartButton" />
+			</button>
+		</div>
 		<div id="buttonController">
 		<button class="button" onmousedown="moveLeftMouse()" onmouseup="onMouseUp()" ontouchstart="moveLeftMouse()" ontouchend="onMouseUp()">
 			<img class="buttonImages" src="Pictures/left.png" alt="LEFT">

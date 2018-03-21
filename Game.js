@@ -30,8 +30,7 @@ const LEVEL_ENEMIES = [
 		y: 60,
 		y2: 200
 	}, {
-		name: "zombie"
-,
+		name: "zombie",
 		x: 40,
 		y: 50,
 		y2: 200
@@ -112,7 +111,7 @@ const LEVEL_PLAYER_CHARACTERS = [{
 	name: "ninja",
 	x2: 450,
 	y2: 120
-}]
+}];
 
 const LEVEL_CLOUDS = [{
 	name: "cloud",
@@ -134,7 +133,9 @@ const LEVEL_CLOUDS = [{
 	name: "cloud3",
 	x: 60,
 	y: 40
-}]
+}];
+
+const font = "Share Tech Mono";
 //END CONFIG
 
 //flag to take care of y axis cordinate increase or decrease
@@ -155,6 +156,8 @@ var backgroundDx = 0;
 var xPos = -5;
 var scoreBoard;
 var coinScoreBoard;
+var coinScoreBoardImg;
+var coinScoreBoardSupImg;
 var highscoreBoard;
 
 var startArrow1;
@@ -163,6 +166,7 @@ var startArrow3;
 var switchArrow = 0;
 
 var timeBoard;
+var timeBoardImg;
 var levelDisplay;
 var enemyCharacters = [];
 var coins = [];
@@ -364,15 +368,20 @@ function startLevel(levelNumber) {
 
 	//score
 	scoreBoard = new component();
-	scoreBoard.init("20px", "Consolas", "black", 230, 40, "text", WALKING);
+	scoreBoard.init("20px", font, "black", 250, 40, "text", WALKING);
 
 	//collected Coins
 	coinScoreBoard = new component();
-	coinScoreBoard.init("20px", "Consolas", "black", 380, 40, "text", WALKING);
+	coinScoreBoard.init("20px", font, "black", 450, 40, "text", WALKING);
+    coinScoreBoardImg = new component();
+    coinScoreBoardImg.init(22, 22, "Pictures/coin.png", 420, 21, "image", WALKING);
+    coinScoreBoardSupImg = new component();
+    coinScoreBoardSupImg.init(40, 40, "Pictures/stars.png", 412, 10, "image", WALKING);
 
-  //highscore board
+
+    //highscore board
   highscoreBoard = new component();
-  highscoreBoard.init("20px", "Consolas", "black", 20, 40, "text", WALKING);
+  highscoreBoard.init("20px", font, "black", 20, 40, "text", WALKING);
 
   //startArrow
   startArrow1 = new component();
@@ -385,11 +394,13 @@ function startLevel(levelNumber) {
 
   //current time left in the given level
   timeBoard = new component ();
-  timeBoard.init("20px", "Consolas", "black", 520, 40, "text", WALKING);
+  timeBoard.init("20px", font, "black", 830, 40, "text", WALKING);
+  timeBoardImg = new component();
+  timeBoardImg.init(22, 22, "Pictures/clock.png", 800, 21, "image", WALKING);
 
 	//current level display
 	levelDisplay = new component();
-	levelDisplay.init("20px", "Consolas", "black", 670, 40, "text", WALKING);
+	levelDisplay.init("20px", font, "black", 670, 40, "text", WALKING);
 
 	//Loop for creating new enemy characters setting a random x coordinate for each. Creates a maximum of 2 enemies/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
@@ -771,15 +782,19 @@ function flashScore() {
 }
 
 function flashCoinScore() {
-	if (coinScoreBoard.color === "black") {
+    coinScoreBoardSupImg.update();
+    if (coinScoreBoard.color === "black") {
 		coinScoreBoard.color = "white";
-	} else {
+        coinScoreBoardSupImg.alpha = 1;
+    } else {
 		coinScoreBoard.color = "black";
-	};
+        coinScoreBoardSupImg.alpha = 0;
+    };
 
 	if (gameArea.coinScoreActiveTime > 1200) {
 		coinScoreBoard.color = "black";
-		clearInterval(gameArea.coinScoreInterval);
+        coinScoreBoardSupImg.alpha = 0;
+        clearInterval(gameArea.coinScoreInterval);
 	};
 	gameArea.coinScoreActiveTime += 150;
 }
@@ -882,8 +897,9 @@ function updateGameArea() {
 	scoreBoard.update();
 
 	//collected coins update
-	coinScoreBoard.text = "COINS: " + collectedCoins;
-	coinScoreBoard.update();
+    coinScoreBoard.text = collectedCoins;
+    coinScoreBoard.update();
+    coinScoreBoardImg.update();
   sethighscore();
   highscoreBoard.update();
 
@@ -895,10 +911,12 @@ function updateGameArea() {
 
 
   //Timer update
-  timeBoard.text = "TIME: " + timeLeft;
-  timeBoard.update();
+    timeBoard.text = parseInt(timeLeft);
+    timeBoard.update();
+    timeBoardImg.update();
 
-	//increment frame number for timer
+
+    //increment frame number for timer
 	incrementFrameNumber(2);
   incrementTime(2);
 
