@@ -122,3 +122,10 @@ Date:08/03/2018
 
 	Description : goldArrow
 		Source: blackArrow with Photoshop
+
+Added by: Srinath Tata
+Date:23/03/2018
+
+	Description : Enemy Killed
+	Original Name : Neck Snap
+		Source: http://soundbible.com/1953-Neck-Snap.html		

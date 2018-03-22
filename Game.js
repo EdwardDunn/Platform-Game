@@ -139,7 +139,6 @@ const LEVEL_CLOUDS = [{
 //END CONFIG
 
 const font = "Share Tech Mono";
-const font = "Share Tech Mono";
 const totalLevels = 5; //This constant is very important--it tells the game how many levels it has.
 const coinWidth = 40;
 const LEVEL_COMPLETION_TIME = 3000;
@@ -856,7 +855,12 @@ function updateGameArea() {
                             enemyCharacters[i].setAlive(false);
                             incrementScore(100*currentLevel);
                             gameArea.bonusActiveTime = 0;
-                            gameArea.bonusInterval = setInterval(flashScore, 150);
+							gameArea.bonusInterval = setInterval(flashScore, 150);
+							if (!musicMuted) {
+								enemy_killed_audio = document.getElementById("enemykilled")
+								enemykilled.autoplay = true;
+								enemykilled.load();								
+							}							
 
 			} else if (playerCharacter.crashWith(enemyCharacters[i])){
                             backgroundDx = 0;
