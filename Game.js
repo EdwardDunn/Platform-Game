@@ -139,7 +139,6 @@ const LEVEL_CLOUDS = [{
 //END CONFIG
 
 const font = "Share Tech Mono";
-const font = "Share Tech Mono";
 const totalLevels = 5; //This constant is very important--it tells the game how many levels it has.
 const coinWidth = 40;
 const LEVEL_COMPLETION_TIME = 3000;
@@ -196,7 +195,7 @@ var gamePaused = false;
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
-var highscore = 0;
+var highscore = localStorage.getItem("highestscore") || 0;
 
 
 function KeyDown(event) {
@@ -708,6 +707,7 @@ function gameOver() {
   //adding score to list of highscores
   if(highscore < score){
     highscore = score;
+    localStorage.setItem("highestscore", highscore)
   }
 	var modal = document.getElementById('gameOverModal');
 	modal.style.display = "block";
