@@ -20,7 +20,8 @@ const userKeys = {
     D: 68,
     SPACE: 32,
     P: 80,
-    M: 77
+    M: 77,
+    C: 67
 };
 
 const LEVEL_ENEMIES = [
@@ -147,8 +148,10 @@ var state = 'instructions';
 
 var currentLevel = 1;
 var collectedCoins = 0;
+var currentCoins = 0;
 var timeLeft; //Says how much time is left in the level--will be calculated based off of LEVEL_COMPLETION_TIME later.
 var score = 0;
+var currentScore = 0;
 var playerCharacter;
 var background;
 var background2;
@@ -207,7 +210,7 @@ function KeyDown(event) {
 
 	var key;
 	key = event.which;
-	
+
 	keysPressed[key] = true;
 
 	if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown == false && playerCharacter.hitGround) {
@@ -239,6 +242,11 @@ function KeyDown(event) {
 		keysPressed[userKeys.M] = false;
 		muteMusic();
 	}
+
+  if (keysPressed[userKeys.C]) {
+    keysPressed[userKeys.C] = false;
+    resumeGame()
+  }
 }
 
 // Toggle music at 'M' key press
@@ -308,7 +316,7 @@ function KeyUp(event) {
         case userKeys.DOWN:
         case userKeys.S:
         	if(playerCharacter.hitGround && playerCharacter.duckCooldown == true){//this if statement is used so that the playercharacter doesnt increase in size when DOWN or S is pressed while character is in the air
-        		playerCharacter.height = playerCharacter.height * 2;	
+        		playerCharacter.height = playerCharacter.height * 2;
         		playerCharacter.duckCooldown = false;
         	}
 	}
@@ -328,7 +336,17 @@ function showInstructions(){
 function initialize_game() {
 	currentLevel = 1;
 	collectedCoins = 0;
-        score = 0;
+  currentCoins = 0;
+  score = 0;
+  currentScore = 0;
+
+  var coinMessage = document.getElementById('coinMessage');
+  var pointsMessage = document.getElementById('pointsMessage');
+  if (coinMessage) {
+    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+    levelTransitionModalContent.removeChild(coinMessage);
+    levelTransitionModalContent.removeChild(pointsMessage);
+  }
 
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
@@ -843,7 +861,13 @@ function updateGameArea() {
 		gameArea.stop();
 		currentLevel++;
 		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
-		else startLevel(currentLevel);
+		else {
+      var levelTransitionModal = document.getElementById('levelTransitionModal');
+    	levelTransitionModal.style.display = "block";
+      var levelTransitionModalContent = document.getElementById('levelTransitionModalContent')
+      levelTransitionModalContent.innerHTML += `<p id="coinMessage" class="levelTransitionMessage">Coins earned: ${currentCoins}</p>`;
+      levelTransitionModalContent.innerHTML += `<p id="pointsMessage" class="levelTransitionMessage">Points earned: ${currentScore}</p>`;
+    }
 	}
 
 	for (var i = 0; i < enemyCharacters.length; i++){
@@ -869,6 +893,7 @@ function updateGameArea() {
 				coins[i].setSrc("Pictures/stars.png");
 				//increase collected coins counter
 				collectedCoins++;
+        currentCoins++;
 				incrementScore(50*currentLevel);
 				coins[i].setAlive(false);
 				//animate coin score board
@@ -1013,6 +1038,7 @@ function incrementFrameNumber(value) {
 
 function incrementScore(value) {
 	score += value;
+  currentScore += value;
 }
 
 function incrementTime(value) {//Both increments time and updates onscreen timer value
@@ -1103,4 +1129,19 @@ function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
   backgroundDx = 0;
+}
+
+function resumeGame(levelTransitionModal) {
+  var levelTransitionModal = document.getElementById('levelTransitionModal');
+  var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+  if (levelTransitionModal.style.display == "block") {
+    var coinMessage = document.getElementById('coinMessage');
+    var pointsMessage = document.getElementById('pointsMessage');
+    levelTransitionModalContent.removeChild(coinMessage);
+    levelTransitionModalContent.removeChild(pointsMessage);
+    levelTransitionModal.style.display = "none";
+    currentCoins = 0;
+    currentScore = 0;
+    startLevel(currentLevel);
+  }
 }
