@@ -21,6 +21,44 @@ const userKeys = {
     M: 77
 };
 
+const specialKeys = {
+    8:'Backspace',
+    9:'Tab',
+    13:'Enter',
+    16:'Shift',
+    17:'Ctrl',
+    18:'Alt',
+    19:'Pause/break',
+    20:'Caps lock',
+    27: 'Escape',
+    32:'Space',
+    33:'Page up',
+    34:'Page down',
+    35:'End',
+    36:'Home',
+    37:'Left',
+    38:'Up',
+    39:'Right',
+    40:'Down',
+    45:'Insert',
+    46:'Delete',
+    91:'LeftwinKey',
+    92:'RightwinKey',
+    106:'Multiply',
+    107:'Add',
+    111:'Divide',
+    187:'Equal',
+    188:'Comma',
+    189:'Dash',
+    190:'Period',
+    191:'Slash',
+    192:'GraveAccent',
+    219:'OpenBracket',
+    220:'BackSlash',
+    221:'CloseBraket',
+    222:'SingleQuote'
+};
+
 const LEVEL_COMPLETION_TIME = 3000;
 
 const LEVEL_ENEMIES = [
@@ -166,7 +204,7 @@ var enemyCharacters = [];
 var coins = [];
 var clouds = [];
 var rotationCmp = 0;
-var keysPressed = {
+var keysPressed ={
 	LEFT: false,
 	UP: false,
 	RIGHT: false,
@@ -177,46 +215,48 @@ var keysPressed = {
 	D: false
 };
 var gamePaused = false;
+var gameOptions = false;
+var optionId= "";
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
 
 function KeyDown(event) {
-	//avoid auto-repeated keydown event
-	if (event.repeat) {
-		return;
-	}
-
-	var key;
+  var key;
 	key = event.which;
 	console.log("key: " + key);
 	keysPressed[key] = true;
-
-	if ((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown == false) {
-		moveLeft();
-                playerCharacter.leftCooldown = true;
-	}
-	if ((keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) && playerCharacter.rightCooldown == false) {
-		moveRight();
-                playerCharacter.rightCooldown = true;
-	}
-	if ((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround) {
-            if(playerCharacter.jumpCooldown == false){
-                    moveUp();
-            }
-	}
-	if (keysPressed[userKeys.SPACE]) {
-		restartGame();
-	}
-	if (keysPressed[userKeys.P]) {
-		keysPressed[userKeys.P] = false;
-		pauseGame();
-	}
-
-	if (keysPressed[userKeys.M]) {
-		keysPressed[userKeys.M] = false;
-		muteMusic();
-	}
+  //avoid auto-repeated keydown event
+  if(event.repeat)
+       return;
+  if(!gameOptions){
+    if((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown == false) {
+		    moveLeft();
+        playerCharacter.leftCooldown = true;
+    }
+	  if ((keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) && playerCharacter.rightCooldown == false) {
+		    moveRight();
+        playerCharacter.rightCooldown = true;
+	  }
+	  if((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround){
+      if(playerCharacter.jumpCooldown == false){
+        moveUp();
+      }
+	  }
+	  if(keysPressed[userKeys.SPACE]){
+		    restartGame();
+	  }
+	  if(keysPressed[userKeys.P]){
+		    keysPressed[userKeys.P] = false;
+		    pauseGame();
+	  }
+    if(keysPressed[userKeys.M]) {
+		    keysPressed[userKeys.M] = false;
+		    muteMusic();
+	  }
+  }else{
+    changeOption(key);
+  }
 }
 
 // Toggle music at 'M' key press
@@ -225,7 +265,7 @@ function muteMusic() {
 	var imgButton = document.getElementById("audioButton");
 	if (musicMuted) {
 		imgButton.src = "Pictures/audioOff.png";
-		if (!gamePaused) { //If the game is running, just turn the audio off
+		if(!gamePaused) { //If the game is running, just turn the audio off
 			audio.pause();
 		} else { //Otherwise, we need to change our musicToggled variable, so that the audio resumes properly with the game
 			musicToggled = false;
@@ -242,6 +282,55 @@ function muteMusic() {
 
 function pauseGame() {
 	gamePaused = !gamePaused;
+}
+
+function updateSoundPng(){
+  if(musicMuted){
+    document.getElementById("MImg").src = "Pictures/audioOff.png";
+  }else{
+    document.getElementById("MImg").src = "Pictures/audioOn.png";
+  }
+}
+
+function optionsGame(){
+  var modal = document.getElementById('optionsModal');
+  gameOptions = !gameOptions;
+  if(gameOptions){
+    updateSoundPng();
+	  modal.style.display = "block";
+  }else{
+     modal.style.display = "none";
+  }
+}
+function dispMess(id,type){
+  if(type == "SOUND"){
+    muteMusic();
+    if(document.getElementById("MImg").src.includes("audioOff.png")){
+      document.getElementById("MImg").src = "Pictures/audioOn.png";
+    }else{
+      document.getElementById("MImg").src = "Pictures/audioOff.png";
+    }
+  }else{
+      document.getElementById("mess").innerHTML = "Press the key you want to use for "+"\""+type+"\"";
+      optionId= id;
+  }
+}
+
+function changeOption(key){
+  var chr = String.fromCharCode(key);
+  if(optionId!= "" && !Object.values(userKeys).includes(key)){
+    if(48 <= key && key <= 90 ){
+      document.getElementById(optionId).value = chr;
+      userKeys[optionId] = key;
+    }else if(key in specialKeys){
+      document.getElementById(optionId).value = specialKeys[key];
+      userKeys[optionId] = key;
+    }
+  }else if(keysPressed[userKeys.M] && optionId != "M"){
+    dispMess('M','SOUND');
+  }else{
+    document.getElementById("mess").innerHTML = "You can't use this key";
+  }
 }
 
 
@@ -769,9 +858,10 @@ function flashStartArrow(){
 function updateGameArea() {
 	//loop for enemy collision
 	var pausemodal = document.getElementById('gamePauseModal');
-	if (gamePaused) {
-		pausemodal.style.display = "block";
-		if (!musicMuted) { //Then mute music, and keep musicToggled on so that we know it's not muted for real
+	if(gamePaused||gameOptions){
+    if(!gameOptions)
+		  pausemodal.style.display = "block";
+		if(!musicMuted && !gameOptions){ //Then mute music, and keep musicToggled on so that we know it's not muted for real
 			audio.pause();
 			musicToggled = true;
 		}
