@@ -9,7 +9,6 @@ New levels can be added by:
 Author: Open Source - Contributor list can be seen in GitHub
 */
 
-
 const userKeys = {
     LEFT: 37,
     UP: 38,
@@ -32,7 +31,7 @@ const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
 		height: 36,
 		y2: 200
 	}, {
-		name: "Zombie",
+		name: "zombie",
                 width: 40,
 		height: 45,
 		y2: 205
@@ -242,10 +241,10 @@ function KeyDown(event) {
 		muteMusic();
 	}
 
-  if (keysPressed[userKeys.C]) {
-    keysPressed[userKeys.C] = false;
-    resumeGame()
-  }
+        if (keysPressed[userKeys.C]) {
+                keysPressed[userKeys.C] = false;
+                resumeGame()
+        }
 }
 
 // Toggle music at 'M' key press
@@ -333,19 +332,19 @@ function showInstructions(){
 }
 
 function initialize_game() {
-	currentLevel = 1;
-	collectedCoins = 0;
-  currentCoins = 0;
-  score = 0;
-  currentScore = 0;
+        currentLevel = 1;
+        collectedCoins = 0;
+        currentCoins = 0;
+        score = 0;
+        currentScore = 0;
 
-  var coinMessage = document.getElementById('coinMessage');
-  var pointsMessage = document.getElementById('pointsMessage');
-  if (coinMessage) {
-    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
-    levelTransitionModalContent.removeChild(coinMessage);
-    levelTransitionModalContent.removeChild(pointsMessage);
-  }
+        var coinMessage = document.getElementById('coinMessage');
+        var pointsMessage = document.getElementById('pointsMessage');
+        if (coinMessage) {
+                var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+                levelTransitionModalContent.removeChild(coinMessage);
+                levelTransitionModalContent.removeChild(pointsMessage);
+        }
 
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
@@ -362,7 +361,7 @@ function startLevel() {
 	//Synchronizes the start coordinates of enemy characters
 	flyUp = false;
 	z = 0;
-	dir = 1; //face to the right
+	dir = 1; //Begin facing to the right
         xPos = -5;
 
 	//player character
@@ -400,10 +399,9 @@ function startLevel() {
         startArrow1 = new component();
         startArrow2 = new component();
         startArrow3 = new component();
-
-        startArrow1.init(90,70,"Pictures/blackArrow.png",60,125,"image",1);
-        startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
-        startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
+        startArrow1.init(90, 70, "Pictures/blackArrow.png", 60, 125, "image", 1);
+        startArrow2.init(90, 70, "Pictures/blackArrow.png", 30, 125, "image", 1);
+        startArrow3.init(90, 70, "Pictures/blackArrow.png", 0, 125, "image", 1);
 
   //current time left in the given level
         timeBoard = new component ();
@@ -418,14 +416,12 @@ function startLevel() {
 	//Loop for creating new enemy characters setting a random x coordinate for each. Creates a maximum of 2 enemies/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
             enemyCharacters[i] = new component();
-
             var x = Math.floor((Math.random() * (i * (canvas.width / 2))) + ((canvas.width / 2) * i + (canvas.width * 1.25)));
 
             //moveType describes the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)...
             //when you want to add a new type of enemy, increment the number inside the Math.random and
             //insert in the correct case the enemy
             var moveType = Math.floor(Math.random() * (LEVEL_ENEMIES[currentLevel - 1].length));
-
             let enemy = LEVEL_ENEMIES[currentLevel - 1][moveType];
             if (moveType === REVERSED) {
 		//These enemies enter offscreen from the left, and have roughly the reverse of the normal formula.
@@ -447,7 +443,6 @@ function startLevel() {
 	for (var i = 0; i < MAX_VARIABLES; i++) {
             var x = Math.floor(((Math.random() + 1) * gameArea.canvas.width) + (i * gameArea.canvas.width / 2));
             var y = Math.floor(Math.random() * 150 + 30); //150 is canvas height - baseline(150) - char height - 30 (space on top)
-
             coins[i] = new component();
             coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", WALKING);
 	}
@@ -554,7 +549,7 @@ function component() {
 	}
 
 	//function to decide to decide what to display on screen, text, image or fill color
-	this.update = function(callback) {
+	this.update = function() {
 		if (this.dataType === "image") {
 			this.ctx.globalAlpha = this.alpha;
 			if (this.angle != 0) {
@@ -723,9 +718,9 @@ function gameOver() {
 	interval && clearInterval(interval);
 
   //adding score to list of highscores
-  if(highscore < score){
-    highscore = score;
-  }
+        if(highscore < score){
+            highscore = score;
+        }
 	var modal = document.getElementById('gameOverModal');
 	modal.style.display = "block";
 
@@ -840,7 +835,6 @@ function flashStartArrow(){
 
 //Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
 function updateGameArea() {
-	//loop for enemy collision
 	var pausemodal = document.getElementById('gamePauseModal');
 	if (gamePaused) {
 		pausemodal.style.display = "block";
@@ -894,7 +888,7 @@ function updateGameArea() {
 				coins[i].setSrc("Pictures/stars.png");
 				//increase collected coins counter
 				collectedCoins++;
-        currentCoins++;
+                                currentCoins++;
 				incrementScore(50*currentLevel);
 				coins[i].setAlive(false);
 				//animate coin score board
@@ -1143,6 +1137,6 @@ function resumeGame() {
     levelTransitionModal.style.display = "none";
     currentCoins = 0;
     currentScore = 0;
-    startLevel(currentLevel);
+    startLevel();
   }
 }
