@@ -140,7 +140,6 @@ const LEVEL_CLOUDS = [{
 //END CONFIG
 
 const font = "Share Tech Mono";
-const font = "Share Tech Mono";
 const totalLevels = 5; //This constant is very important--it tells the game how many levels it has.
 const coinWidth = 40;
 const LEVEL_COMPLETION_TIME = 3000;
