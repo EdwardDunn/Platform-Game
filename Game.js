@@ -860,25 +860,17 @@ function updateGameArea() {
 	//check current level, if more than 5 (because there are five levels currently), show game complete modal
 	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
 		gameArea.stop();
-<<<<<<< HEAD
-		currentLevel++;
-		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
-		else {
-      var levelTransitionModal = document.getElementById('levelTransitionModal');
-    	levelTransitionModal.style.display = "block";
-      var levelTransitionModalContent = document.getElementById('levelTransitionModalContent')
-      levelTransitionModalContent.innerHTML += `<p id="coinMessage" class="levelTransitionMessage">Coins earned: ${currentCoins}</p>`;
-      levelTransitionModalContent.innerHTML += `<p id="pointsMessage" class="levelTransitionMessage">Points earned: ${currentScore}</p>`;
-    }
-=======
 		if (currentLevel == totalLevels) gameComplete();
-		else{
+		else {
                     currentLevel++;
-                    startLevel();
+                    var levelTransitionModal = document.getElementById('levelTransitionModal');
+                    levelTransitionModal.style.display = "block";
+                    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent')
+                    levelTransitionModalContent.innerHTML += `<p id="coinMessage" class="levelTransitionMessage">Coins earned: ${currentCoins}</p>`;
+                    levelTransitionModalContent.innerHTML += `<p id="pointsMessage" class="levelTransitionMessage">Points earned: ${currentScore}</p>`;
                 }
->>>>>>> parent of 6843b02... Revert "Merge pull request #151 from Germlord/master"
-	}
-
+        }
+        
 	for (var i = 0; i < enemyCharacters.length; i++){
 		if(enemyCharacters[i].isAlive()) {
 			if(playerCharacter.jumpsOn(enemyCharacters[i])){
@@ -1133,13 +1125,14 @@ function moveRightMouse() {
   backgroundDx = 5;
 
 }
+
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
         backgroundDx = 0;
 }
 
-function resumeGame(levelTransitionModal) {
+function resumeGame() {
   var levelTransitionModal = document.getElementById('levelTransitionModal');
   var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
   if (levelTransitionModal.style.display == "block") {
