@@ -862,12 +862,15 @@ function updateGameArea() {
 	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
 		gameArea.stop();
 		if (currentLevel == totalLevels) gameComplete();
-		else{
-          currentLevel++;
-          startLevel();
-      }
-	}
-
+		else {
+                    currentLevel++;
+                    var levelTransitionModal = document.getElementById('levelTransitionModal');
+                    levelTransitionModal.style.display = "block";
+                    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent')
+                    levelTransitionModalContent.innerHTML += `<p id="coinMessage" class="levelTransitionMessage">Coins earned: ${currentCoins}</p>`;
+                    levelTransitionModalContent.innerHTML += `<p id="pointsMessage" class="levelTransitionMessage">Points earned: ${currentScore}</p>`;
+                }
+        }
 	for (var i = 0; i < enemyCharacters.length; i++){
 		if(enemyCharacters[i].isAlive()) {
 			if(playerCharacter.jumpsOn(enemyCharacters[i])){
@@ -1122,13 +1125,14 @@ function moveRightMouse() {
   backgroundDx = 5;
 
 }
+
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
         backgroundDx = 0;
 }
 
-function resumeGame(levelTransitionModal) {
+function resumeGame() {
   var levelTransitionModal = document.getElementById('levelTransitionModal');
   var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
   if (levelTransitionModal.style.display == "block") {
