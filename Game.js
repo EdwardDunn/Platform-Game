@@ -274,13 +274,13 @@ function pauseGame() {
 
 
 function updateBackgroundDx(){
-  if(keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
-    backgroundDx = -5;
-	}else if(keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
-    backgroundDx = 5;
-	}else{
-      backgroundDx = 0;
-  }
+    if(keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
+        backgroundDx = -5;
+    }else if(keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
+        backgroundDx = 5;
+    }else{
+        backgroundDx = 0;
+    }
 }
 
 function KeyUp(event) {
@@ -318,7 +318,7 @@ function KeyUp(event) {
         		playerCharacter.duckCooldown = false;
         	}
 	}
-  updateBackgroundDx();
+        updateBackgroundDx();
 }
 
 
@@ -332,7 +332,8 @@ function showInstructions(){
 }
 
 function initialize_game() {
-        currentLevel = 1;
+        //currentLevel = 1;
+        currentLevel = 5;
         collectedCoins = 0;
         currentCoins = 0;
         score = 0;
@@ -465,8 +466,8 @@ var gameArea = {
 
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 		this.time = 0;
-		this.bonusActiveTime = 0;
-		this.coinScoreActiveTime = 0;
+		this.bonusActiveTime = 1500; //The actual number isn't important, we just want to make sure 
+		this.coinScoreActiveTime = 1500; //that the flash functions won't activate immediately
 		this.coinScoreInterval = null;
 	},
 
@@ -479,7 +480,6 @@ var gameArea = {
 			var modal = modals[i];
 			modal.style.display = "none";
 		}
-
 		//update interval
 		this.interval = setInterval(updateGameArea, 20);
 	},
@@ -520,7 +520,7 @@ function component() {
 				this.imageMirror.height = height;
 			}
 
-			if (initialShow) {
+			if (initialShow) {//This is for things we want displaying before the game starts--basically the background
 				var imgCopy = this.image;
 				var ctxCopy = this.ctx;
 				this.image.onload = function() {
@@ -573,25 +573,25 @@ function component() {
 	};
         
         //This function manages the scrolling backgrounds
-  this.moveBackgrounds = function(background2){
-    if(0 <= xPos){
-        xPos += backgroundDx;
-        this.x -= backgroundDx;
-        background2.x -= backgroundDx;
-    }else{
-      backgroundDx = 0;
-    }
+        this.moveBackgrounds = function(background2){
+                if(0 <= xPos){
+                        xPos += backgroundDx;
+                        this.x -= backgroundDx;
+                        background2.x -= backgroundDx;
+                }else{
+                        backgroundDx = 0;
+                }
 		if(this.x <= -900){this.x = 900;}
-    else if(background2.x <= -900){background2.x = 900;}
+                else if(background2.x <= -900){background2.x = 900;}
 		else if(900 <= this.x){this.x = -900;}
-    else if(900 <= background2.x){background2.x = -900;}
-    else if(900 < Math.abs(this.x)+Math.abs(background2.x)){
-      if(Math.abs(background2.x) < Math.abs(this.x)){
-        this.x += (0 < this.x)?-5:5;
-      }else{
-        background2.x += (0 < background2.x)?-5:5;
-      }
-    }
+                else if(900 <= background2.x){background2.x = -900;}
+                else if(900 < Math.abs(this.x)+Math.abs(background2.x)){
+                        if(Math.abs(background2.x) < Math.abs(this.x)){
+                                this.x += (0 < this.x)?-5:5;
+                        }else{
+                                background2.x += (0 < background2.x)?-5:5;
+                        }
+                }
 	}
         
 	//enemy character collision function
@@ -797,40 +797,40 @@ function flashScore() {
 function flashCoinScore() {
     coinScoreBoardSupImg.update();
     if (coinScoreBoard.color === "black") {
-		coinScoreBoard.color = "white";
-        coinScoreBoardSupImg.alpha = 1;
+            coinScoreBoard.color = "white";
+            coinScoreBoardSupImg.alpha = 1;
     } else {
-		coinScoreBoard.color = "black";
-        coinScoreBoardSupImg.alpha = 0;
+            coinScoreBoard.color = "black";
+            coinScoreBoardSupImg.alpha = 0;
     };
 
-	if (gameArea.coinScoreActiveTime > 1200) {
-		coinScoreBoard.color = "black";
-        coinScoreBoardSupImg.alpha = 0;
-        clearInterval(gameArea.coinScoreInterval);
-	};
-	gameArea.coinScoreActiveTime += 150;
+    if (gameArea.coinScoreActiveTime > 1200) {
+            coinScoreBoard.color = "black";
+            coinScoreBoardSupImg.alpha = 0;
+            clearInterval(gameArea.coinScoreInterval);
+    };
+    gameArea.coinScoreActiveTime += 150;
 }
 
 
 function flashStartArrow(){
-  switchArrow++;
-  if(switchArrow < 30){
-    startArrow3.setSrc("Pictures/goldArrow.png");
-    startArrow2.setSrc("Pictures/blackArrow.png");
-    startArrow1.setSrc("Pictures/blackArrow.png");
-  }else if(switchArrow < 60){
-    startArrow3.setSrc("Pictures/blackArrow.png");
-    startArrow2.setSrc("Pictures/goldArrow.png");
-  }else if(switchArrow < 90){
-    startArrow2.setSrc("Pictures/blackArrow.png");
-    startArrow1.setSrc("Pictures/goldArrow.png");
-  }else{
-    switchArrow = 0;
-  }
-  startArrow1.setX(startArrow1.getOrignX()-xPos);
-  startArrow2.setX(startArrow2.getOrignX()-xPos);
-  startArrow3.setX(startArrow3.getOrignX()-xPos);
+    switchArrow++;
+    if(switchArrow < 30){
+        startArrow3.setSrc("Pictures/goldArrow.png");
+        startArrow2.setSrc("Pictures/blackArrow.png");
+        startArrow1.setSrc("Pictures/blackArrow.png");
+    }else if(switchArrow < 60){
+        startArrow3.setSrc("Pictures/blackArrow.png");
+        startArrow2.setSrc("Pictures/goldArrow.png");
+    }else if(switchArrow < 90){
+        startArrow2.setSrc("Pictures/blackArrow.png");
+        startArrow1.setSrc("Pictures/goldArrow.png");
+    }else{
+        switchArrow = 0;
+    }
+    startArrow1.setX(startArrow1.getOrignX()-xPos);
+    startArrow2.setX(startArrow2.getOrignX()-xPos);
+    startArrow3.setX(startArrow3.getOrignX()-xPos);
 }
 
 //Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
@@ -872,7 +872,6 @@ function updateGameArea() {
                             incrementScore(100*currentLevel);
                             gameArea.bonusActiveTime = 0;
                             gameArea.bonusInterval = setInterval(flashScore, 150);
-
 			} else if (playerCharacter.crashWith(enemyCharacters[i])){
                             backgroundDx = 0;
                             gameArea.stop();
@@ -911,7 +910,15 @@ function updateGameArea() {
         background.moveBackgrounds(background2);
 	background.update();
         background2.update();
-
+        
+	//Cloud update--doesn't display on level 5, which is indoors
+        if(currentLevel != 5){
+            for (var i = 0; i < clouds.length; i++) {
+                    clouds[i].x += 0.5 - backgroundDx;
+                    clouds[i].update();
+            }
+        }
+        
 	//score update
 	scoreBoard.text = "SCORE: " + score;
 	scoreBoard.update();
@@ -951,14 +958,6 @@ function updateGameArea() {
 	for (var i = 0; i < coins.length; i++) {
 		coins[i].update();
 	}
-
-	//Cloud update--doesn't display on level 5, which is indoors
-        if(currentLevel != 5){
-            for (var i = 0; i < clouds.length; i++) {
-                    clouds[i].x += 0.5 - backgroundDx;
-                    clouds[i].update();
-            }
-        }
 
 	//player character update
 	playerCharacter.newPos();
@@ -1084,18 +1083,18 @@ function moveDown() {
 function moveLeft() {
 	playerCharacter.changeDir(-1);
 	//playerCharacter.speedX = -5;
-  backgroundDx = -5;
+        backgroundDx = -5;
 }
 
 function moveRight(){
 	playerCharacter.changeDir(1);
 	//playerCharacter.speedX = 5;
-  if(xPos <= -5){
-    xPos = 0;
-    background.setX(-50);
-    background2.setX(850);
-  }
-  backgroundDx = 5;
+        if(xPos <= -5){
+                xPos = 0;
+                background.setX(-50);
+                background2.setX(850);
+        }
+        backgroundDx = 5;
 }
 
 function duck(){
@@ -1112,12 +1111,11 @@ function moveLeftMouse() {
 function moveRightMouse() {
 	interval = setInterval(moveRight, 1);
         if(xPos <= -5){
-        xPos = 0;
-        background.setX(-50);
-        background2.setX(850);
-}
-  backgroundDx = 5;
-
+                xPos = 0;
+                background.setX(-50);
+                background2.setX(850);
+        }
+        backgroundDx = 5;
 }
 
 function onMouseUp() {
