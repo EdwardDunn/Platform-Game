@@ -5,6 +5,7 @@ New levels can be added by:
 - Adding an extra object to the array LEVEL_PLAYER_CHARACTERS
 - Adding an extra object to the array LEVEL_CLOUDS
 - Making a new background or copying an existing one and incrementing the number by 1
+- Increasing totalLevels variable by 1
 Author: Open Source - Contributor list can be seen in GitHub
 */
 
@@ -13,12 +14,15 @@ const userKeys = {
     LEFT: 37,
     UP: 38,
     RIGHT: 39,
+    DOWN: 40,
     W: 87,
+    S: 83,
     A: 65,
     D: 68,
     SPACE: 32,
     P: 80,
-    M: 77
+    M: 77,
+    C: 67
 };
 
 const specialKeys = {
@@ -61,71 +65,71 @@ const specialKeys = {
 
 const LEVEL_COMPLETION_TIME = 3000;
 
-const LEVEL_ENEMIES = [
+const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
 	[{
-		name: "enemy2",
-		x: 80,
-		y: 60,
+		name: "FloatingFish",
+                width: 44,
+		height: 36,
 		y2: 200
 	}, {
-		name: "zombie",
-		x: 40,
-		y: 50,
+		name: "Zombie",
+                width: 40,
+		height: 45,
+		y2: 205
+	}],
+	[{
+		name: "FloatingFish",
+                width: 44,
+		height: 36,
+		y2: 200
+	}, {
+		name: "BlackBlob",
+                width: 60,
+		height: 53,
+		y2: 197
+	}],
+	[{
+		name: "FloatingFish",
+                width: 44,
+		height: 36,
+		y2: 200
+	}, {
+		name: "SlidingSkull",
+                width: 60,
+		height: 50,
 		y2: 200
 	}],
 	[{
-		name: "enemy2",
-		x: 80,
-		y: 60,
+		name: "FloatingFish",
+                width: 44,
+		height: 36,
 		y2: 200
 	}, {
-		name: "bad_guy",
-		x: 60,
-		y: 50,
-		y2: 200
+		name: "CyclopsCrab",
+                width: 60,
+		height: 37,
+		y2: 220
 	}],
 	[{
-		name: "enemy2",
-		x: 80,
-		y: 60,
+		name: "FloatingFish",
+                width: 44,
+		height: 36,
 		y2: 200
 	}, {
-		name: "skull_baddie",
-		x: 60,
-		y: 50,
-		y2: 200
-	}],
-	[{
-		name: "enemy2",
-		x: 80,
-		y: 60,
-		y2: 200
+		name: "CyclopsCrab",
+                width: 60,
+		height: 37,
+		y2: 220
 	}, {
-		name: "newchar",
-		x: 120,
-		y: 120,
+		name: "SpinningSword",
+                width: 80,
+		height: 14,
 		y2: 170
-	}],
-	[{
-		name: "enemy2",
-		x: 80,
-		y: 60,
-		y2: 200
 	}, {
-		name: "newchar",
-		x: 120,
-		y: 120,
-		y2: 170
-	}, {
-		name: "sword",
-		x: 80,
-		y: 14,
-		y2: 170
-	}, {
-		name: "enemyGuy",
-		x: 80,
-		y: 73,
-		y2: 190
+		name: "ScarletStabber",
+                width: 70,
+		height: 60,
+		y2: 185
 	}]
 ];
 
@@ -147,44 +151,55 @@ const LEVEL_PLAYER_CHARACTERS = [{
 	y2: 120
 }, {
 	name: "ninja",
-	x2: 450,
+	x2: 390, //Ideally this should call on the canvas width to place the character in the center--however, canvas.width is only created later.
 	y2: 120
-}]
+}];
 
 const LEVEL_CLOUDS = [{
 	name: "cloud",
-	x: 60,
-	y: 34
+        width: 60,
+	height: 34
 }, {
 	name: "cloud2",
-	x: 65,
-	y: 50
+        width: 65,
+	height: 50
 }, {
 	name: "cloud3",
-	x: 60,
-	y: 40
+        width: 60,
+	height: 40
 }, {
 	name: "cloud3",
-	x: 60,
-	y: 40
+        width: 60,
+	height: 40
 }, {
 	name: "cloud3",
-	x: 60,
-	y: 40
-}]
+        width: 60,
+	height: 40
+}];
+
 //END CONFIG
 
-//flag to take care of y axis cordinate increase or decrease
-//z to set a interval at which flag is changed
-var flag = 1;
-var z = 0;
-// Add state to check if user is playing, complete or game-over
-var state = 'instructions';
+const font = "Share Tech Mono";
+const totalLevels = 5; //This constant is very important--it tells the game how many levels it has.
+const coinWidth = 40;
+const LEVEL_COMPLETION_TIME = 3000;
+const MAX_VARIABLES = Math.floor(LEVEL_COMPLETION_TIME / 50); //Each of our arrays should be able to contain a maximum of 2 objects/second.
+const FLYING = 0; //This movement type goes up and down as it travels, going from right to left.
+const WALKING = 1; //This movement type goes in a straight line from right to left--or, in some cases, doesn't move.
+const ROTATING = 2; //This movement type rotates in two dimensions, traveling from right to left.
+const REVERSED = 3; //This movement type travels from left to right.
 
-var currentLevel = 1;
+//flyUp says whether FLYING enemies are flying up or down--up if true, down if false.
+//z sets the interval at which flyUp changes.
+var flyUp = false;
+var z = 0;
+
+var currentLevel;
 var collectedCoins = 0;
-var timeLeft = 30;
+var currentCoins = 0;
+var timeLeft; //Says how much time is left in the level--will be calculated based off of LEVEL_COMPLETION_TIME later.
 var score = 0;
+var currentScore = 0;
 var playerCharacter;
 var background;
 var background2;
@@ -192,6 +207,9 @@ var backgroundDx = 0;
 var xPos = -5;
 var scoreBoard;
 var coinScoreBoard;
+var coinScoreBoardImg;
+var coinScoreBoardSupImg;
+var highscoreBoard;
 
 var startArrow1;
 var startArrow2;
@@ -199,18 +217,21 @@ var startArrow3;
 var switchArrow = 0;
 
 var timeBoard;
+var timeBoardImg;
 var levelDisplay;
 var enemyCharacters = [];
 var coins = [];
 var clouds = [];
 var rotationCmp = 0;
-var keysPressed ={
+var keysPressed = {
 	LEFT: false,
 	UP: false,
 	RIGHT: false,
+	DOWN: false,
 	P: false,
 	M: false,
 	W: false,
+	S: false,
 	A: false,
 	D: false
 };
@@ -220,17 +241,19 @@ var optionId= "";
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
+var highscore = 0;
+
 
 function KeyDown(event) {
   var key;
 	key = event.which;
-	console.log("key: " + key);
+
 	keysPressed[key] = true;
   //avoid auto-repeated keydown event
   if(event.repeat)
        return;
   if(!gameOptions){
-    if((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown == false) {
+    if((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown == false){
 		    moveLeft();
         playerCharacter.leftCooldown = true;
     }
@@ -254,6 +277,11 @@ function KeyDown(event) {
 		    keysPressed[userKeys.M] = false;
 		    muteMusic();
 	  }
+    if(keysPressed[userKeys.C]) {
+        keysPressed[userKeys.C] = false;
+        resumeGame();
+    }
+    
   }else{
     changeOption(key);
   }
@@ -371,6 +399,13 @@ function KeyUp(event) {
 				playerCharacter.speedX = 0;
 			}
                         playerCharacter.rightCooldown = false;
+        	break;
+        case userKeys.DOWN:
+        case userKeys.S:
+        	if(playerCharacter.hitGround && playerCharacter.duckCooldown == true){//this if statement is used so that the playercharacter doesnt increase in size when DOWN or S is pressed while character is in the air
+        		playerCharacter.height = playerCharacter.height * 2;
+        		playerCharacter.duckCooldown = false;
+        	}
 	}
   updateBackgroundDx();
 }
@@ -380,7 +415,7 @@ function showInstructions(){
 	gameArea.init();
 	//background
 	background = new component();
-  background.init(900, 400, "Pictures/background_1.jpg", 0, 0, "image", 1, true);
+	background.init(canvas.width, canvas.height, "Pictures/background_1.jpg", 0, 0, "image", WALKING, true);
 	var modal = document.getElementById('instructionsModal');
 	modal.style.display = "block";
 }
@@ -388,7 +423,17 @@ function showInstructions(){
 function initialize_game() {
 	currentLevel = 1;
 	collectedCoins = 0;
-        score = 0;
+  currentCoins = 0;
+  score = 0;
+  currentScore = 0;
+
+  var coinMessage = document.getElementById('coinMessage');
+  var pointsMessage = document.getElementById('pointsMessage');
+  if (coinMessage) {
+    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+    levelTransitionModalContent.removeChild(coinMessage);
+    levelTransitionModalContent.removeChild(pointsMessage);
+  }
 
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
@@ -398,93 +443,101 @@ function initialize_game() {
 		audio.load();
 	}
 
-	//generating coins at random positions
-	for (var i = 0; i < 100; i++) {
-		var coinWidth = 40;
-		var x = Math.floor((Math.random() * gameArea.canvas.width) + i * gameArea.canvas.width / 2);
-		var y = Math.floor(Math.random() * 150 + 30); //150 is canvas height - baseline(150) - char height - 30 (space on top)
-
-		coins[i] = new component();
-		coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", 1);
-	}
-
-	startLevel(1);
+	startLevel();
 }
 
-function startLevel(levelNumber) {
-	//to synchronize the start coordinates of enemy characters
-	flag = 1;
+function startLevel() {
+	//Synchronizes the start coordinates of enemy characters
+	flyUp = false;
 	z = 0;
-	dir = 1; //face in right direction
-  xPos = -5;
+	dir = 1; //face to the right
+        xPos = -5;
 
 	//player character
 	playerCharacter = new component();
-	let char = LEVEL_PLAYER_CHARACTERS[levelNumber - 1];
-	playerCharacter.init(60, 70, `Pictures/${char.name}.png`, char.x2, char.y2, "image", 1, undefined, char.name);
-
+	let char = LEVEL_PLAYER_CHARACTERS[currentLevel - 1];
+	playerCharacter.init(60, 70, `Pictures/${char.name}.png`, char.x2, char.y2, "image", WALKING, undefined, char.name);
         playerCharacter.jumpCooldown = false; //These cooldowns let our system know whether a certain key has recently been
         playerCharacter.leftCooldown = false; //pressed--"false" means that the key is not on cooldown and should be
         playerCharacter.rightCooldown = false;//acknowledged normally.
+  	playerCharacter.duckCooldown = false;
 
 	//background
 	background = new component();
-  background2 = new component();
-	background.init(900, 400, `Pictures/background_${levelNumber}.jpg`, -50, 0, "image", 1);
-  background2.init(900, 400, `Pictures/background_${levelNumber}_reverse.jpg`,850, 0, "image", 1);
+        background2 = new component();
+	background.init(canvas.width, canvas.height, `Pictures/background_${currentLevel}.jpg`, -50, 0, "image", WALKING);
+        background2.init(canvas.width, canvas.height, `Pictures/background_${currentLevel}_reverse.jpg`,850, 0, "image", WALKING);
 
 	//score
 	scoreBoard = new component();
-	scoreBoard.init("30px", "Consolas", "black", 20, 40, "text", 1);
+	scoreBoard.init("20px", font, "black", 250, 40, "text", WALKING);
 
 	//collected Coins
 	coinScoreBoard = new component();
-	coinScoreBoard.init("30px", "Consolas", "black", 240, 40, "text", 1);
+	coinScoreBoard.init("20px", font, "black", 450, 40, "text", WALKING);
+        coinScoreBoardImg = new component();
+        coinScoreBoardImg.init(22, 22, "Pictures/coin.png", 420, 21, "image", WALKING);
+        coinScoreBoardSupImg = new component();
+        coinScoreBoardSupImg.init(40, 40, "Pictures/stars.png", 412, 10, "image", WALKING);
 
-  //startArrow
-  startArrow1 = new component();
-  startArrow2 = new component();
-  startArrow3 = new component();
+        highscoreBoard = new component();
+        highscoreBoard.init("20px", "Consolas", "black", 20, 40, "text", WALKING);
+        highscoreBoard.text = "HIGHSCORE:" + highscore;
 
-  startArrow1.init(90,70,"Pictures/blackArrow.png",60,125,"image",1);
-  startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
-  startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
+        //startArrow
+        startArrow1 = new component();
+        startArrow2 = new component();
+        startArrow3 = new component();
+
+        startArrow1.init(90,70,"Pictures/blackArrow.png",60,125,"image",1);
+        startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
+        startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
 
   //current time left in the given level
-  timeBoard = new component ();
-  timeBoard.init("30px", "Consolas", "black", 410, 40, "text", 1);
+        timeBoard = new component ();
+        timeBoard.init("20px", font, "black", 830, 40, "text", WALKING);
+        timeBoardImg = new component();
+        timeBoardImg.init(22, 22, "Pictures/clock.png", 800, 21, "image", WALKING);
 
 	//current level display
 	levelDisplay = new component();
-	levelDisplay.init("30px", "Consolas", "black", 620, 40, "text", 1);
+	levelDisplay.init("20px", font, "black", 670, 40, "text", WALKING);
 
-	//loop for creating new enemy characters setting a random x coordinate for each
-	for (var i = 0; i < 100; i++) {
-		enemyCharacters[i] = new component();
+	//Loop for creating new enemy characters setting a random x coordinate for each. Creates a maximum of 2 enemies/second.
+	for (var i = 0; i < MAX_VARIABLES; i++) {
+            enemyCharacters[i] = new component();
 
-		var x = Math.floor((Math.random() * (1400 + i * 500)) + (500 * i + 900));
+            var x = Math.floor((Math.random() * (i * (canvas.width / 2))) + ((canvas.width / 2) * i + (canvas.width * 1.25)));
 
-		//enemyType is the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)..
-		//when you want to add a new type of enemy, increment the number inside the Math.random and
-		//insert in the correct case the enemy
-		var enemyType = Math.floor(Math.random() * (LEVEL_ENEMIES[levelNumber - 1].length));
+            //moveType describes the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)...
+            //when you want to add a new type of enemy, increment the number inside the Math.random and
+            //insert in the correct case the enemy
+            var moveType = Math.floor(Math.random() * (LEVEL_ENEMIES[currentLevel - 1].length));
 
-		let enemy = LEVEL_ENEMIES[levelNumber - 1][enemyType];
-		if (enemy.name === "enemyGuy") {
-			//in this case the x value is calculate as the clouds
-			x = Math.floor((Math.random() * (900 - i * 300) + 1));
-		}
-		enemyCharacters[i].init(enemy.x, enemy.y, `Pictures/${enemy.name}.png`, x, enemy.y2, "image", enemyType);
-
+            let enemy = LEVEL_ENEMIES[currentLevel - 1][moveType];
+            if (moveType === REVERSED) {
+		//These enemies enter offscreen from the left, and have roughly the reverse of the normal formula.
+		x = Math.floor(Math.random() * (-i * (canvas.width / 2)));
+            }
+            
+            enemyCharacters[i].init(enemy.width, enemy.height, `Pictures/${enemy.name}.png`, x, enemy.y2, "image", moveType);
 	}
 
-	//loop for creating new clouds setting a random x coordinate for each
-	for (var i = 0; i < 100; i++) {
-		var x = Math.floor((Math.random() * (900 - i * 300) + 1));
-		clouds[i] = new component();
+	//Loop for creating new clouds setting a random x coordinate for each. Creates a maximum of 2 clouds/second.
+        for (var i = 0; i < MAX_VARIABLES; i++) {
+            var x = Math.floor((Math.random() * (-600 + i * 450) + 1));
+            clouds[i] = new component();
+            let cloud = LEVEL_CLOUDS[currentLevel - 1];
+            clouds[i].init(cloud.width, cloud.height, `Pictures/${cloud.name}.png`, x, 40, "image", WALKING);
+	}
 
-		let cloud = LEVEL_CLOUDS[levelNumber - 1];
-		clouds[i].init(cloud.x, cloud.y, `Pictures/${cloud.name}.png`, x, 40, "image", 1);
+        //Generates new coins at random positions. Creates a maximum of 2/second.
+	for (var i = 0; i < MAX_VARIABLES; i++) {
+            var x = Math.floor(((Math.random() + 1) * gameArea.canvas.width) + (i * gameArea.canvas.width / 2));
+            var y = Math.floor(Math.random() * 150 + 30); //150 is canvas height - baseline(150) - char height - 30 (space on top)
+
+            coins[i] = new component();
+            coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", WALKING);
 	}
 
 	//call start function
@@ -508,7 +561,6 @@ var gameArea = {
 		this.bonusActiveTime = 0;
 		this.coinScoreActiveTime = 0;
 		this.coinScoreInterval = null;
-
 	},
 
 	start: function() {
@@ -518,7 +570,6 @@ var gameArea = {
 		var modals = document.getElementsByClassName('modal');
 		for (var i = 0; i < modals.length; i++) {
 			var modal = modals[i];
-
 			modal.style.display = "none";
 		}
 
@@ -538,19 +589,18 @@ var gameArea = {
 };
 
 function component() {
-	this.init = function(width, height, color, x, y, type, h, initialShow = false, charName = undefined) {
-		//h to test if it is enemy 1 or 2
-		this.h = h;
+	this.init = function(width, height, color, x, y, dataType, moveType, initialShow = false, charName = undefined) {
+		this.moveType = moveType; //This seems to mainly describe the movement type of an enemy
 		this.alive = true;
 		this.alive = true;
-
+                this.rotationCmp = 0;
 		this.color = color;
-		//test if component is image
-		this.type = type;
+                //Assigns data type of the variable (usually an image).
+		this.dataType = dataType;
 
 		this.ctx = gameArea.context;
 
-		if (type === "image") {
+		if (dataType === "image") {
 			this.image = new Image();
 			this.image.src = this.color;
 			this.image.width = width;
@@ -574,7 +624,7 @@ function component() {
 
 		this.width = width;
 		this.initHeight = height; // to get squeezed height later
-		this.alpha = 1;
+		this.alpha = 1; //This variable decrees how much an object is "faded"--1 is fully displayed, 0 is gone.
 		this.height = height;
 
 		//change components position
@@ -582,7 +632,7 @@ function component() {
 		this.speedY = 0;
 		this.x = x;
 		this.y = y;
-    this.orignX = x;
+                this.orignX = x;
 		this.gravity = 1.5;
 		//indicates if the character is on the ground or not
 		this.hitGround = true;
@@ -593,7 +643,7 @@ function component() {
 
 	//function to decide to decide what to display on screen, text, image or fill color
 	this.update = function(callback) {
-		if (this.type === "image") {
+		if (this.dataType === "image") {
 			this.ctx.globalAlpha = this.alpha;
 			if (this.angle != 0) {
 				this.ctx.save();
@@ -605,7 +655,7 @@ function component() {
 			} else {
 				this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 			}
-		} else if (this.type === "text") {
+		} else if (this.dataType === "text") {
 			this.ctx.font = this.width + " " + this.height;
 			this.ctx.fillStyle = this.color;
 			this.ctx.fillText(this.text, this.x, this.y);
@@ -614,6 +664,8 @@ function component() {
 			this.ctx.fillRect(this.x, this.y, this.width, this.height);
 		}
 	};
+        
+        //This function manages the scrolling backgrounds
   this.moveBackgrounds = function(background2){
     if(0 <= xPos){
         xPos += backgroundDx;
@@ -634,6 +686,7 @@ function component() {
       }
     }
 	}
+        
 	//enemy character collision function
 	this.crashWith = function(otherobj) {
 		var left = this.x;
@@ -654,18 +707,18 @@ function component() {
 		return crash;
 	};
 
+//This function tells us whether the player character (or any other object) has jumped on another object
 	this.jumpsOn = function(otherobj) {
 		var bottomY = this.y + (this.height);
-		var middleX = this.x + (this.width / 2);
+		var farX = this.x + this.width;
 		var otherleft = otherobj.x;
 		var otherright = otherobj.x + (otherobj.width);
 		var othertop = otherobj.y;
-		var otherbottom = otherobj.y + (otherobj.height);
 		var smoosh = false;
-		if ((bottomY > othertop - 15) &&
-			(bottomY < otherbottom - (otherobj.height - 10)) &&
-			(middleX > otherleft) &&
-			(middleX < otherright)) {
+		if ((bottomY > othertop - 5) &&
+			(bottomY < (othertop + 20)) &&
+			(farX > otherleft) &&
+			(this.x < otherright)) {
 			smoosh = true;
 			//When the player smooshes an enemy, we send them up
 			moveUp("hit");
@@ -679,7 +732,6 @@ function component() {
 		this.speedY += this.gravity; //increment the y speed with the gravity
 		this.x += this.speedX;
 		this.hitBottom();
-		//console.log(`${this.x},${this.y}`);
 	};
 
 	//set floor on canvas
@@ -698,33 +750,41 @@ function component() {
 	this.isAlive = function() {
 		return this.alive;
 	}
+        
   this.setX = function(x){
     this.x = x;
   }
+  
   this.getX = function(){
     return this.x;
   }
+  
   this.getOrignX = function(){
     return this.orignX;
   }
+  
 	this.getImgSrc = function(){
 		return this.image.src;
 	}
+        
 	this.setSrc = function(src){
 		this.image.src = src;
 	}
+        
+        //This is a rotation function for coins only, allowing them to rotate in 3 dimensions
 	this.rotation = function(){
-		rotationCmp++;
-		if(rotationCmp < 1000){
-			this.image.src = "Pictures/coin.png";
-		}else if(rotationCmp < 2000){
-			this.image.src = "Pictures/coin2.png";
-		}else if(rotationCmp < 3000){
-			this.image.src = "Pictures/coin4.png";
-		}else if(rotationCmp < 4000){
-			this.image.src = "Pictures/coin3.png";
-			rotationCmp = 0;
-		}
+		if(this.rotationCmp == 0){
+			this.setSrc("Pictures/coin.png");
+		}else if(this.rotationCmp == 10){
+			this.setSrc("Pictures/coin2.png");
+		}else if(this.rotationCmp == 20){
+			this.setSrc("Pictures/coin4.png");
+		}else if(this.rotationCmp == 30){
+			this.setSrc("Pictures/coin3.png");
+		}else if (this.rotationCmp >= 40){
+                    this.rotationCmp = -1; //Sets it to -1 so that it gets assigned to 0 by the start of the loop.
+                }
+                this.rotationCmp++;
 	}
 
 	//check if there was a change in direction character is facing
@@ -745,9 +805,15 @@ function component() {
 	}
 }
 
+
+
 function gameOver() {
 	interval && clearInterval(interval);
-	state = 'game-over';
+
+  //adding score to list of highscores
+  if(highscore < score){
+    highscore = score;
+  }
 	var modal = document.getElementById('gameOverModal');
 	modal.style.display = "block";
 
@@ -767,10 +833,12 @@ function restartGame() {
 }
 
 function gameComplete() {
-	state = 'complete';
 	var modal = document.getElementById('gameCompleteModal');
 	modal.style.display = "block";
 	gameArea.stop();
+        if(highscore < score){
+            highscore = score;
+        }
 
 	if (!musicMuted) {
 		audio = document.getElementById("bgm");
@@ -820,15 +888,19 @@ function flashScore() {
 }
 
 function flashCoinScore() {
-	if (coinScoreBoard.color === "black") {
+    coinScoreBoardSupImg.update();
+    if (coinScoreBoard.color === "black") {
 		coinScoreBoard.color = "white";
-	} else {
+        coinScoreBoardSupImg.alpha = 1;
+    } else {
 		coinScoreBoard.color = "black";
-	};
+        coinScoreBoardSupImg.alpha = 0;
+    };
 
 	if (gameArea.coinScoreActiveTime > 1200) {
 		coinScoreBoard.color = "black";
-		clearInterval(gameArea.coinScoreInterval);
+        coinScoreBoardSupImg.alpha = 0;
+        clearInterval(gameArea.coinScoreInterval);
 	};
 	gameArea.coinScoreActiveTime += 150;
 }
@@ -877,24 +949,29 @@ function updateGameArea() {
 	//check current level, if more than 5 (because there are five levels currently), show game complete modal
 	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
 		gameArea.stop();
-		currentLevel++;
-		console.log(currentLevel);
-		if (currentLevel > LEVEL_CLOUDS.length) gameComplete();
-		else startLevel(currentLevel);
-	}
-
+		if (currentLevel == totalLevels) gameComplete();
+		else {
+                    currentLevel++;
+                    var levelTransitionModal = document.getElementById('levelTransitionModal');
+                    levelTransitionModal.style.display = "block";
+                    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent')
+                    levelTransitionModalContent.innerHTML += `<p id="coinMessage" class="levelTransitionMessage">Coins earned: ${currentCoins}</p>`;
+                    levelTransitionModalContent.innerHTML += `<p id="pointsMessage" class="levelTransitionMessage">Points earned: ${currentScore}</p>`;
+                }
+        }
+        
 	for (var i = 0; i < enemyCharacters.length; i++){
 		if(enemyCharacters[i].isAlive()) {
 			if(playerCharacter.jumpsOn(enemyCharacters[i])){
-				enemyCharacters[i].setAlive(false);
-				incrementScore(100*currentLevel);
-				gameArea.bonusActiveTime = 0;
-				gameArea.bonusInterval = setInterval(flashScore, 150);
+                            enemyCharacters[i].setAlive(false);
+                            incrementScore(100*currentLevel);
+                            gameArea.bonusActiveTime = 0;
+                            gameArea.bonusInterval = setInterval(flashScore, 150);
 
 			} else if (playerCharacter.crashWith(enemyCharacters[i])){
-        backgroundDx = 0;
-        gameArea.stop();
-				gameOver();
+                            backgroundDx = 0;
+                            gameArea.stop();
+                            gameOver();
 			}
 		}
 	}
@@ -906,14 +983,17 @@ function updateGameArea() {
 				coins[i].setSrc("Pictures/stars.png");
 				//increase collected coins counter
 				collectedCoins++;
+        currentCoins++;
 				incrementScore(50*currentLevel);
 				coins[i].setAlive(false);
 				//animate coin score board
 				gameArea.coinScoreActiveTime = 0;
 				gameArea.coinScoreInterval = setInterval(flashCoinScore, 150);
-				coinpickup_audio=document.getElementById("coinpickup")
-				coinpickup.autoplay = true;
-				coinpickup.load();
+				if(!musicMuted){
+					coinpickup_audio=document.getElementById("coinpickup")
+					coinpickup.autoplay = true;
+					coinpickup.load();
+				}
 			}else{
 				coins[i].rotation();
 			}
@@ -923,39 +1003,42 @@ function updateGameArea() {
 	gameArea.clear();
 
 	//update background
-  background.moveBackgrounds(background2);
+        background.moveBackgrounds(background2);
 	background.update();
-  background2.update();
+        background2.update();
 
 	//score update
 	scoreBoard.text = "SCORE: " + score;
 	scoreBoard.update();
 
 	//collected coins update
-	coinScoreBoard.text = "COINS: " + collectedCoins;
-	coinScoreBoard.update();
+        coinScoreBoard.text = collectedCoins;
+        coinScoreBoard.update();
+        coinScoreBoardImg.update();
+        highscoreBoard.update();
 
-  //startArrow
-  flashStartArrow();
-  startArrow1.update();
-  startArrow2.update();
-  startArrow3.update();
+        //startArrow
+        flashStartArrow();
+        startArrow1.update();
+        startArrow2.update();
+        startArrow3.update();
 
 
-  //Timer update
-  timeBoard.text = "TIME: " + timeLeft;
-  timeBoard.update();
+        //Timer update
+        timeBoard.text = parseInt(timeLeft);
+        timeBoard.update();
+        timeBoardImg.update();
 
-	//increment frame number for timer
+        //increment frame number for timer
 	incrementFrameNumber(2);
-  incrementTime(2);
+        incrementTime(2);
 
 	//LevelDisplay update
 	levelDisplay.text = "Level " + currentLevel;
 	levelDisplay.update();
 
 	//enemy update
-	for (var i = 0; i < 100; i++) {
+	for (var i = 0; i < enemyCharacters.length; i++) {
 		enemyCharacters[i].update();
 	}
 
@@ -964,60 +1047,59 @@ function updateGameArea() {
 		coins[i].update();
 	}
 
-	//cloud update
-	for (var i = 0; i < 100; i++) {
-		clouds[i].x += 0.5 -backgroundDx;
-		clouds[i].update();
-	}
+	//Cloud update--doesn't display on level 5, which is indoors
+        if(currentLevel != 5){
+            for (var i = 0; i < clouds.length; i++) {
+                    clouds[i].x += 0.5 - backgroundDx;
+                    clouds[i].update();
+            }
+        }
 
 	//player character update
 	playerCharacter.newPos();
 	correctCharacterPos();
 	playerCharacter.update();
 
-	//if statement to reverse the flag so that the y cordinate of birds would be changed
-	//z keeps the track and change flag after every 35 iteration
+	//After every 35 iterations, flyUp flips, so that FLYING enemies start moving in the opposite direction.
 	if (z == 35) {
-		flag = !flag;
+		flyUp = !flyUp;
 		z = 0;
 	}
-	//z increased in every iteration
+	//z increases in every iteration
 	z++;
 	//loop to set speed of enemy characters
 	for (var i = 0; i < enemyCharacters.length; i++) {
 		if (enemyCharacters[i].isAlive()) {
 			//check if level is 3 or greater
 			//vary the speed of enemy characters if level is 3 or greater
-			if (currentLevel >= 3 && enemyCharacters[i].h) {
-				if (currentLevel === 5 && enemyCharacters[i].h === 3) {
-					enemyCharacters[i].x -= -4+backgroundDx; //it enter from the left
+			if (currentLevel >= 3 && enemyCharacters[i].moveType != FLYING) { //The flying enemies are fast enough, thank you
+				if (currentLevel === 5 && enemyCharacters[i].moveType === REVERSED) {
+					enemyCharacters[i].x -= (-4 + backgroundDx); //These enemies enter from the left
 				} else {
-					enemyCharacters[i].x += -4-backgroundDx;
+					enemyCharacters[i].x += (-4 - backgroundDx);
 				}
-
 			} else {
-				enemyCharacters[i].x += -2-backgroundDx;
+				enemyCharacters[i].x += (-2 - backgroundDx);
 			}
 
-			//if statement to check if y cordinate has to increase or decrease
-			//should birds go up or down
-			if (!enemyCharacters[i].h) {
-				if (flag == 1) {
-					enemyCharacters[i].y += -3;
+			//This tells bird enemies whether to go up or down
+			if (enemyCharacters[i].moveType === FLYING) {
+				if (flyUp == true) {
+					enemyCharacters[i].y += 3;
 				} else {
-					enemyCharacters[i].y += +3;
+					enemyCharacters[i].y += -3;
 				}
 			}
 
-			//if h===2 the enemy must rotate
-			if (enemyCharacters[i].h === 2) {
+			//This rotates enemies of type 2--currently just the Sword enemies in level 5
+			if (enemyCharacters[i].moveType === ROTATING) {
 				enemyCharacters[i].angle += 10 * Math.PI / 180;
 			}
 
 		} else { // if dead; enemy will be 'squeezed', fall to the ground and fade away. Feel free to improve by adding further animation.
 			enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
-      enemyCharacters[i].x -= backgroundDx;
-      enemyCharacters[i].y += 10;
+                        enemyCharacters[i].x -= backgroundDx;
+                        enemyCharacters[i].y += 10;
 			enemyCharacters[i].alpha += -0.01;
 			if (enemyCharacters[i].alpha < 0) {
 				enemyCharacters[i].alpha = 0;
@@ -1045,6 +1127,7 @@ function incrementFrameNumber(value) {
 
 function incrementScore(value) {
 	score += value;
+  currentScore += value;
 }
 
 function incrementTime(value) {//Both increments time and updates onscreen timer value
@@ -1110,25 +1193,45 @@ function moveRight(){
   backgroundDx = 5;
 }
 
+function duck(){
+	playerCharacter.height = playerCharacter.height / 2;
+}
+
 var interval;
 
 function moveLeftMouse() {
 	interval = setInterval(moveLeft, 1);
-  backgroundDx = -5;
+        backgroundDx = -5;
 }
 
 function moveRightMouse() {
 	interval = setInterval(moveRight, 1);
-  if(xPos <= -5){
-    xPos = 0;
-    background.setX(-50);
-    background2.setX(850);
-  }
+        if(xPos <= -5){
+        xPos = 0;
+        background.setX(-50);
+        background2.setX(850);
+}
   backgroundDx = 5;
 
 }
+
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
-  backgroundDx = 0;
+        backgroundDx = 0;
+}
+
+function resumeGame() {
+  var levelTransitionModal = document.getElementById('levelTransitionModal');
+  var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+  if (levelTransitionModal.style.display == "block") {
+    var coinMessage = document.getElementById('coinMessage');
+    var pointsMessage = document.getElementById('pointsMessage');
+    levelTransitionModalContent.removeChild(coinMessage);
+    levelTransitionModalContent.removeChild(pointsMessage);
+    levelTransitionModal.style.display = "none";
+    currentCoins = 0;
+    currentScore = 0;
+    startLevel(currentLevel);
+  }
 }

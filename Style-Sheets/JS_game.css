@@ -3,7 +3,7 @@ body {
   font-family: 'Share Tech Mono', monospace;
 }
 
-canvas {	
+canvas {
   border:1px solid #d3d3d3;
   background-color: #f1f1f1;
   width: 90%;
@@ -84,9 +84,18 @@ canvas {
     height:100%;
 }
 
+#buttonRestart {
+    display: inline-block;
+    text-align: center;
+    margin: auto;
+    white-space: normal;
+    float: left;
+    margin-left: 5%;
+}
+
 #buttonWrapper{
   margin-top: 20px;
-  text-align: center; 
+  text-align: center;
   max-width: 99%;
 }
 
@@ -111,21 +120,14 @@ canvas {
 
 #buttonPause{
 	float: right;
-	margin-bottom: 7%;   
+	margin-bottom: 7%;
 	overflow: auto;
 }
 
 #buttonAudio{
 	float: right;
-    margin-bottom: 7%;   
+    margin-bottom: 7%;
     overflow: auto;
-}
-
-#restartButtonNearScore{
-    width:13.3%;
-    right: 7%;
-    margin-bottom: 7%;   
-    position: absolute;
 }
 
 /* Mobile */
@@ -135,4 +137,4 @@ canvas {
         width: 65%;
         margin: 0 auto;
     }
-
+}
