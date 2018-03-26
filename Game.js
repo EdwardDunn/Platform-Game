@@ -62,9 +62,6 @@ const specialKeys = {
     221:'CloseBraket',
     222:'SingleQuote'
 };
-
-const LEVEL_COMPLETION_TIME = 3000;
-
 const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
 	[{
 		name: "FloatingFish",
