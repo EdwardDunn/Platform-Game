@@ -9,7 +9,6 @@ New levels can be added by:
 Author: Open Source - Contributor list can be seen in GitHub
 */
 
-
 const userKeys = {
     LEFT: 37,
     UP: 38,
@@ -32,7 +31,7 @@ const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
 		height: 36,
 		y2: 200
 	}, {
-		name: "Zombie",
+		name: "zombie",
                 width: 40,
 		height: 45,
 		y2: 205
@@ -242,10 +241,10 @@ function KeyDown(event) {
 		muteMusic();
 	}
 
-  if (keysPressed[userKeys.C]) {
-    keysPressed[userKeys.C] = false;
-    resumeGame()
-  }
+        if (keysPressed[userKeys.C]) {
+                keysPressed[userKeys.C] = false;
+                resumeGame()
+        }
 }
 
 // Toggle music at 'M' key press
@@ -275,13 +274,13 @@ function pauseGame() {
 
 
 function updateBackgroundDx(){
-  if(keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
-    backgroundDx = -5;
-	}else if(keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
-    backgroundDx = 5;
-	}else{
-      backgroundDx = 0;
-  }
+    if(keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
+        backgroundDx = -5;
+    }else if(keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
+        backgroundDx = 5;
+    }else{
+        backgroundDx = 0;
+    }
 }
 
 function KeyUp(event) {
@@ -319,7 +318,7 @@ function KeyUp(event) {
         		playerCharacter.duckCooldown = false;
         	}
 	}
-  updateBackgroundDx();
+        updateBackgroundDx();
 }
 
 
@@ -333,19 +332,19 @@ function showInstructions(){
 }
 
 function initialize_game() {
-	currentLevel = 1;
-	collectedCoins = 0;
-  currentCoins = 0;
-  score = 0;
-  currentScore = 0;
+        currentLevel = 1;
+        collectedCoins = 0;
+        currentCoins = 0;
+        score = 0;
+        currentScore = 0;
 
-  var coinMessage = document.getElementById('coinMessage');
-  var pointsMessage = document.getElementById('pointsMessage');
-  if (coinMessage) {
-    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
-    levelTransitionModalContent.removeChild(coinMessage);
-    levelTransitionModalContent.removeChild(pointsMessage);
-  }
+        var coinMessage = document.getElementById('coinMessage');
+        var pointsMessage = document.getElementById('pointsMessage');
+        if (coinMessage) {
+                var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+                levelTransitionModalContent.removeChild(coinMessage);
+                levelTransitionModalContent.removeChild(pointsMessage);
+        }
 
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
@@ -362,7 +361,7 @@ function startLevel() {
 	//Synchronizes the start coordinates of enemy characters
 	flyUp = false;
 	z = 0;
-	dir = 1; //face to the right
+	dir = 1; //Begin facing to the right
         xPos = -5;
 
 	//player character
@@ -400,10 +399,9 @@ function startLevel() {
         startArrow1 = new component();
         startArrow2 = new component();
         startArrow3 = new component();
-
-        startArrow1.init(90,70,"Pictures/blackArrow.png",60,125,"image",1);
-        startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
-        startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
+        startArrow1.init(90, 70, "Pictures/blackArrow.png", 60, 125, "image", 1);
+        startArrow2.init(90, 70, "Pictures/blackArrow.png", 30, 125, "image", 1);
+        startArrow3.init(90, 70, "Pictures/blackArrow.png", 0, 125, "image", 1);
 
   //current time left in the given level
         timeBoard = new component ();
@@ -418,14 +416,12 @@ function startLevel() {
 	//Loop for creating new enemy characters setting a random x coordinate for each. Creates a maximum of 2 enemies/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
             enemyCharacters[i] = new component();
-
             var x = Math.floor((Math.random() * (i * (canvas.width / 2))) + ((canvas.width / 2) * i + (canvas.width * 1.25)));
 
             //moveType describes the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)...
             //when you want to add a new type of enemy, increment the number inside the Math.random and
             //insert in the correct case the enemy
             var moveType = Math.floor(Math.random() * (LEVEL_ENEMIES[currentLevel - 1].length));
-
             let enemy = LEVEL_ENEMIES[currentLevel - 1][moveType];
             if (moveType === REVERSED) {
 		//These enemies enter offscreen from the left, and have roughly the reverse of the normal formula.
@@ -447,7 +443,6 @@ function startLevel() {
 	for (var i = 0; i < MAX_VARIABLES; i++) {
             var x = Math.floor(((Math.random() + 1) * gameArea.canvas.width) + (i * gameArea.canvas.width / 2));
             var y = Math.floor(Math.random() * 150 + 30); //150 is canvas height - baseline(150) - char height - 30 (space on top)
-
             coins[i] = new component();
             coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", WALKING);
 	}
@@ -470,8 +465,8 @@ var gameArea = {
 
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 		this.time = 0;
-		this.bonusActiveTime = 0;
-		this.coinScoreActiveTime = 0;
+		this.bonusActiveTime = 1500; //The actual number isn't important, we just want to make sure 
+		this.coinScoreActiveTime = 1500; //that the flash functions won't activate immediately
 		this.coinScoreInterval = null;
 	},
 
@@ -484,7 +479,6 @@ var gameArea = {
 			var modal = modals[i];
 			modal.style.display = "none";
 		}
-
 		//update interval
 		this.interval = setInterval(updateGameArea, 20);
 	},
@@ -525,7 +519,7 @@ function component() {
 				this.imageMirror.height = height;
 			}
 
-			if (initialShow) {
+			if (initialShow) {//This is for things we want displaying before the game starts--basically the background
 				var imgCopy = this.image;
 				var ctxCopy = this.ctx;
 				this.image.onload = function() {
@@ -554,7 +548,7 @@ function component() {
 	}
 
 	//function to decide to decide what to display on screen, text, image or fill color
-	this.update = function(callback) {
+	this.update = function() {
 		if (this.dataType === "image") {
 			this.ctx.globalAlpha = this.alpha;
 			if (this.angle != 0) {
@@ -578,25 +572,25 @@ function component() {
 	};
         
         //This function manages the scrolling backgrounds
-  this.moveBackgrounds = function(background2){
-    if(0 <= xPos){
-        xPos += backgroundDx;
-        this.x -= backgroundDx;
-        background2.x -= backgroundDx;
-    }else{
-      backgroundDx = 0;
-    }
+        this.moveBackgrounds = function(background2){
+                if(0 <= xPos){
+                        xPos += backgroundDx;
+                        this.x -= backgroundDx;
+                        background2.x -= backgroundDx;
+                }else{
+                        backgroundDx = 0;
+                }
 		if(this.x <= -900){this.x = 900;}
-    else if(background2.x <= -900){background2.x = 900;}
+                else if(background2.x <= -900){background2.x = 900;}
 		else if(900 <= this.x){this.x = -900;}
-    else if(900 <= background2.x){background2.x = -900;}
-    else if(900 < Math.abs(this.x)+Math.abs(background2.x)){
-      if(Math.abs(background2.x) < Math.abs(this.x)){
-        this.x += (0 < this.x)?-5:5;
-      }else{
-        background2.x += (0 < background2.x)?-5:5;
-      }
-    }
+                else if(900 <= background2.x){background2.x = -900;}
+                else if(900 < Math.abs(this.x)+Math.abs(background2.x)){
+                        if(Math.abs(background2.x) < Math.abs(this.x)){
+                                this.x += (0 < this.x)?-5:5;
+                        }else{
+                                background2.x += (0 < background2.x)?-5:5;
+                        }
+                }
 	}
         
 	//enemy character collision function
@@ -723,9 +717,9 @@ function gameOver() {
 	interval && clearInterval(interval);
 
   //adding score to list of highscores
-  if(highscore < score){
-    highscore = score;
-  }
+        if(highscore < score){
+            highscore = score;
+        }
 	var modal = document.getElementById('gameOverModal');
 	modal.style.display = "block";
 
@@ -802,45 +796,44 @@ function flashScore() {
 function flashCoinScore() {
     coinScoreBoardSupImg.update();
     if (coinScoreBoard.color === "black") {
-		coinScoreBoard.color = "white";
-        coinScoreBoardSupImg.alpha = 1;
+            coinScoreBoard.color = "white";
+            coinScoreBoardSupImg.alpha = 1;
     } else {
-		coinScoreBoard.color = "black";
-        coinScoreBoardSupImg.alpha = 0;
+            coinScoreBoard.color = "black";
+            coinScoreBoardSupImg.alpha = 0;
     };
 
-	if (gameArea.coinScoreActiveTime > 1200) {
-		coinScoreBoard.color = "black";
-        coinScoreBoardSupImg.alpha = 0;
-        clearInterval(gameArea.coinScoreInterval);
-	};
-	gameArea.coinScoreActiveTime += 150;
+    if (gameArea.coinScoreActiveTime > 1200) {
+            coinScoreBoard.color = "black";
+            coinScoreBoardSupImg.alpha = 0;
+            clearInterval(gameArea.coinScoreInterval);
+    };
+    gameArea.coinScoreActiveTime += 150;
 }
 
 
 function flashStartArrow(){
-  switchArrow++;
-  if(switchArrow < 30){
-    startArrow3.setSrc("Pictures/goldArrow.png");
-    startArrow2.setSrc("Pictures/blackArrow.png");
-    startArrow1.setSrc("Pictures/blackArrow.png");
-  }else if(switchArrow < 60){
-    startArrow3.setSrc("Pictures/blackArrow.png");
-    startArrow2.setSrc("Pictures/goldArrow.png");
-  }else if(switchArrow < 90){
-    startArrow2.setSrc("Pictures/blackArrow.png");
-    startArrow1.setSrc("Pictures/goldArrow.png");
-  }else{
-    switchArrow = 0;
-  }
-  startArrow1.setX(startArrow1.getOrignX()-xPos);
-  startArrow2.setX(startArrow2.getOrignX()-xPos);
-  startArrow3.setX(startArrow3.getOrignX()-xPos);
+    switchArrow++;
+    if(switchArrow < 30){
+        startArrow3.setSrc("Pictures/goldArrow.png");
+        startArrow2.setSrc("Pictures/blackArrow.png");
+        startArrow1.setSrc("Pictures/blackArrow.png");
+    }else if(switchArrow < 60){
+        startArrow3.setSrc("Pictures/blackArrow.png");
+        startArrow2.setSrc("Pictures/goldArrow.png");
+    }else if(switchArrow < 90){
+        startArrow2.setSrc("Pictures/blackArrow.png");
+        startArrow1.setSrc("Pictures/goldArrow.png");
+    }else{
+        switchArrow = 0;
+    }
+    startArrow1.setX(startArrow1.getOrignX()-xPos);
+    startArrow2.setX(startArrow2.getOrignX()-xPos);
+    startArrow3.setX(startArrow3.getOrignX()-xPos);
 }
 
 //Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
 function updateGameArea() {
-	//loop for enemy collision
 	var pausemodal = document.getElementById('gamePauseModal');
 	if (gamePaused) {
 		pausemodal.style.display = "block";
@@ -878,7 +871,6 @@ function updateGameArea() {
                             incrementScore(100*currentLevel);
                             gameArea.bonusActiveTime = 0;
                             gameArea.bonusInterval = setInterval(flashScore, 150);
-
 			} else if (playerCharacter.crashWith(enemyCharacters[i])){
                             backgroundDx = 0;
                             gameArea.stop();
@@ -894,7 +886,7 @@ function updateGameArea() {
 				coins[i].setSrc("Pictures/stars.png");
 				//increase collected coins counter
 				collectedCoins++;
-        currentCoins++;
+                                currentCoins++;
 				incrementScore(50*currentLevel);
 				coins[i].setAlive(false);
 				//animate coin score board
@@ -917,7 +909,15 @@ function updateGameArea() {
         background.moveBackgrounds(background2);
 	background.update();
         background2.update();
-
+        
+	//Cloud update--doesn't display on level 5, which is indoors
+        if(currentLevel != 5){
+            for (var i = 0; i < clouds.length; i++) {
+                    clouds[i].x += 0.5 - backgroundDx;
+                    clouds[i].update();
+            }
+        }
+        
 	//score update
 	scoreBoard.text = "SCORE: " + score;
 	scoreBoard.update();
@@ -957,14 +957,6 @@ function updateGameArea() {
 	for (var i = 0; i < coins.length; i++) {
 		coins[i].update();
 	}
-
-	//Cloud update--doesn't display on level 5, which is indoors
-        if(currentLevel != 5){
-            for (var i = 0; i < clouds.length; i++) {
-                    clouds[i].x += 0.5 - backgroundDx;
-                    clouds[i].update();
-            }
-        }
 
 	//player character update
 	playerCharacter.newPos();
@@ -1090,18 +1082,18 @@ function moveDown() {
 function moveLeft() {
 	playerCharacter.changeDir(-1);
 	//playerCharacter.speedX = -5;
-  backgroundDx = -5;
+        backgroundDx = -5;
 }
 
 function moveRight(){
 	playerCharacter.changeDir(1);
 	//playerCharacter.speedX = 5;
-  if(xPos <= -5){
-    xPos = 0;
-    background.setX(-50);
-    background2.setX(850);
-  }
-  backgroundDx = 5;
+        if(xPos <= -5){
+                xPos = 0;
+                background.setX(-50);
+                background2.setX(850);
+        }
+        backgroundDx = 5;
 }
 
 function duck(){
@@ -1118,12 +1110,11 @@ function moveLeftMouse() {
 function moveRightMouse() {
 	interval = setInterval(moveRight, 1);
         if(xPos <= -5){
-        xPos = 0;
-        background.setX(-50);
-        background2.setX(850);
-}
-  backgroundDx = 5;
-
+                xPos = 0;
+                background.setX(-50);
+                background2.setX(850);
+        }
+        backgroundDx = 5;
 }
 
 function onMouseUp() {
@@ -1143,6 +1134,6 @@ function resumeGame() {
     levelTransitionModal.style.display = "none";
     currentCoins = 0;
     currentScore = 0;
-    startLevel(currentLevel);
+    startLevel();
   }
 }
