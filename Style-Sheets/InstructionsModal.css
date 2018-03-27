@@ -19,6 +19,12 @@
     width: 80%; 
 }
 
+.instruction_title{
+    font-family: 'Rammetto One', cursive;
+    font-size: 20px;
+    text-align: center;
+}
+
 .close {
     color: #aaa;
     float: right;
