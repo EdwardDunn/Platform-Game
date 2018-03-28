@@ -122,3 +122,15 @@ Date:08/03/2018
 
 	Description : goldArrow
 		Source: blackArrow with Photoshop
+
+Added by: DesseKande
+Date:22/03/2018
+
+	Description : Backbtn
+		Source: https://www.pinterest.fr/pin/295971006744838729/?lp=true
+
+Added by: DesseKande
+Date:22/03/2018
+
+	Description : Settingsbtn
+		Source: https://www.pinterest.fr/pin/295971006744838729/?lp=true
