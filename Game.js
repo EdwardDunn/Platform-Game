@@ -957,7 +957,12 @@ function updateGameArea() {
                             enemyCharacters[i].setAlive(false);
                             incrementScore(100*currentLevel);
                             gameArea.bonusActiveTime = 0;
-                            gameArea.bonusInterval = setInterval(flashScore, 150);
+							gameArea.bonusInterval = setInterval(flashScore, 150);
+							if (!musicMuted) {
+								enemy_killed_audio = document.getElementById("enemykilled")
+								enemykilled.autoplay = true;
+								enemykilled.load();								
+							}							
 			} else if (playerCharacter.crashWith(enemyCharacters[i])){
                             backgroundDx = 0;
                             gameArea.stop();
