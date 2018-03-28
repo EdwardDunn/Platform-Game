@@ -9,7 +9,6 @@ New levels can be added by:
 Author: Open Source - Contributor list can be seen in GitHub
 */
 
-
 const userKeys = {
     LEFT: 37,
     UP: 38,
@@ -21,9 +20,47 @@ const userKeys = {
     D: 68,
     SPACE: 32,
     P: 80,
-    M: 77
+    M: 77,
+    C: 67
 };
 
+const specialKeys = {
+    8:'Backspace',
+    9:'Tab',
+    13:'Enter',
+    16:'Shift',
+    17:'Ctrl',
+    18:'Alt',
+    19:'Pause/break',
+    20:'Caps lock',
+    27: 'Escape',
+    32:'Space',
+    33:'Page up',
+    34:'Page down',
+    35:'End',
+    36:'Home',
+    37:'Left',
+    38:'Up',
+    39:'Right',
+    40:'Down',
+    45:'Insert',
+    46:'Delete',
+    91:'LeftwinKey',
+    92:'RightwinKey',
+    106:'Multiply',
+    107:'Add',
+    111:'Divide',
+    187:'Equal',
+    188:'Comma',
+    189:'Dash',
+    190:'Period',
+    191:'Slash',
+    192:'GraveAccent',
+    219:'OpenBracket',
+    220:'BackSlash',
+    221:'CloseBraket',
+    222:'SingleQuote'
+};
 const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
 	[{
 		name: "FloatingFish",
@@ -31,7 +68,7 @@ const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
 		height: 36,
 		y2: 200
 	}, {
-		name: "Zombie",
+		name: "zombie",
                 width: 40,
 		height: 45,
 		y2: 205
@@ -155,8 +192,10 @@ var z = 0;
 
 var currentLevel;
 var collectedCoins = 0;
+var currentCoins = 0;
 var timeLeft; //Says how much time is left in the level--will be calculated based off of LEVEL_COMPLETION_TIME later.
 var score = 0;
+var currentScore = 0;
 var playerCharacter;
 var background;
 var background2;
@@ -179,6 +218,7 @@ var levelDisplay;
 var enemyCharacters = [];
 var coins = [];
 var clouds = [];
+var rotationCmp = 0;
 var keysPressed = {
 	LEFT: false,
 	UP: false,
@@ -192,6 +232,8 @@ var keysPressed = {
 	D: false
 };
 var gamePaused = false;
+var gameOptions = false;
+var optionId= "";
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
@@ -199,45 +241,47 @@ var highscore = 0;
 
 
 function KeyDown(event) {
-	//avoid auto-repeated keydown event
-	if (event.repeat) {
-		return;
-	}
-
-	var key;
+  var key;
 	key = event.which;
-	
+
 	keysPressed[key] = true;
-
-	if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown == false && playerCharacter.hitGround) {
-		duck();
-			playerCharacter.duckCooldown = true;
-	}
-	if ((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown == false) {
-		moveLeft();
-                playerCharacter.leftCooldown = true;
-	}
-	if ((keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) && playerCharacter.rightCooldown == false) {
-		moveRight();
-                playerCharacter.rightCooldown = true;
-	}
-	if ((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround && playerCharacter.duckCooldown == false) {
-            if(playerCharacter.jumpCooldown == false){
-                    moveUp();
-            }
-	}
-	if (keysPressed[userKeys.SPACE]) {
-		restartGame();
-	}
-	if (keysPressed[userKeys.P]) {
-		keysPressed[userKeys.P] = false;
-		pauseGame();
-	}
-
-	if (keysPressed[userKeys.M]) {
-		keysPressed[userKeys.M] = false;
-		muteMusic();
-	}
+  
+  //avoid auto-repeated keydown event
+  if(event.repeat)
+       return;
+  if(!gameOptions){
+    if((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown == false){
+		    moveLeft();
+        playerCharacter.leftCooldown = true;
+    }
+	  if ((keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) && playerCharacter.rightCooldown == false) {
+		    moveRight();
+        playerCharacter.rightCooldown = true;
+	  }
+	  if((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround){
+      if(playerCharacter.jumpCooldown == false){
+        moveUp();
+      }
+	  }
+	  if(keysPressed[userKeys.SPACE]){
+		    restartGame();
+	  }
+	  if(keysPressed[userKeys.P]){
+		    keysPressed[userKeys.P] = false;
+		    pauseGame();
+	  }
+    if(keysPressed[userKeys.M]) {
+		    keysPressed[userKeys.M] = false;
+		    muteMusic();
+	  }
+    if(keysPressed[userKeys.C]) {
+        keysPressed[userKeys.C] = false;
+        resumeGame();
+    }
+    
+  }else{
+    changeOption(key);
+  }
 }
 
 // Toggle music at 'M' key press
@@ -246,7 +290,7 @@ function muteMusic() {
 	var imgButton = document.getElementById("audioButton");
 	if (musicMuted) {
 		imgButton.src = "Pictures/audioOff.png";
-		if (!gamePaused) { //If the game is running, just turn the audio off
+		if(!gamePaused) { //If the game is running, just turn the audio off
 			audio.pause();
 		} else { //Otherwise, we need to change our musicToggled variable, so that the audio resumes properly with the game
 			musicToggled = false;
@@ -265,15 +309,64 @@ function pauseGame() {
 	gamePaused = !gamePaused;
 }
 
+function updateSoundPng(){
+  if(musicMuted){
+    document.getElementById("MImg").src = "Pictures/audioOff.png";
+  }else{
+    document.getElementById("MImg").src = "Pictures/audioOn.png";
+  }
+}
+
+function optionsGame(){
+  var modal = document.getElementById('optionsModal');
+  gameOptions = !gameOptions;
+  if(gameOptions){
+    updateSoundPng();
+	  modal.style.display = "block";
+  }else{
+     modal.style.display = "none";
+  }
+}
+function dispMess(id,type){
+  if(type == "SOUND"){
+    muteMusic();
+    if(document.getElementById("MImg").src.includes("audioOff.png")){
+      document.getElementById("MImg").src = "Pictures/audioOn.png";
+    }else{
+      document.getElementById("MImg").src = "Pictures/audioOff.png";
+    }
+  }else{
+      document.getElementById("mess").innerHTML = "Press the key you want to use for "+"\""+type+"\"";
+      optionId= id;
+  }
+}
+
+function changeOption(key){
+  var chr = String.fromCharCode(key);
+  if(optionId!= "" && !Object.values(userKeys).includes(key)){
+    if(48 <= key && key <= 90 ){
+      document.getElementById(optionId).value = chr;
+      userKeys[optionId] = key;
+    }else if(key in specialKeys){
+      document.getElementById(optionId).value = specialKeys[key];
+      userKeys[optionId] = key;
+    }
+  }else if(keysPressed[userKeys.M] && optionId != "M"){
+    dispMess('M','SOUND');
+  }else{
+    document.getElementById("mess").innerHTML = "You can't use this key";
+  }
+}
+
 
 function updateBackgroundDx(){
-  if(keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
-    backgroundDx = -5;
-	}else if(keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
-    backgroundDx = 5;
-	}else{
-      backgroundDx = 0;
-  }
+    if(keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) {
+        backgroundDx = -5;
+    }else if(keysPressed[userKeys.RIGHT] || keysPressed[userKeys.D]) {
+        backgroundDx = 5;
+    }else{
+        backgroundDx = 0;
+    }
 }
 
 function KeyUp(event) {
@@ -307,11 +400,11 @@ function KeyUp(event) {
         case userKeys.DOWN:
         case userKeys.S:
         	if(playerCharacter.hitGround && playerCharacter.duckCooldown == true){//this if statement is used so that the playercharacter doesnt increase in size when DOWN or S is pressed while character is in the air
-        		playerCharacter.height = playerCharacter.height * 2;	
+        		playerCharacter.height = playerCharacter.height * 2;
         		playerCharacter.duckCooldown = false;
         	}
 	}
-  updateBackgroundDx();
+        updateBackgroundDx();
 }
 
 
@@ -325,9 +418,19 @@ function showInstructions(){
 }
 
 function initialize_game() {
-	currentLevel = 1;
-	collectedCoins = 0;
+        currentLevel = 1;
+        collectedCoins = 0;
+        currentCoins = 0;
         score = 0;
+        currentScore = 0;
+
+        var coinMessage = document.getElementById('coinMessage');
+        var pointsMessage = document.getElementById('pointsMessage');
+        if (coinMessage) {
+                var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+                levelTransitionModalContent.removeChild(coinMessage);
+                levelTransitionModalContent.removeChild(pointsMessage);
+        }
 
 	audio = document.getElementById("bgm");
 	audio.autoplay = true;
@@ -344,7 +447,7 @@ function startLevel() {
 	//Synchronizes the start coordinates of enemy characters
 	flyUp = false;
 	z = 0;
-	dir = 1; //face to the right
+	dir = 1; //Begin facing to the right
         xPos = -5;
 
 	//player character
@@ -382,10 +485,9 @@ function startLevel() {
         startArrow1 = new component();
         startArrow2 = new component();
         startArrow3 = new component();
-
-        startArrow1.init(90,70,"Pictures/blackArrow.png",60,125,"image",1);
-        startArrow2.init(90,70,"Pictures/blackArrow.png",30,125,"image",1);
-        startArrow3.init(90,70,"Pictures/blackArrow.png",0,125,"image",1);
+        startArrow1.init(90, 70, "Pictures/blackArrow.png", 60, 125, "image", 1);
+        startArrow2.init(90, 70, "Pictures/blackArrow.png", 30, 125, "image", 1);
+        startArrow3.init(90, 70, "Pictures/blackArrow.png", 0, 125, "image", 1);
 
   //current time left in the given level
         timeBoard = new component ();
@@ -400,14 +502,12 @@ function startLevel() {
 	//Loop for creating new enemy characters setting a random x coordinate for each. Creates a maximum of 2 enemies/second.
 	for (var i = 0; i < MAX_VARIABLES; i++) {
             enemyCharacters[i] = new component();
-
             var x = Math.floor((Math.random() * (i * (canvas.width / 2))) + ((canvas.width / 2) * i + (canvas.width * 1.25)));
 
             //moveType describes the type of enemy: flying (0), walking (1), rotating (2), entering from the left (3)...
             //when you want to add a new type of enemy, increment the number inside the Math.random and
             //insert in the correct case the enemy
             var moveType = Math.floor(Math.random() * (LEVEL_ENEMIES[currentLevel - 1].length));
-
             let enemy = LEVEL_ENEMIES[currentLevel - 1][moveType];
             if (moveType === REVERSED) {
 		//These enemies enter offscreen from the left, and have roughly the reverse of the normal formula.
@@ -429,7 +529,6 @@ function startLevel() {
 	for (var i = 0; i < MAX_VARIABLES; i++) {
             var x = Math.floor(((Math.random() + 1) * gameArea.canvas.width) + (i * gameArea.canvas.width / 2));
             var y = Math.floor(Math.random() * 150 + 30); //150 is canvas height - baseline(150) - char height - 30 (space on top)
-
             coins[i] = new component();
             coins[i].init(coinWidth, coinWidth, "Pictures/coin.png", x, y, "image", WALKING);
 	}
@@ -452,8 +551,8 @@ var gameArea = {
 
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 		this.time = 0;
-		this.bonusActiveTime = 0;
-		this.coinScoreActiveTime = 0;
+		this.bonusActiveTime = 1500; //The actual number isn't important, we just want to make sure 
+		this.coinScoreActiveTime = 1500; //that the flash functions won't activate immediately
 		this.coinScoreInterval = null;
 	},
 
@@ -466,7 +565,6 @@ var gameArea = {
 			var modal = modals[i];
 			modal.style.display = "none";
 		}
-
 		//update interval
 		this.interval = setInterval(updateGameArea, 20);
 	},
@@ -507,7 +605,7 @@ function component() {
 				this.imageMirror.height = height;
 			}
 
-			if (initialShow) {
+			if (initialShow) {//This is for things we want displaying before the game starts--basically the background
 				var imgCopy = this.image;
 				var ctxCopy = this.ctx;
 				this.image.onload = function() {
@@ -536,7 +634,7 @@ function component() {
 	}
 
 	//function to decide to decide what to display on screen, text, image or fill color
-	this.update = function(callback) {
+	this.update = function() {
 		if (this.dataType === "image") {
 			this.ctx.globalAlpha = this.alpha;
 			if (this.angle != 0) {
@@ -560,25 +658,25 @@ function component() {
 	};
         
         //This function manages the scrolling backgrounds
-  this.moveBackgrounds = function(background2){
-    if(0 <= xPos){
-        xPos += backgroundDx;
-        this.x -= backgroundDx;
-        background2.x -= backgroundDx;
-    }else{
-      backgroundDx = 0;
-    }
+        this.moveBackgrounds = function(background2){
+                if(0 <= xPos){
+                        xPos += backgroundDx;
+                        this.x -= backgroundDx;
+                        background2.x -= backgroundDx;
+                }else{
+                        backgroundDx = 0;
+                }
 		if(this.x <= -900){this.x = 900;}
-    else if(background2.x <= -900){background2.x = 900;}
+                else if(background2.x <= -900){background2.x = 900;}
 		else if(900 <= this.x){this.x = -900;}
-    else if(900 <= background2.x){background2.x = -900;}
-    else if(900 < Math.abs(this.x)+Math.abs(background2.x)){
-      if(Math.abs(background2.x) < Math.abs(this.x)){
-        this.x += (0 < this.x)?-5:5;
-      }else{
-        background2.x += (0 < background2.x)?-5:5;
-      }
-    }
+                else if(900 <= background2.x){background2.x = -900;}
+                else if(900 < Math.abs(this.x)+Math.abs(background2.x)){
+                        if(Math.abs(background2.x) < Math.abs(this.x)){
+                                this.x += (0 < this.x)?-5:5;
+                        }else{
+                                background2.x += (0 < background2.x)?-5:5;
+                        }
+                }
 	}
         
 	//enemy character collision function
@@ -705,9 +803,9 @@ function gameOver() {
 	interval && clearInterval(interval);
 
   //adding score to list of highscores
-  if(highscore < score){
-    highscore = score;
-  }
+        if(highscore < score){
+            highscore = score;
+        }
 	var modal = document.getElementById('gameOverModal');
 	modal.style.display = "block";
 
@@ -784,49 +882,49 @@ function flashScore() {
 function flashCoinScore() {
     coinScoreBoardSupImg.update();
     if (coinScoreBoard.color === "black") {
-		coinScoreBoard.color = "white";
-        coinScoreBoardSupImg.alpha = 1;
+            coinScoreBoard.color = "white";
+            coinScoreBoardSupImg.alpha = 1;
     } else {
-		coinScoreBoard.color = "black";
-        coinScoreBoardSupImg.alpha = 0;
+            coinScoreBoard.color = "black";
+            coinScoreBoardSupImg.alpha = 0;
     };
 
-	if (gameArea.coinScoreActiveTime > 1200) {
-		coinScoreBoard.color = "black";
-        coinScoreBoardSupImg.alpha = 0;
-        clearInterval(gameArea.coinScoreInterval);
-	};
-	gameArea.coinScoreActiveTime += 150;
+    if (gameArea.coinScoreActiveTime > 1200) {
+            coinScoreBoard.color = "black";
+            coinScoreBoardSupImg.alpha = 0;
+            clearInterval(gameArea.coinScoreInterval);
+    };
+    gameArea.coinScoreActiveTime += 150;
 }
 
 
 function flashStartArrow(){
-  switchArrow++;
-  if(switchArrow < 30){
-    startArrow3.setSrc("Pictures/goldArrow.png");
-    startArrow2.setSrc("Pictures/blackArrow.png");
-    startArrow1.setSrc("Pictures/blackArrow.png");
-  }else if(switchArrow < 60){
-    startArrow3.setSrc("Pictures/blackArrow.png");
-    startArrow2.setSrc("Pictures/goldArrow.png");
-  }else if(switchArrow < 90){
-    startArrow2.setSrc("Pictures/blackArrow.png");
-    startArrow1.setSrc("Pictures/goldArrow.png");
-  }else{
-    switchArrow = 0;
-  }
-  startArrow1.setX(startArrow1.getOrignX()-xPos);
-  startArrow2.setX(startArrow2.getOrignX()-xPos);
-  startArrow3.setX(startArrow3.getOrignX()-xPos);
+    switchArrow++;
+    if(switchArrow < 30){
+        startArrow3.setSrc("Pictures/goldArrow.png");
+        startArrow2.setSrc("Pictures/blackArrow.png");
+        startArrow1.setSrc("Pictures/blackArrow.png");
+    }else if(switchArrow < 60){
+        startArrow3.setSrc("Pictures/blackArrow.png");
+        startArrow2.setSrc("Pictures/goldArrow.png");
+    }else if(switchArrow < 90){
+        startArrow2.setSrc("Pictures/blackArrow.png");
+        startArrow1.setSrc("Pictures/goldArrow.png");
+    }else{
+        switchArrow = 0;
+    }
+    startArrow1.setX(startArrow1.getOrignX()-xPos);
+    startArrow2.setX(startArrow2.getOrignX()-xPos);
+    startArrow3.setX(startArrow3.getOrignX()-xPos);
 }
 
 //Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
 function updateGameArea() {
-	//loop for enemy collision
 	var pausemodal = document.getElementById('gamePauseModal');
-	if (gamePaused) {
-		pausemodal.style.display = "block";
-		if (!musicMuted) { //Then mute music, and keep musicToggled on so that we know it's not muted for real
+	if(gamePaused||gameOptions){
+    if(!gameOptions)
+		  pausemodal.style.display = "block";
+		if(!musicMuted && !gameOptions){ //Then mute music, and keep musicToggled on so that we know it's not muted for real
 			audio.pause();
 			musicToggled = true;
 		}
@@ -843,12 +941,16 @@ function updateGameArea() {
 	if (gameArea.time >= LEVEL_COMPLETION_TIME) {
 		gameArea.stop();
 		if (currentLevel == totalLevels) gameComplete();
-		else{
+		else {
                     currentLevel++;
-                    startLevel();
+                    var levelTransitionModal = document.getElementById('levelTransitionModal');
+                    levelTransitionModal.style.display = "block";
+                    var levelTransitionModalContent = document.getElementById('levelTransitionModalContent')
+                    levelTransitionModalContent.innerHTML += `<p id="coinMessage" class="levelTransitionMessage">Coins earned: ${currentCoins}</p>`;
+                    levelTransitionModalContent.innerHTML += `<p id="pointsMessage" class="levelTransitionMessage">Points earned: ${currentScore}</p>`;
                 }
-	}
-
+        }
+        
 	for (var i = 0; i < enemyCharacters.length; i++){
 		if(enemyCharacters[i].isAlive()) {
 			if(playerCharacter.jumpsOn(enemyCharacters[i])){
@@ -861,7 +963,6 @@ function updateGameArea() {
 								enemykilled.autoplay = true;
 								enemykilled.load();								
 							}							
-
 			} else if (playerCharacter.crashWith(enemyCharacters[i])){
                             backgroundDx = 0;
                             gameArea.stop();
@@ -877,6 +978,7 @@ function updateGameArea() {
 				coins[i].setSrc("Pictures/stars.png");
 				//increase collected coins counter
 				collectedCoins++;
+                                currentCoins++;
 				incrementScore(50*currentLevel);
 				coins[i].setAlive(false);
 				//animate coin score board
@@ -899,7 +1001,15 @@ function updateGameArea() {
         background.moveBackgrounds(background2);
 	background.update();
         background2.update();
-
+        
+	//Cloud update--doesn't display on level 5, which is indoors
+        if(currentLevel != 5){
+            for (var i = 0; i < clouds.length; i++) {
+                    clouds[i].x += 0.5 - backgroundDx;
+                    clouds[i].update();
+            }
+        }
+        
 	//score update
 	scoreBoard.text = "SCORE: " + score;
 	scoreBoard.update();
@@ -939,14 +1049,6 @@ function updateGameArea() {
 	for (var i = 0; i < coins.length; i++) {
 		coins[i].update();
 	}
-
-	//Cloud update--doesn't display on level 5, which is indoors
-        if(currentLevel != 5){
-            for (var i = 0; i < clouds.length; i++) {
-                    clouds[i].x += 0.5 - backgroundDx;
-                    clouds[i].update();
-            }
-        }
 
 	//player character update
 	playerCharacter.newPos();
@@ -1020,6 +1122,7 @@ function incrementFrameNumber(value) {
 
 function incrementScore(value) {
 	score += value;
+  currentScore += value;
 }
 
 function incrementTime(value) {//Both increments time and updates onscreen timer value
@@ -1071,18 +1174,18 @@ function moveDown() {
 function moveLeft() {
 	playerCharacter.changeDir(-1);
 	//playerCharacter.speedX = -5;
-  backgroundDx = -5;
+        backgroundDx = -5;
 }
 
 function moveRight(){
 	playerCharacter.changeDir(1);
 	//playerCharacter.speedX = 5;
-  if(xPos <= -5){
-    xPos = 0;
-    background.setX(-50);
-    background2.setX(850);
-  }
-  backgroundDx = 5;
+        if(xPos <= -5){
+                xPos = 0;
+                background.setX(-50);
+                background2.setX(850);
+        }
+        backgroundDx = 5;
 }
 
 function duck(){
@@ -1099,15 +1202,30 @@ function moveLeftMouse() {
 function moveRightMouse() {
 	interval = setInterval(moveRight, 1);
         if(xPos <= -5){
-        xPos = 0;
-        background.setX(-50);
-        background2.setX(850);
+                xPos = 0;
+                background.setX(-50);
+                background2.setX(850);
+        }
+        backgroundDx = 5;
 }
-  backgroundDx = 5;
 
-}
 function onMouseUp() {
 	clearInterval(interval);
 	stopMove();
         backgroundDx = 0;
+}
+
+function resumeGame() {
+  var levelTransitionModal = document.getElementById('levelTransitionModal');
+  var levelTransitionModalContent = document.getElementById('levelTransitionModalContent');
+  if (levelTransitionModal.style.display == "block") {
+    var coinMessage = document.getElementById('coinMessage');
+    var pointsMessage = document.getElementById('pointsMessage');
+    levelTransitionModalContent.removeChild(coinMessage);
+    levelTransitionModalContent.removeChild(pointsMessage);
+    levelTransitionModal.style.display = "none";
+    currentCoins = 0;
+    currentScore = 0;
+    startLevel();
+  }
 }

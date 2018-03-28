@@ -56,7 +56,7 @@ Play the game, and if you have any suggestions, **create a new issue outlining w
 
 12. Submit a pull request!
 
-## How to Update your fork
+## How to Update Your Fork
 If the main branch has been updated since you made your fork, you'll need to [sync your fork](https://help.github.com/articles/syncing-a-fork/) in order to make further contributions. Fortunately, this is fairly straightforward.
 
 1. Open your Command Prompt, Git Bash, or other editing tool of choice.
@@ -73,13 +73,28 @@ If the main branch has been updated since you made your fork, you'll need to [sy
 
     `git checkout master`
 
-5. Now we merge the upstream data into your local master branch. This should preserve your local changes, but you may have to resolve conflicts if you've made any changes that contradict the new upstream data.
+5. Now we merge the upstream data into your local master branch. This will merge your changes, if any, with the changes that have happened in the main branch. HOWEVER! If these changes contradict each other in some way, the system will tell you that you need to resolve the conflicts manually. If this happens, skip step 6 and head down to the "How to Resolve Conflicts in Your Code" section. Otherwise, just keep reading here.
 
     `git merge upstream/master`
 
-6. Now just push your changes to your Github! Once you've done this, you should be able to visit your fork and have it say that it is even with EdwardDunn:master.
+6. Now just push your changes to your Github! Once you've done this, you should be able to visit your fork and have it say that it is even or ahead of EdwardDunn:master.
 
     `git push origin master`
+
+## How to Resolve Conflicts in Your Code
+This deals with resolving the issues that happen when Git can't automatically merge your files with upstream changes.
+
+1. Use your preferred IDE to the file that the system tells you have conflicts--this will usually be Game.js, but not always.
+
+2. Once you have the file open, look for a line that starts with "<<<<<<< HEAD"--this will usually be pretty easy to spot, since an IDE will recognize this as not being proper code. The HEAD line is Git's way of marking where the upstream branch's code starts. Below this section of code will be a line of "=" signs (i.e. ======================================), which divides the upstream code from whatever changes you made in this area. The section will end with ">>>>>>> BRANCH-NAME" to mark the end of your branch's changes.
+
+3. Read your code and the upstream code and decide whether to go with one version or the other, or to put something else entirely in this area. Whatever your solution, be sure to delete the lines that Git put in so that the computer can read your code again.
+
+4. Repeat steps 2-3 until you have removed all the conflicts from the code.
+
+5. Save your code, then run the program for a quick test pass to make sure you didn't break anything.
+
+6. Assuming the program is still running fine, go back to the "How to Contribute" section and follow the steps for pushing your changes onto your fork. If you want to make a pull request, your code will now be ready to merge!
 
 ## Tips
 * If you're working on an open issue, place a comment on it so others know it's in progress.
