@@ -61,6 +61,7 @@ const specialKeys = {
   221:'CloseBraket',
   222:'SingleQuote'
 };
+
 const LEVEL_ENEMIES = [ //The y2 variable dictates how high up the unit starts
   [{
     name: 'FloatingFish',
@@ -238,7 +239,7 @@ var keysPressed = {
   D: false
 };
 var gamePaused = false;
-var gameOptions = false;
+var displayOptionsModal = false;
 var optionId= '';
 let musicMuted = false;
 let musicToggled = false; //this is just for muting music when game paused
@@ -249,13 +250,12 @@ var highscore = 0;
 function KeyDown(event) {
   var key;
   key = event.which;
-
   keysPressed[key] = true;
 
   //avoid auto-repeated keydown event
   if(event.repeat)
     return;
-  if(!gameOptions){
+  if(!displayOptionsModal){
     if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown === false && playerCharacter.hitGround) {
       duck();
       playerCharacter.duckCooldown = true;
@@ -268,7 +268,7 @@ function KeyDown(event) {
       moveRight();
       playerCharacter.rightCooldown = true;
     }
-    if((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround){
+    if((keysPressed[userKeys.UP] || keysPressed[userKeys.W]) && playerCharacter.hitGround && playerCharacter.duckCooldown === false){
       if(playerCharacter.jumpCooldown === false){
         moveUp();
       }
@@ -288,7 +288,6 @@ function KeyDown(event) {
       keysPressed[userKeys.C] = false;
       resumeGame();
     }
-
   }else{
     changeOption(key);
   }
@@ -327,13 +326,15 @@ function updateSoundPng(){
   }
 }
 
-function optionsGame(){
+function gameOptions(){
   var modal = document.getElementById('optionsModal');
-  gameOptions = !gameOptions;
-  if(gameOptions){
+  displayOptionsModal = !displayOptionsModal;
+  if(displayOptionsModal){
+    gamePaused = true;
     updateSoundPng();
     modal.style.display = 'block';
   }else{
+    gamePaused = false;
     modal.style.display = 'none';
   }
 }
