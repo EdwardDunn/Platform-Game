@@ -195,6 +195,7 @@ var coinpickup;
 var gameover;
 var gamewon;
 var jump;
+var enemykilled;
 
 var currentLevel;
 var collectedCoins = 0;
@@ -224,7 +225,6 @@ var levelDisplay;
 var enemyCharacters = [];
 var coins = [];
 var clouds = [];
-var rotationCmp = 0;
 var keysPressed = {
   LEFT: false,
   UP: false,
@@ -337,6 +337,7 @@ function optionsGame(){
     modal.style.display = 'none';
   }
 }
+
 function dispMess(id,type){
   if(type === 'SOUND'){
     muteMusic();
@@ -962,6 +963,11 @@ function updateGameArea() {
         incrementScore(100*currentLevel);
         gameArea.bonusActiveTime = 0;
         gameArea.bonusInterval = setInterval(flashScore, 150);
+        if (!musicMuted) {
+          enemykilled = document.getElementById('enemykilled');
+          enemykilled.autoplay = true;
+          enemykilled.load();
+        }
       } else if (playerCharacter.crashWith(enemyCharacters[i])){
         backgroundDx = 0;
         gameArea.stop();
@@ -993,6 +999,7 @@ function updateGameArea() {
       }
     }
   }
+
   //clear canvas before each update
   gameArea.clear();
 
@@ -1059,8 +1066,10 @@ function updateGameArea() {
     flyUp = !flyUp;
     flyCounter = 0;
   }
+
   //flyCounter increases in every iteration
   flyCounter++;
+
   //loop to set speed of enemy characters
   for (let i = 0; i < enemyCharacters.length; i++) {
     if (enemyCharacters[i].isAlive()) {
@@ -1075,7 +1084,6 @@ function updateGameArea() {
       } else {
         enemyCharacters[i].x += (-2 - backgroundDx);
       }
-
       //This tells bird enemies whether to go up or down
       if (enemyCharacters[i].moveType === FLYING) {
         if (flyUp === true) {
@@ -1084,12 +1092,10 @@ function updateGameArea() {
           enemyCharacters[i].y += -3;
         }
       }
-
       //This rotates enemies of type 2--currently just the Sword enemies in level 5
       if (enemyCharacters[i].moveType === ROTATING) {
         enemyCharacters[i].angle += 10 * Math.PI / 180;
       }
-
     } else { // if dead; enemy will be 'squeezed', fall to the ground and fade away. Feel free to improve by adding further animation.
       enemyCharacters[i].height = enemyCharacters[i].initHeight / 3;
       enemyCharacters[i].x -= backgroundDx;
