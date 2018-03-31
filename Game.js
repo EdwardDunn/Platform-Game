@@ -209,6 +209,7 @@ var background;
 var background2;
 var backgroundDx = 0;
 var xPos = -5;
+var coinRotationValue = 0;
 var scoreBoard;
 var coinScoreBoard;
 var coinScoreBoardImg;
@@ -327,16 +328,7 @@ function updateSoundPng(){
 }
 
 function gameOptions(){
-  var modal = document.getElementById('optionsModal');
   displayOptionsModal = !displayOptionsModal;
-  if(displayOptionsModal){
-    gamePaused = true;
-    updateSoundPng();
-    modal.style.display = 'block';
-  }else{
-    gamePaused = false;
-    modal.style.display = 'none';
-  }
 }
 
 function dispMess(id,type){
@@ -596,7 +588,6 @@ function Component() {
     this.moveType = moveType; //This seems to mainly describe the movement type of an enemy
     this.alive = true;
     this.alive = true;
-    this.rotationCmp = 0;
     this.color = color;
     //Assigns data type of the variable (usually an image).
     this.dataType = dataType;
@@ -776,18 +767,15 @@ function Component() {
 
   //This is a rotation function for coins only, allowing them to rotate in 3 dimensions
   this.rotation = function(){
-    if(this.rotationCmp === 0){
+    if(coinRotationValue === 0){
       this.setSrc('Pictures/coin.png');
-    }else if(this.rotationCmp === 10){
+    }else if(coinRotationValue === 10){
       this.setSrc('Pictures/coin2.png');
-    }else if(this.rotationCmp === 20){
-      this.setSrc('Pictures/coin4.png');
-    }else if(this.rotationCmp === 30){
+    }else if(coinRotationValue === 20){
       this.setSrc('Pictures/coin3.png');
-    }else if (this.rotationCmp >= 40){
-      this.rotationCmp = -1; //Sets it to -1 so that it gets assigned to 0 by the start of the loop.
+    }else if(coinRotationValue === 30){
+      this.setSrc('Pictures/coin4.png');
     }
-    this.rotationCmp++;
   };
 
   //check if there was a change in direction character is facing
@@ -927,7 +915,8 @@ function flashStartArrow(){
 
 //Update game area for period defined in game area function, current 20th of a millisecond (50 times a second)
 function updateGameArea() {
-  var pausemodal = document.getElementById('gamePauseModal');
+  let pausemodal = document.getElementById('gamePauseModal');
+  let optionsModal = document.getElementById('optionsModal');
   if (gamePaused) {
     pausemodal.style.display = 'block';
     if (!musicMuted) { //Then mute music, and keep musicToggled on so that we know it's not muted for real
@@ -935,8 +924,16 @@ function updateGameArea() {
       musicToggled = true;
     }
     return;
+  } else if (displayOptionsModal){
+    optionsModal.style.display = 'block';
+    if (!musicMuted) {
+      audio.pause();
+      musicToggled = true;
+    }
+    return;
   } else {
     pausemodal.style.display = 'none';
+    optionsModal.style.display = 'none';
     if (musicToggled) { //Then unmute the music, and cancel musicToggled so that this won't re-trigger
       audio.load();
       musicToggled = false;
@@ -977,6 +974,10 @@ function updateGameArea() {
     }
   }
 
+  coinRotationValue++; //We update the rotation value for the coins before updating the coins
+  if (coinRotationValue >= 40){
+    coinRotationValue = 0;
+  }
   //loop for coin collision
   for (let i = 0; i < coins.length; i++) {
     if (coins[i].isAlive()){
@@ -985,7 +986,7 @@ function updateGameArea() {
         //increase collected coins counter
         collectedCoins++;
         currentCoins++;
-        incrementScore(50*currentLevel);
+        incrementScore(50 * currentLevel);
         coins[i].setAlive(false);
         //animate coin score board
         gameArea.coinScoreActiveTime = 0;
@@ -1153,6 +1154,7 @@ function stopMove() {
     playerCharacter.x = gameArea.canvas.width - playerCharacter.width;
   }
 }
+
 function moveUp(state){
   if(state === 'hit'){
     if(playerCharacter.speedY >= -3){
