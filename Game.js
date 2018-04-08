@@ -553,6 +553,7 @@ var gameArea = {
     this.context = this.canvas.getContext('2d');
 
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    document.body.insertBefore(document.getElementById('banner'), document.body.childNodes[0])
     this.time = 0;
     this.bonusActiveTime = 1500; //The actual number isn't important, we just want to make sure
     this.coinScoreActiveTime = 1500; //that the flash functions won't activate immediately

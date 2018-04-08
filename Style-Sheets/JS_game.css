@@ -3,6 +3,13 @@ body {
   font-family: 'Share Tech Mono', monospace;
 }
 
+#banner {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
 canvas {
   border:1px solid #d3d3d3;
   background-color: #f1f1f1;
