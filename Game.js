@@ -334,6 +334,7 @@ function gameOptions(){
 function dispMess(id,type){
   if(type === 'SOUND'){
     muteMusic();
+    musicToggled = false;
     if(document.getElementById('MImg').src.includes('audioOff.png')){
       document.getElementById('MImg').src = 'Pictures/audioOn.png';
     }else{
