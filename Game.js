@@ -300,19 +300,20 @@ function muteMusic() {
   var imgButton = document.getElementById('audioButton');
   if (musicMuted) {
     imgButton.src = 'Pictures/audioOff.png';
-    if (!gamePaused) { //If the game is running, just turn the audio off
+    if (!gamePaused && !displayOptionsModal) { //If the game is running, just turn the audio off
       audio.pause();
     } else { //Otherwise, we need to change our musicToggled variable, so that the audio resumes properly with the game
       musicToggled = false;
     }
   } else {
     imgButton.src = 'Pictures/audioOn.png';
-    if (!gamePaused) {
+    if (!gamePaused && !displayOptionsModal) {
       audio.load();
     } else {
       musicToggled = true;
     }
   }
+  updateSoundPng();
 }
 
 function pauseGame() {
@@ -334,11 +335,6 @@ function gameOptions(){
 function dispMess(id,type){
   if(type === 'SOUND'){
     muteMusic();
-    if(document.getElementById('MImg').src.includes('audioOff.png')){
-      document.getElementById('MImg').src = 'Pictures/audioOn.png';
-    }else{
-      document.getElementById('MImg').src = 'Pictures/audioOff.png';
-    }
   }else{
     document.getElementById('mess').innerHTML = 'Press the key you want to use for '+'"'+type+'"';
     optionId= id;
