@@ -1216,6 +1216,10 @@ function moveRightMouse() {
   backgroundDx = 5;
 }
 
+function duckMouse() {
+  interval = setInterval(duck, 1);
+}
+
 function onMouseUp() {
   clearInterval(interval);
   stopMove();
