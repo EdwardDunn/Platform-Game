@@ -259,7 +259,6 @@ function KeyDown(event) {
   if(!displayOptionsModal){
     if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown === false && playerCharacter.hitGround) {
       duck();
-      playerCharacter.duckCooldown = true;
     }
     if((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown === false){
       moveLeft();
@@ -1197,6 +1196,7 @@ function moveRight(){
 
 function duck(){
   playerCharacter.height = playerCharacter.height / 2;
+  playerCharacter.duckCooldown = true;
 }
 
 var interval;
@@ -1216,14 +1216,17 @@ function moveRightMouse() {
   backgroundDx = 5;
 }
 
-function duckMouse() {
-  interval = setInterval(duck, 1);
-}
-
 function onMouseUp() {
   clearInterval(interval);
   stopMove();
   backgroundDx = 0;
+}
+
+function duckMouseUp() {
+  if(playerCharacter.hitGround && playerCharacter.duckCooldown === true){//this if statement is used so that the playercharacter doesnt increase in size when DOWN or S is pressed while character is in the air
+    playerCharacter.height = playerCharacter.height * 2;
+    playerCharacter.duckCooldown = false;
+  }
 }
 
 function resumeGame() {
