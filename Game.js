@@ -257,7 +257,7 @@ function KeyDown(event) {
   if(event.repeat)
     return;
   if(!displayOptionsModal){
-    if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown === false && playerCharacter.hitGround) {
+    if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown === false) {
       duck();
     }
     if((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown === false){
@@ -1195,8 +1195,10 @@ function moveRight(){
 }
 
 function duck(){
-  playerCharacter.height = playerCharacter.height / 2;
-  playerCharacter.duckCooldown = true;
+  if (playerCharacter.hitGround){
+    playerCharacter.height = playerCharacter.height / 2;
+    playerCharacter.duckCooldown = true;
+  }
 }
 
 var interval;
