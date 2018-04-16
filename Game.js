@@ -257,9 +257,8 @@ function KeyDown(event) {
   if(event.repeat)
     return;
   if(!displayOptionsModal){
-    if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown === false && playerCharacter.hitGround) {
+    if ((keysPressed[userKeys.DOWN] || keysPressed[userKeys.S]) && playerCharacter.duckCooldown === false) {
       duck();
-      playerCharacter.duckCooldown = true;
     }
     if((keysPressed[userKeys.LEFT] || keysPressed[userKeys.A]) && playerCharacter.leftCooldown === false){
       moveLeft();
@@ -300,19 +299,20 @@ function muteMusic() {
   var imgButton = document.getElementById('audioButton');
   if (musicMuted) {
     imgButton.src = 'Pictures/audioOff.png';
-    if (!gamePaused) { //If the game is running, just turn the audio off
+    if (!gamePaused && !displayOptionsModal) { //If the game is running, just turn the audio off
       audio.pause();
     } else { //Otherwise, we need to change our musicToggled variable, so that the audio resumes properly with the game
       musicToggled = false;
     }
   } else {
     imgButton.src = 'Pictures/audioOn.png';
-    if (!gamePaused) {
+    if (!gamePaused && !displayOptionsModal) {
       audio.load();
     } else {
       musicToggled = true;
     }
   }
+  updateSoundPng(); //Ensures that the mute button in the options page remains updated
 }
 
 function pauseGame() {
@@ -334,11 +334,6 @@ function gameOptions(){
 function dispMess(id,type){
   if(type === 'SOUND'){
     muteMusic();
-    if(document.getElementById('MImg').src.includes('audioOff.png')){
-      document.getElementById('MImg').src = 'Pictures/audioOn.png';
-    }else{
-      document.getElementById('MImg').src = 'Pictures/audioOff.png';
-    }
   }else{
     document.getElementById('mess').innerHTML = 'Press the key you want to use for '+'"'+type+'"';
     optionId= id;
@@ -1200,7 +1195,10 @@ function moveRight(){
 }
 
 function duck(){
-  playerCharacter.height = playerCharacter.height / 2;
+  if (playerCharacter.hitGround){
+    playerCharacter.height = playerCharacter.height / 2;
+    playerCharacter.duckCooldown = true;
+  }
 }
 
 var interval;
@@ -1224,6 +1222,13 @@ function onMouseUp() {
   clearInterval(interval);
   stopMove();
   backgroundDx = 0;
+}
+
+function duckMouseUp() {
+  if(playerCharacter.hitGround && playerCharacter.duckCooldown === true){//this if statement is used so that the playercharacter doesnt increase in size when DOWN or S is pressed while character is in the air
+    playerCharacter.height = playerCharacter.height * 2;
+    playerCharacter.duckCooldown = false;
+  }
 }
 
 function resumeGame() {

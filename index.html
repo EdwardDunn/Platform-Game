@@ -52,17 +52,17 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<source src="Audio/win_sound.wav" type="audio/wav">
 			Your browser does not support the audio element.
 	</audio>
-	
+
 	<audio id="enemykilled" style="display: none" controls>
 		<source src="Audio/enemy_killed.wav" type="audio/wav">
 			Your browser does not support the audio element.
-	</audio>	
+	</audio>
 
-	
+
 
 	<!--Restart button on game page-->
 	<canvas id="canvas" width=300 height=300></canvas>
-	
+
 	<!--button id="restartButtonNearScore" class="button" onClick="restartGame()">
 		<img class="buttonImages" src="Pictures/restart.png" alt="RestartButton" />
 	</button-->
@@ -260,9 +260,12 @@ Author: Open Source - Contributor list can be seen in GitHub
 		<button class="button" onmousedown="moveUp()" ontouchstart="moveUp()">
 			<img class="buttonImages" src="Pictures/jump.png" alt="JUMP">
 		</button>
+		<button class="button" onmousedown="duck()" onmouseup="duckMouseUp()" ontouchstart="duck()" ontouchend="duckMouseUp()">
+			<img class="buttonImages" src="Pictures/duck.png" alt="DUCK">
+		</button>
 		<button class="button" onmousedown="moveRightMouse()" onmouseup="onMouseUp()" ontouchstart="moveRightMouse()" ontouchend="onMouseUp()">
 			<img class="buttonImages" src="Pictures/right.png" alt="RIGHT">
-		</button>  
+		</button>
 		</div>
 		<div id="buttonPauseAudio">
 		<button class="button" id="buttonAudio" onClick="muteMusic()" >
