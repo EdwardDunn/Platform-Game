@@ -224,7 +224,7 @@ Author: Open Source - Contributor list can be seen in GitHub
     		</div>
 				<div class="row">
 					<div class="col-25">
-        		<label ><img class="Sound" src="Pictures/audioOn.png" alt="OptionGame" onclick="dispMess('M','SOUND')" id="MImg"></label>
+        		<label><img class="Sound" src="Pictures/audioOn.png" alt="OptionGame" onclick="dispMess('M','SOUND')" id="MImg"></label>
 					</div>
 					<div class="col-75">
 						<button class="button" id="buttonOptions" onClick="gameOptions()">
@@ -268,8 +268,12 @@ Author: Open Source - Contributor list can be seen in GitHub
 		</button>
 		</div>
 		<div id="buttonPauseAudio">
-		<button class="button" id="buttonAudio" onClick="muteMusic()" >
-			<img class="buttonImages" id="audioButton" src="Pictures/audioOn.png" alt="MuteMusic">
+		<button class="button" id="buttonAudio">
+			<div class="slidecontainer">
+				<img class="buttonImages minAudio" src="Pictures/audioOff.png" alt="MuteMusic">
+				<input type="range" min="1" max="100" value="50" class="slider" id="audioSlider">
+				<img class="buttonImages maxAudio" src="Pictures/audioOn.png" alt="MuteMusic">
+			</div>
 		</button>
 		<button class="button" id="buttonPause" onClick="pauseGame()">
 			<img class="buttonImages" src="Pictures/pause.png" alt="PauseGame">

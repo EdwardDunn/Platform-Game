@@ -33,7 +33,7 @@ const specialKeys = {
   18:'Alt',
   19:'Pause/break',
   20:'Caps lock',
-  27: 'Escape',
+  27:'Escape',
   32:'Space',
   33:'Page up',
   34:'Page down',
@@ -247,7 +247,6 @@ let musicToggled = false; //this is just for muting music when game paused
 let dir; // which way character faces. 1 is right, -1 is left
 var highscore = 0;
 
-
 function KeyDown(event) {
   var key;
   key = event.which;
@@ -293,38 +292,17 @@ function KeyDown(event) {
   }
 }
 
-// Toggle music at 'M' key press
-function muteMusic() {
-  musicMuted = !musicMuted;
-  var imgButton = document.getElementById('audioButton');
-  if (musicMuted) {
-    imgButton.src = 'Pictures/audioOff.png';
-    if (!gamePaused && !displayOptionsModal) { //If the game is running, just turn the audio off
-      audio.pause();
-    } else { //Otherwise, we need to change our musicToggled variable, so that the audio resumes properly with the game
-      musicToggled = false;
-    }
-  } else {
-    imgButton.src = 'Pictures/audioOn.png';
-    if (!gamePaused && !displayOptionsModal) {
-      audio.load();
-    } else {
-      musicToggled = true;
-    }
-  }
-  updateSoundPng(); //Ensures that the mute button in the options page remains updated
+function checkMusicVolume() {
+    var audioSlider = document.getElementById('audioSlider');
+    audioSlider.addEventListener('input', (slider) => {
+      var sliderVal = slider.target.value
+      var audioVolume = sliderVal / 100
+      audio.volume = (audioVolume == 0.01) ? 0 : audioVolume;
+    })
 }
 
 function pauseGame() {
   gamePaused = !gamePaused;
-}
-
-function updateSoundPng(){
-  if(musicMuted){
-    document.getElementById('MImg').src = 'Pictures/audioOff.png';
-  }else{
-    document.getElementById('MImg').src = 'Pictures/audioOn.png';
-  }
 }
 
 function gameOptions(){
@@ -434,10 +412,13 @@ function initialize_game() {
   audio = document.getElementById('bgm');
   audio.autoplay = true;
   audio.loop = true;
-
-  if (!musicMuted) {
-    audio.load();
-  }
+    
+  // Initialize volume to val of slider
+  audio.volume = 0.5;
+  // Reset val of slider to 50 in case of game restart
+  document.getElementById('audioSlider').value = 50;
+  audio.load();
+  checkMusicVolume();
 
   startLevel();
 }
@@ -716,6 +697,7 @@ function Component() {
     return smoosh;
   };
 
+  gameArea.stop();
   //gravity property
   this.newPos = function() {
     this.y += this.speedY; //increment y position with his speed
@@ -805,13 +787,13 @@ function gameOver() {
   modal.style.display = 'block';
 
   audio = document.getElementById('bgm');
+  audio.volume = 0.5
   audio.pause();
 
-  if (!musicMuted) {
-    gameover = document.getElementById('gameover');
-    gameover.autoplay = true;
-    gameover.load();
-  }
+  gameover = document.getElementById('gameover');
+  gameover.autoplay = true;
+  gameover.load();
+
 }
 
 function restartGame() {
@@ -827,13 +809,11 @@ function gameComplete() {
     highscore = score;
   }
 
-  if (!musicMuted) {
-    audio = document.getElementById('bgm');
-    audio.pause();
-    gamewon = document.getElementById('gamewon');
-    gamewon.autoplay = true;
-    gamewon.load();
-  }
+  audio = document.getElementById('bgm');
+  audio.pause();
+  gamewon = document.getElementById('gamewon');
+  gamewon.autoplay = true;
+  gamewon.load();
 }
 
 //Adjust character to a valid position if it moves out of border
@@ -915,25 +895,13 @@ function updateGameArea() {
   let optionsModal = document.getElementById('optionsModal');
   if (gamePaused) {
     pausemodal.style.display = 'block';
-    if (!musicMuted) { //Then mute music, and keep musicToggled on so that we know it's not muted for real
-      audio.pause();
-      musicToggled = true;
-    }
     return;
   } else if (displayOptionsModal){
     optionsModal.style.display = 'block';
-    if (!musicMuted) {
-      audio.pause();
-      musicToggled = true;
-    }
     return;
   } else {
     pausemodal.style.display = 'none';
     optionsModal.style.display = 'none';
-    if (musicToggled) { //Then unmute the music, and cancel musicToggled so that this won't re-trigger
-      audio.load();
-      musicToggled = false;
-    }
   }
   //when frame number reaches 3000 (point at which obstacles end) end level
   //check current level, if more than 5 (because there are five levels currently), show game complete modal
