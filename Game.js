@@ -417,7 +417,7 @@ function showInstructions(){
 }
 
 function initialize_game() {
-  currentLevel = 3;
+  currentLevel = 5;
   collectedCoins = 0;
   currentCoins = 0;
   score = 0;
