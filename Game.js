@@ -198,7 +198,7 @@ var gamewon;
 var jump;
 var enemykilled;
 
-var currentLevel = 5;
+var currentLevel = 4;
 var collectedCoins = 0;
 var currentCoins = 0;
 var timeLeft; //Says how much time is left in the level--will be calculated based off of LEVEL_COMPLETION_TIME later.
@@ -417,7 +417,7 @@ function showInstructions(){
 }
 
 function initialize_game() {
-  currentLevel = 5;
+  currentLevel = 4;
   collectedCoins = 0;
   currentCoins = 0;
   score = 0;
